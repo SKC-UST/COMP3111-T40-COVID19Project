@@ -47,7 +47,7 @@ public class MyApplication extends Application {
    		VBox root = (VBox) loader.load();
    		Scene scene =  new Scene(root);
    		stage.setScene(scene);
-   		stage.setTitle("Super Team T-00: Data Explorer on COVID-19");
+   		stage.setTitle("T-40 Project COVID19 Data Explorer");
    		stage.show();
 	}
 
