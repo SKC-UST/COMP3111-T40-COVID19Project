@@ -9,4 +9,4 @@ email: skchoiab | github: SKC-UST | dev-branch: nk_feature1 <br/>Tasks: A1, A2
 email: nkchow | github: calmChowder3 | dev-branch: yanton-feature-C<br/>Task C1, C2, C3
 
 ## 3. WONG, Wai Yin
-
+email: wywongbp | github: wwyjason | dev-branch: jason-feature-B<br/>Task B1, B2
