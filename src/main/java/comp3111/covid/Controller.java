@@ -1,5 +1,10 @@
 package comp3111.covid;
 
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
+import java.io.File;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -30,6 +35,9 @@ public class Controller {
 
     @FXML
     private Button buttonConfirmedCases;
+    
+    @FXML
+    private Button fileChoosingButton;
 
     @FXML
     private Tab tabReport1;
@@ -94,6 +102,15 @@ public class Controller {
     	String oReport = DataAnalysis.getRateOfVaccination(iDataset, iISO);
     	textAreaConsole.setText(oReport);
     }  
-
+    
+    @FXML
+    void pickFile(ActionEvent event) {
+    	JFileChooser chooser = new JFileChooser(".");
+    	FileNameExtensionFilter filter = new FileNameExtensionFilter("CSV files", "csv");
+    	int returnVal = chooser.showOpenDialog(null);
+    	if(returnVal == JFileChooser.APPROVE_OPTION) {
+    		System.out.println("You chose to open this file: " + chooser.getSelectedFile().getName());
+    	}
+    }
 }
 
