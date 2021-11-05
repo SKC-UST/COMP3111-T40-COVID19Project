@@ -111,6 +111,12 @@ public class Database {
 			System.out.println();
 		}
 		*/
-		System.out.println(hashStorage);
+		String dateString = "7/1/2021"; //July 1
+		try {
+			Date testDate = new SimpleDateFormat("MM/dd/yyyy").parse(dateString);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }
