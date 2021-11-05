@@ -3,6 +3,8 @@ package comp3111.covid;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import comp3111.covid.datastorage.Database;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -64,6 +66,7 @@ public class Controller {
     @FXML
     private TextArea textAreaConsole;
 
+    private static final Database database = new Database();
   
 
     /**
@@ -108,7 +111,7 @@ public class Controller {
     }  
     
     private File chooseCSVFile() {
-    	JFileChooser csvChooser = new JFileChooser(".");
+    	JFileChooser csvChooser = new JFileChooser("./src/main/resources/dataset");
     	FileNameExtensionFilter csvFilter = new FileNameExtensionFilter("CSV files", "csv");
     	csvChooser.setFileFilter(csvFilter);
     	int chooserReturnVal = csvChooser.showOpenDialog(null);
@@ -122,24 +125,10 @@ public class Controller {
     void importCSVtoDatabase(ActionEvent event) {
     	File csvFile = chooseCSVFile();
     	// TODO: handle file not chosen
-    	
-    	String line = "";
-    	
-    	try {
-			BufferedReader br = new BufferedReader(new FileReader(csvFile));
-			
-			while((line = br.readLine()) != null) {
-				String[] values = line.split(",");
-				System.out.println(values[0]);
-			}
-		} 
-    	catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-    	catch (IOException e) {
-    		e.printStackTrace();
+    	if(csvFile != null) {
+    		Controller.database.importCSV(csvFile);
+        	Controller.database.printDatabaseContent();
     	}
-  
     }
 }
 

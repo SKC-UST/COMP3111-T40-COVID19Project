@@ -34,6 +34,7 @@ import javafx.scene.Scene;
 public class MyApplication extends Application {
 
     private static final String UI_FILE = "/ui.fxml";  //file in the folder of src/main/resources/
+    
 	
 	/** 
 	 * @see javafx.application.Application#start(javafx.stage.Stage)
