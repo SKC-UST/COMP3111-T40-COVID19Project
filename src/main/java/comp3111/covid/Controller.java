@@ -3,7 +3,11 @@ package comp3111.covid;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -103,14 +107,39 @@ public class Controller {
     	textAreaConsole.setText(oReport);
     }  
     
-    @FXML
-    void pickFile(ActionEvent event) {
-    	JFileChooser chooser = new JFileChooser(".");
-    	FileNameExtensionFilter filter = new FileNameExtensionFilter("CSV files", "csv");
-    	int returnVal = chooser.showOpenDialog(null);
-    	if(returnVal == JFileChooser.APPROVE_OPTION) {
-    		System.out.println("You chose to open this file: " + chooser.getSelectedFile().getName());
+    private File chooseCSVFile() {
+    	JFileChooser csvChooser = new JFileChooser(".");
+    	FileNameExtensionFilter csvFilter = new FileNameExtensionFilter("CSV files", "csv");
+    	csvChooser.setFileFilter(csvFilter);
+    	int chooserReturnVal = csvChooser.showOpenDialog(null);
+    	if(chooserReturnVal == JFileChooser.APPROVE_OPTION) {
+    		return csvChooser.getSelectedFile();
     	}
+    	return null;
+    }
+    
+    @FXML
+    void importCSVtoDatabase(ActionEvent event) {
+    	File csvFile = chooseCSVFile();
+    	// TODO: handle file not chosen
+    	
+    	String line = "";
+    	
+    	try {
+			BufferedReader br = new BufferedReader(new FileReader(csvFile));
+			
+			while((line = br.readLine()) != null) {
+				String[] values = line.split(",");
+				System.out.println(values[0]);
+			}
+		} 
+    	catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+    	catch (IOException e) {
+    		e.printStackTrace();
+    	}
+  
     }
 }
 
