@@ -33,7 +33,7 @@ public class Database {
 			
 			DayData(String date, String caseNum, String deathsNum, String vcaccinationNum){
 				try {
-					this.dataDate = new SimpleDateFormat("d/MM/yyyy").parse(date);
+					this.dataDate = new SimpleDateFormat("MM/dd/yyyy").parse(date);
 				} catch (ParseException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -42,6 +42,19 @@ public class Database {
 				this.newCases = Integer.parseInt(deathsNum);
 				this.newVaccinations = Integer.parseInt(vcaccinationNum);
 			}
+			
+			DayData(String date, int caseNum, int deathsNum, int vcaccinationNum){
+				try {
+					this.dataDate = new SimpleDateFormat("MM/dd/yyyy").parse(date);
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				this.newDeaths = caseNum;
+				this.newCases = deathsNum;
+				this.newVaccinations = vcaccinationNum;
+			}
+			
 		}
 		
 		LocationData(String isoCode, String continent, String location) {
@@ -49,16 +62,40 @@ public class Database {
 			this.locationContinent = continent;
 			this.locationName = location;
 		}
+		
+		private void addDayData(DayData newDayData) {
+			dataList.add(newDayData);
+		}
+		
+		public ArrayList<DayData> getDayData() {
+			return this.dataList;
+		}
 	}
 	
-	private List<String[]> arrayStorage;
+	private ArrayList<String[]> arrayStorage = new ArrayList<String[]>();
 	private HashMap<String, LocationData> hashStorage = new HashMap<String, LocationData>(); //isoCode as key
 	private boolean datasetPresent = false;
 	
+	private void rowToData(String[] row) {
+		String isoCode = row[0];
+		if(!(hashStorage.containsKey(isoCode))) {
+			hashStorage.put(isoCode, new LocationData(isoCode, row[1], row[2]));
+		}
+		try {
+			hashStorage.get(isoCode).addDayData(hashStorage.get(isoCode).new DayData(row[3], row[5], row[8], row[37]));
+		}catch(Exception e) {
+			System.out.println(isoCode + " no data for " + row[3]);
+		}
+	}
+	
 	public void importCSV(File csvDataset) {
 		try {
-			CSVReader csvReader = new CSVReaderBuilder(new FileReader(csvDataset)).withSkipLines(1).build();
-			this.arrayStorage = csvReader.readAll();
+			CSVReader csvReader = new CSVReader(new FileReader(csvDataset));
+			String[] nextRecord = csvReader.readNext();
+			
+			while((nextRecord = csvReader.readNext()) != null) {
+				rowToData(nextRecord);
+			}
 		}
 		catch(Exception e) {
 			e.printStackTrace();
@@ -66,11 +103,14 @@ public class Database {
 	}
 	
 	public void printDatabaseContent() {
+		/*
 		for(String[] row : this.arrayStorage) {
 			for(String cell : row) {
 				System.out.print(cell + "\t");
 			}
 			System.out.println();
 		}
+		*/
+		System.out.println(hashStorage);
 	}
 }
