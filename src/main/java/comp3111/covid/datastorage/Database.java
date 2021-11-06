@@ -18,11 +18,16 @@ import java.text.SimpleDateFormat;
 
 public class Database {
 	
+	private ArrayList<String[]> arrayStorage = new ArrayList<String[]>();
+	private HashMap<String, LocationData> hashStorage = new HashMap<String, LocationData>(); //isoCode as key
+	private boolean datasetPresent = false;
+	public enum DataTitle {CASES, DEATHS, VACCINATIONS};
+	
 	private class LocationData {
 		private String locationIsoCode;
 		private String locationContinent;
 		private String locationName;
-		private ArrayList<DayData> dataList = new ArrayList();
+		private ArrayList<DayData> dataList = new ArrayList<DayData>();
 		
 		private class DayData {
 			//Represents a row in the CSV file
@@ -54,7 +59,12 @@ public class Database {
 				this.newCases = deathsNum;
 				this.newVaccinations = vcaccinationNum;
 			}
+
+			private Date getDate() {
+				return dataDate;
+			}
 			
+			// get single data value
 			private int getDayDataContent(DataTitle title) {
 				switch (title) {
 				 	case CASES:
@@ -79,13 +89,25 @@ public class Database {
 			dataList.add(newDayData);
 		}
 		
-		private DayData getDayData(Date startDate, Date endDate) {
+		// get single DayData
+		private DayData getDayData(Date targetData) {
 			for(DayData elem : this.dataList) {
-				if (!startDate.after(elem.dataDate) && !endDate.before(elem.dataDate)) {
+				if(elem.getDate().equals(targetData)) {
 					return elem;
 				}
 			}
 			return null;
+		}
+		
+		// get DayData across a date range (inclusive)
+		private ArrayList<DayData> getDayData(Date startDate, Date endDate) {
+			ArrayList<DayData> result = new ArrayList<DayData>();
+			for(DayData elem : this.dataList) {
+				if (!startDate.after(elem.dataDate) && !endDate.before(elem.dataDate)) {
+					result.add(elem);
+				}
+			}
+			return result;
 		}
 		
 		private void printDataList() {
@@ -93,12 +115,8 @@ public class Database {
 				System.out.println(elem.dataDate + "\t" + elem.newCases);
 			}
 		}
+		
 	}
-	
-	private ArrayList<String[]> arrayStorage = new ArrayList<String[]>();
-	private HashMap<String, LocationData> hashStorage = new HashMap<String, LocationData>(); //isoCode as key
-	private boolean datasetPresent = false;
-	public enum DataTitle {CASES, DEATHS, VACCINATIONS};
 	
 	private void rowToData(String[] row) {
 		String isoCode = row[0];
@@ -106,6 +124,8 @@ public class Database {
 			hashStorage.put(isoCode, new LocationData(isoCode, row[1], row[2]));
 		}
 		int caseData, deathsData, vacData;
+		
+		// TODO: change from new cases to cumulative/total cases as of given date
 		try { caseData = Integer.parseInt(row[3]); } catch(Exception e) { caseData = 0; }
 		try { deathsData = Integer.parseInt(row[5]); } catch(Exception e) { deathsData = 0; }
 		try { vacData = Integer.parseInt(row[37]); } catch(Exception e) { vacData = 0; }
@@ -132,7 +152,7 @@ public class Database {
 		String stringDate = "4/25/2020";
 		try {
 			Date targetDate = new SimpleDateFormat("MM/dd/yyyy").parse(stringDate);
-			int targetData = this.hashStorage.get("HKG").getDayData(targetDate, targetDate).getDayDataContent(DataTitle.CASES);
+			int targetData = this.hashStorage.get("HKG").getDayData(targetDate).getDayDataContent(DataTitle.CASES);
 			System.out.println(targetData);
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
