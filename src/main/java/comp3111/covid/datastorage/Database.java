@@ -55,6 +55,18 @@ public class Database {
 				this.newVaccinations = vcaccinationNum;
 			}
 			
+			private int getDayDataContent(DataTitle title) {
+				switch (title) {
+				 	case CASES:
+				 		return newCases;
+				 	case DEATHS:
+				 		return newDeaths;
+				 	case VACCINATIONS:
+				 		return newVaccinations;
+				}
+				return -1;
+			}
+			
 		}
 		
 		LocationData(String isoCode, String continent, String location) {
@@ -67,25 +79,39 @@ public class Database {
 			dataList.add(newDayData);
 		}
 		
-		public ArrayList<DayData> getDayData() {
-			return this.dataList;
+		private DayData getDayData(Date startDate, Date endDate) {
+			for(DayData elem : this.dataList) {
+				if (!startDate.after(elem.dataDate) && !endDate.before(elem.dataDate)) {
+					return elem;
+				}
+			}
+			return null;
+		}
+		
+		private void printDataList() {
+			for(DayData elem : this.dataList) {
+				System.out.println(elem.dataDate + "\t" + elem.newCases);
+			}
 		}
 	}
 	
 	private ArrayList<String[]> arrayStorage = new ArrayList<String[]>();
 	private HashMap<String, LocationData> hashStorage = new HashMap<String, LocationData>(); //isoCode as key
 	private boolean datasetPresent = false;
+	public enum DataTitle {CASES, DEATHS, VACCINATIONS};
 	
 	private void rowToData(String[] row) {
 		String isoCode = row[0];
 		if(!(hashStorage.containsKey(isoCode))) {
 			hashStorage.put(isoCode, new LocationData(isoCode, row[1], row[2]));
 		}
-		try {
-			hashStorage.get(isoCode).addDayData(hashStorage.get(isoCode).new DayData(row[3], row[5], row[8], row[37]));
-		}catch(Exception e) {
-			System.out.println(isoCode + " no data for " + row[3]);
-		}
+		int caseData, deathsData, vacData;
+		try { caseData = Integer.parseInt(row[3]); } catch(Exception e) { caseData = 0; }
+		try { deathsData = Integer.parseInt(row[5]); } catch(Exception e) { deathsData = 0; }
+		try { vacData = Integer.parseInt(row[37]); } catch(Exception e) { vacData = 0; }
+		
+		hashStorage.get(isoCode).addDayData(hashStorage.get(isoCode).new DayData(row[3], caseData, deathsData, vacData));
+		
 	}
 	
 	public void importCSV(File csvDataset) {
@@ -94,7 +120,7 @@ public class Database {
 			String[] nextRecord = csvReader.readNext();
 			
 			while((nextRecord = csvReader.readNext()) != null) {
-				rowToData(nextRecord);
+				rowToData(nextRecord); // add DayData to LocationData
 			}
 		}
 		catch(Exception e) {
@@ -103,17 +129,11 @@ public class Database {
 	}
 	
 	public void printDatabaseContent() {
-		/*
-		for(String[] row : this.arrayStorage) {
-			for(String cell : row) {
-				System.out.print(cell + "\t");
-			}
-			System.out.println();
-		}
-		*/
-		String dateString = "7/1/2021"; //July 1
+		String stringDate = "4/25/2020";
 		try {
-			Date testDate = new SimpleDateFormat("MM/dd/yyyy").parse(dateString);
+			Date targetDate = new SimpleDateFormat("MM/dd/yyyy").parse(stringDate);
+			int targetData = this.hashStorage.get("HKG").getDayData(targetDate, targetDate).getDayDataContent(DataTitle.CASES);
+			System.out.println(targetData);
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
