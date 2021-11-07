@@ -8,7 +8,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
@@ -110,10 +112,8 @@ public class Database {
 			return result;
 		}
 		
-		private void printDataList() {
-			for(DayData elem : this.dataList) {
-				System.out.println(elem.dataDate + "\t" + elem.newCases);
-			}
+		private void clearDayData() {
+			this.dataList.clear();
 		}
 		
 	}
@@ -163,6 +163,15 @@ public class Database {
 			results.add(days.getDayDataContent(title));		
 		}
 		return results;
+	}
+	
+	public void clearDatabase () {
+		Iterator it = hashStorage.entrySet().iterator();
+		while (it.hasNext()) {
+			Map.Entry<String, LocationData> pair = (Map.Entry<String, LocationData>)it.next();
+			pair.getValue().clearDayData();
+		}
+		hashStorage.clear();
 	}
 	
 	public void printDatabaseContent() {

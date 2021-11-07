@@ -128,6 +128,9 @@ public class Controller {
     	if(csvFile != null) {
     		Controller.database.importCSV(csvFile);
         	Controller.database.printDatabaseContent();
+        	System.out.println("successfully imported");
+        	Controller.database.clearDatabase();
+        	Controller.database.printDatabaseContent();
     	}
     }
 }
