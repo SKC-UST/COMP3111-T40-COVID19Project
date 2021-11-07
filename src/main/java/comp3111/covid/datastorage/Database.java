@@ -119,55 +119,97 @@ public class Database {
 			}
 		}
 		
-		// get single DayData
-		private ArrayList<TotalDayData> getTotalDayData(Date targetDate, DataTitle dataTitle){
-			
-		}
-		private DayData getRateData(Date targetData, DataTitle dataTitle) {
-			ArrayList<DayData> targetType = this.dayDataMap.get(dataTitle);
-			for(DayData elem : targetType) {
-				if(elem.getDate().equals(targetData)) {
-					return elem;
-				}
+		private ArrayList<TotalDayData> getTotalDayList(DataTitle dataTitle){
+			switch(dataTitle) {
+				case CASE:
+					return this.caseTotalList;
+				case DEATH:
+					return this.deathTotalList;
+				case VAC:
+					return this.vacTotalList;
 			}
 			return null;
 		}
 		
-		// get DayData across a date range (inclusive)
-		private ArrayList<DayData> getDayData(DataTitle dataTitle, Date startDate, Date endDate) {
-			ArrayList<DayData> targetType = this.dayDataMap.get(dataTitle);
-			ArrayList<DayData> result = new ArrayList<DayData>();
-			for(DayData elem : targetType) {
-				Date elemDate = elem.getDate();
-				if (!startDate.after(elemDate) && !endDate.before(elemDate)) {
-					result.add(elem);
+		private ArrayList<RateDayData> getRateDayList(DataTitle dataTitle){
+			switch(dataTitle) {
+				case CASE:
+					return this.caseRateList;
+				case DEATH:
+					return this.deathRateList;
+				case VAC:
+					return this.vacRateList;
+			}
+			return null;
+		}
+		
+		private long getTotalDayData(Date targetDate, DataTitle dataTitle) {
+			ArrayList<TotalDayData> targetTitle = null;
+			switch(dataTitle) {
+				case CASE:
+					targetTitle = this.caseTotalList;
+					break;
+				case DEATH:
+					targetTitle = this.deathTotalList;
+					break;
+				case VAC:
+					targetTitle = this.vacTotalList;
+					break;
+			}
+			for(TotalDayData day : targetTitle) {
+				if(day.getDate().equals(targetDate)) {
+					return day.getData();
 				}
 			}
-			return result;
+			return -1; // not found
+		}
+		
+		private double getRateDayData(Date targetDate, DataTitle dataTitle) {
+			ArrayList<RateDayData> targetTitle = null;
+			switch(dataTitle) {
+				case CASE:
+					targetTitle = this.caseRateList;
+					break;
+				case DEATH:
+					targetTitle = this.deathRateList;
+					break;
+				case VAC:
+					targetTitle = this.vacRateList;
+					break;
+			}
+			for(RateDayData day : targetTitle) {
+				if(day.getDate().equals(targetDate)) {
+					return day.getData();
+				}
+			}
+			return -1; // not found
 		}
 		
 		private void clearLocationData() {
-			Iterator<Entry<DataTitle, ArrayList<DayData>>> it = this.dayDataMap.entrySet().iterator();
-			while (it.hasNext()) {
-				Map.Entry<DataTitle, ArrayList<DayData>> pair = (Map.Entry<DataTitle, ArrayList<DayData>>)it.next();
-				pair.getValue().clear();
-			}
-			dayDataMap.clear();
+			this.caseTotalList.clear();
+			this.caseRateList.clear();
+			this.deathTotalList.clear();
+			this.deathRateList.clear();
+			this.vacTotalList.clear();
+			this.vacRateList.clear();
 		}
 	}
 	
+	// TODO: use apache CSV
 	private void rowToData(String[] row) {
 		String isoCode = row[0];
 		if(!(hashStorage.containsKey(isoCode))) {
 			long populationNum = Long.parseLong(row[44]);
 			hashStorage.put(isoCode, new LocationData(isoCode, row[1], row[2], populationNum));
 		}
-		int caseData, deathsData, vacData, caseRate;
+		long caseTotal, deathsTotal, vacTotal;
+		double caseRate, deathsRate, vacRate;
 		
 		// TODO: change from new cases to cumulative/total cases as of given date
-		try { caseData = Integer.parseInt(row[3]); } catch(Exception e) { caseData = 0; }
-		try { deathsData = Integer.parseInt(row[5]); } catch(Exception e) { deathsData = 0; }
-		try { vacData = Integer.parseInt(row[37]); } catch(Exception e) { vacData = 0; }
+		try { caseTotal = Long.parseLong(row[3]); } catch(Exception e) { caseTotal = 0; }
+		try { deathsTotal = Long.parseLong(row[5]); } catch(Exception e) { deathsTotal = 0; }
+		try { vacTotal = Long.parseLong(row[37]); } catch(Exception e) { vacTotal = 0; }
+		
 		
 		hashStorage.get(isoCode).addDayData(hashStorage.get(isoCode).new DayData(row[3], caseData, deathsData, vacData));
 		
@@ -188,25 +230,38 @@ public class Database {
 	}
 	
 	// search single data - for Table
-	// return null if no data is found
-	public double searchData(String isoCode, Date targetDate, RateDataTitle title) {
-		double result = (double) this.hashStorage.get(isoCode).getDayData(targetDate, title).getData();
+	// return -1 if not found
+	public long searchTotalData(String isoCode, Date targetDate, DataTitle title) throws Exception {
+		long result = this.hashStorage.get(isoCode).getTotalDayData(targetDate, title);
 		return result;
 	}
 	
-	public long searchData(String isoCode, Date targetDate, TotalDataTitle title) {
-		long result = (long) this.hashStorage.get(isoCode).getDayData(targetDate, title).getData();
-		return result;
-	}
-	
-	// search a list of data over dates - for Chart
-	public ArrayList<Integer> searchData(String isoCode, Date startDate, Date endDate, DataTitle title){
-		ArrayList<Integer> results = new ArrayList<Integer>();
-		ArrayList<LocationData.DayData> targetDays = this.hashStorage.get(isoCode).getDayData(startDate, endDate);
-		for(LocationData.DayData days : targetDays) {
-			results.add(days.getDayDataContent(title));		
+	public ArrayList<Long> searchTotalData(String isoCode, Date startDate, Date endDate, DataTitle title) {
+		ArrayList<Long> result = new ArrayList<Long>();
+		ArrayList<TotalDayData> targetList = this.hashStorage.get(isoCode).getTotalDayList(title);
+		for(TotalDayData elem : targetList) {
+			if(!elem.getDate().before(startDate) && !elem.getDate().after(endDate)) {
+				result.add(elem.getData());
+			}
 		}
-		return results;
+		return result;
+	}
+	
+	//return -1 if not found
+	public double searchRateData(String isoCode, Date targetDate, DataTitle title) throws Exception {
+		double result = this.hashStorage.get(isoCode).getRateDayData(targetDate, title);
+		return result;
+	}
+	
+	public ArrayList<Double> searchRateData(String isoCode, Date startDate, Date endDate, DataTitle title) {
+		ArrayList<Double> result = new ArrayList<Double>();
+		ArrayList<RateDayData> targetList = this.hashStorage.get(isoCode).getRateDayList(title);
+		for(RateDayData elem : targetList) {
+			if(!elem.getDate().before(startDate) && !elem.getDate().after(endDate)) {
+				result.add(elem.getData());
+			}
+		}
+		return result;
 	}
 	
 	public void clearDatabase () {
@@ -219,12 +274,6 @@ public class Database {
 	}
 	
 	public void printDatabaseContent() {
-		//print the whole database for checking
-		for(LocationData location : this.hashStorage.values()) {
-			System.out.println(location.locationIsoCode + "\t" + location.locationName);
-			for(DayData day : location.dataList) {
-				System.out.println(day.getDayDataContent(DataTitle.CASES) + "\t" + day.getDayDataContent(DataTitle.DEATHS) + "\t" + day.getDayDataContent(DataTitle.VACCINATIONS));
-			}
-		}
+		
 	}
 }
