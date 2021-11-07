@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
@@ -23,77 +24,108 @@ public class Database {
 	private ArrayList<String[]> arrayStorage = new ArrayList<String[]>();
 	private HashMap<String, LocationData> hashStorage = new HashMap<String, LocationData>(); //isoCode as key
 	private boolean datasetPresent = false;
-	public enum DataTitle {CASES, DEATHS, VACCINATIONS};
+	public enum DataTitle {CASE, DEATH, VAC}
+	
+	private interface DayData<T> {
+		public Date getDate();
+		public T getData();
+	}
+	
+	private class TotalDayData implements DayData<Long> {
+		private Date dataDate;
+		private long totalData;
+		
+		TotalDayData(Date date, long data){
+			this.dataDate = date;
+			this.totalData = data;
+		}
+		
+		@Override
+		public Date getDate() {
+			return this.dataDate;
+		}
+		
+		@Override
+		public Long getData() {
+			return this.totalData;
+		}
+	}
+	
+	private class RateDayData implements DayData<Double> {
+		private Date dataDate;
+		private double rateData;
+		
+		RateDayData(Date date, double data){
+			this.dataDate = date;
+			this.rateData = data;
+		}
+		
+		@Override
+		public Date getDate() {
+			return this.dataDate;
+		}
+		
+		@Override
+		public Double getData() {
+			return this.rateData;
+		}
+	}
 	
 	private class LocationData {
 		private String locationIsoCode;
 		private String locationContinent;
 		private String locationName;
-		private ArrayList<DayData> dataList = new ArrayList<DayData>();
+		private long locationPopulation;
+		private ArrayList<TotalDayData> caseTotalList = new ArrayList<TotalDayData>();
+		private ArrayList<TotalDayData> deathTotalList = new ArrayList<TotalDayData>();
+		private ArrayList<TotalDayData> vacTotalList = new ArrayList<TotalDayData>();
+		private ArrayList<RateDayData> caseRateList = new ArrayList<RateDayData>();
+		private ArrayList<RateDayData> deathRateList = new ArrayList<RateDayData>();
+		private ArrayList<RateDayData> vacRateList = new ArrayList<RateDayData>();
 		
-		private class DayData {
-			//Represents a row in the CSV file
-			private Date dataDate;
-			private int newCases;
-			private int newDeaths;
-			private int newVaccinations;
-			
-			DayData(String date, String caseNum, String deathsNum, String vcaccinationNum){
-				try {
-					this.dataDate = new SimpleDateFormat("MM/dd/yyyy").parse(date);
-				} catch (ParseException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				this.newDeaths = Integer.parseInt(caseNum);
-				this.newCases = Integer.parseInt(deathsNum);
-				this.newVaccinations = Integer.parseInt(vcaccinationNum);
-			}
-			
-			DayData(String date, int caseNum, int deathsNum, int vcaccinationNum){
-				try {
-					this.dataDate = new SimpleDateFormat("MM/dd/yyyy").parse(date);
-				} catch (ParseException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				this.newDeaths = caseNum;
-				this.newCases = deathsNum;
-				this.newVaccinations = vcaccinationNum;
-			}
-
-			private Date getDate() {
-				return dataDate;
-			}
-			
-			// get single data value
-			private int getDayDataContent(DataTitle title) {
-				switch (title) {
-				 	case CASES:
-				 		return newCases;
-				 	case DEATHS:
-				 		return newDeaths;
-				 	case VACCINATIONS:
-				 		return newVaccinations;
-				}
-				return -1;
-			}
-			
-		}
-		
-		LocationData(String isoCode, String continent, String location) {
+		LocationData(String isoCode, String continent, String location, long population) {
 			this.locationIsoCode = isoCode;
 			this.locationContinent = continent;
 			this.locationName = location;
+			this.locationPopulation = population;
 		}
 		
-		private void addDayData(DayData newDayData) {
-			dataList.add(newDayData);
+		private void addDayData(DataTitle dataTitle, DayData newDayData) {
+			if(newDayData instanceof TotalDayData) {
+				switch(dataTitle) {
+					case CASE:
+						this.caseTotalList.add((TotalDayData) newDayData);
+						break;
+					case DEATH:
+						this.deathTotalList.add((TotalDayData) newDayData);
+						break;
+					case VAC:
+						this.deathTotalList.add((TotalDayData) newDayData);
+						break;
+				}
+			}
+			else {
+				switch(dataTitle) {
+					case CASE:
+						this.caseRateList.add((RateDayData) newDayData);
+						break;
+					case DEATH:
+						this.deathRateList.add((RateDayData) newDayData);
+						break;
+					case VAC:
+						this.deathRateList.add((RateDayData) newDayData);
+						break;
+				}
+			}
 		}
 		
 		// get single DayData
-		private DayData getDayData(Date targetData) {
-			for(DayData elem : this.dataList) {
+		private ArrayList<TotalDayData> getTotalDayData(Date targetDate, DataTitle dataTitle){
+			
+		}
+		private DayData getRateData(Date targetData, DataTitle dataTitle) {
+			ArrayList<DayData> targetType = this.dayDataMap.get(dataTitle);
+			for(DayData elem : targetType) {
 				if(elem.getDate().equals(targetData)) {
 					return elem;
 				}
@@ -102,28 +134,35 @@ public class Database {
 		}
 		
 		// get DayData across a date range (inclusive)
-		private ArrayList<DayData> getDayData(Date startDate, Date endDate) {
+		private ArrayList<DayData> getDayData(DataTitle dataTitle, Date startDate, Date endDate) {
+			ArrayList<DayData> targetType = this.dayDataMap.get(dataTitle);
 			ArrayList<DayData> result = new ArrayList<DayData>();
-			for(DayData elem : this.dataList) {
-				if (!startDate.after(elem.dataDate) && !endDate.before(elem.dataDate)) {
+			for(DayData elem : targetType) {
+				Date elemDate = elem.getDate();
+				if (!startDate.after(elemDate) && !endDate.before(elemDate)) {
 					result.add(elem);
 				}
 			}
 			return result;
 		}
 		
-		private void clearDayData() {
-			this.dataList.clear();
+		private void clearLocationData() {
+			Iterator<Entry<DataTitle, ArrayList<DayData>>> it = this.dayDataMap.entrySet().iterator();
+			while (it.hasNext()) {
+				Map.Entry<DataTitle, ArrayList<DayData>> pair = (Map.Entry<DataTitle, ArrayList<DayData>>)it.next();
+				pair.getValue().clear();
+			}
+			dayDataMap.clear();
 		}
-		
 	}
 	
 	private void rowToData(String[] row) {
 		String isoCode = row[0];
 		if(!(hashStorage.containsKey(isoCode))) {
-			hashStorage.put(isoCode, new LocationData(isoCode, row[1], row[2]));
+			long populationNum = Long.parseLong(row[44]);
+			hashStorage.put(isoCode, new LocationData(isoCode, row[1], row[2], populationNum));
 		}
-		int caseData, deathsData, vacData;
+		int caseData, deathsData, vacData, caseRate;
 		
 		// TODO: change from new cases to cumulative/total cases as of given date
 		try { caseData = Integer.parseInt(row[3]); } catch(Exception e) { caseData = 0; }
@@ -150,8 +189,13 @@ public class Database {
 	
 	// search single data - for Table
 	// return null if no data is found
-	public int searchData(String isoCode, Date targetDate, DataTitle title) {
-		int result = this.hashStorage.get(isoCode).getDayData(targetDate).getDayDataContent(title);
+	public double searchData(String isoCode, Date targetDate, RateDataTitle title) {
+		double result = (double) this.hashStorage.get(isoCode).getDayData(targetDate, title).getData();
+		return result;
+	}
+	
+	public long searchData(String isoCode, Date targetDate, TotalDataTitle title) {
+		long result = (long) this.hashStorage.get(isoCode).getDayData(targetDate, title).getData();
 		return result;
 	}
 	
@@ -169,7 +213,7 @@ public class Database {
 		Iterator it = hashStorage.entrySet().iterator();
 		while (it.hasNext()) {
 			Map.Entry<String, LocationData> pair = (Map.Entry<String, LocationData>)it.next();
-			pair.getValue().clearDayData();
+			pair.getValue().clearLocationData();
 		}
 		hashStorage.clear();
 	}
@@ -178,7 +222,7 @@ public class Database {
 		//print the whole database for checking
 		for(LocationData location : this.hashStorage.values()) {
 			System.out.println(location.locationIsoCode + "\t" + location.locationName);
-			for(LocationData.DayData day : location.dataList) {
+			for(DayData day : location.dataList) {
 				System.out.println(day.getDayDataContent(DataTitle.CASES) + "\t" + day.getDayDataContent(DataTitle.DEATHS) + "\t" + day.getDayDataContent(DataTitle.VACCINATIONS));
 			}
 		}
