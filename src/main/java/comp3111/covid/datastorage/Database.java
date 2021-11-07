@@ -165,8 +165,13 @@ public class Database {
 		return results;
 	}
 	
-	
 	public void printDatabaseContent() {
 		//print the whole database for checking
+		for(LocationData location : this.hashStorage.values()) {
+			System.out.println(location.locationIsoCode + "\t" + location.locationName);
+			for(LocationData.DayData day : location.dataList) {
+				System.out.println(day.getDayDataContent(DataTitle.CASES) + "\t" + day.getDayDataContent(DataTitle.DEATHS) + "\t" + day.getDayDataContent(DataTitle.VACCINATIONS));
+			}
+		}
 	}
 }
