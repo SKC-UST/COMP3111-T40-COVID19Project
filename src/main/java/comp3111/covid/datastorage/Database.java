@@ -148,15 +148,25 @@ public class Database {
 		}
 	}
 	
-	public void printDatabaseContent() {
-		String stringDate = "4/25/2020";
-		try {
-			Date targetDate = new SimpleDateFormat("MM/dd/yyyy").parse(stringDate);
-			int targetData = this.hashStorage.get("HKG").getDayData(targetDate).getDayDataContent(DataTitle.CASES);
-			System.out.println(targetData);
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+	// search single data - for Table
+	// return null if no data is found
+	public int searchData(String isoCode, Date targetDate, DataTitle title) {
+		int result = this.hashStorage.get(isoCode).getDayData(targetDate).getDayDataContent(title);
+		return result;
+	}
+	
+	// search a list of data over dates - for Chart
+	public ArrayList<Integer> searchData(String isoCode, Date startDate, Date endDate, DataTitle title){
+		ArrayList<Integer> results = new ArrayList<Integer>();
+		ArrayList<LocationData.DayData> targetDays = this.hashStorage.get(isoCode).getDayData(startDate, endDate);
+		for(LocationData.DayData days : targetDays) {
+			results.add(days.getDayDataContent(title));		
 		}
+		return results;
+	}
+	
+	
+	public void printDatabaseContent() {
+		//print the whole database for checking
 	}
 }
