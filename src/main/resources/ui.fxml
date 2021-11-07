@@ -40,9 +40,9 @@
                            <children>
                               <Label layoutX="79.0" layoutY="44.0" text="Date" />
                               <Label layoutX="70.0" layoutY="89.0" text="Country" />
-                              <ListView layoutX="132.0" layoutY="89.0" prefHeight="200.0" prefWidth="200.0" />
-                              <DatePicker layoutX="132.0" layoutY="40.0" promptText="Select Date of Interest" />
-                              <Button layoutX="360.0" layoutY="266.0" mnemonicParsing="false" text="Generate Table" />
+                              <ListView fx:id="listviewCountries" layoutX="132.0" layoutY="89.0" prefHeight="200.0" prefWidth="200.0" />
+                              <DatePicker fx:id="datepickerDate" layoutX="132.0" layoutY="40.0" promptText="Select Date of Interest" />
+                              <Button fx:id="buttonTableA" layoutX="360.0" layoutY="266.0" mnemonicParsing="false" onAction="#makeTableA" text="Generate Table" />
                            </children>
                         </AnchorPane>
                     </content>
@@ -53,9 +53,9 @@
                            <children>
                               <Label layoutX="79.0" layoutY="44.0" text="Date" />
                               <Label layoutX="70.0" layoutY="89.0" text="Country" />
-                              <ListView layoutX="132.0" layoutY="89.0" prefHeight="200.0" prefWidth="200.0" />
-                              <DatePicker layoutX="132.0" layoutY="40.0" promptText="Select Date of Interest" />
-                              <Button layoutX="360.0" layoutY="266.0" mnemonicParsing="false" text="Generate Table" />
+                              <ListView fx:id="listviewCountries" layoutX="132.0" layoutY="89.0" prefHeight="200.0" prefWidth="200.0" />
+                              <DatePicker fx:id="datepickerDate" layoutX="132.0" layoutY="40.0" promptText="Select Date of Interest" />
+                              <Button fx:id="buttonTableB" layoutX="360.0" layoutY="266.0" mnemonicParsing="false" onAction="#makeTableB" text="Generate Table" />
                            </children>
                         </AnchorPane>
                      </content>
@@ -66,9 +66,9 @@
                            <children>
                               <Label layoutX="79.0" layoutY="44.0" text="Date" />
                               <Label layoutX="70.0" layoutY="89.0" text="Country" />
-                              <ListView layoutX="132.0" layoutY="89.0" prefHeight="200.0" prefWidth="200.0" />
-                              <DatePicker layoutX="132.0" layoutY="40.0" promptText="Select Date of Interest" />
-                              <Button layoutX="360.0" layoutY="266.0" mnemonicParsing="false" text="Generate Table" />
+                              <ListView fx:id="listviewCountries" layoutX="132.0" layoutY="89.0" prefHeight="200.0" prefWidth="200.0" />
+                              <DatePicker fx:id="datepickerDate" layoutX="132.0" layoutY="40.0" promptText="Select Date of Interest" />
+                              <Button fx:id="buttonTableC" layoutX="360.0" layoutY="266.0" mnemonicParsing="false" onAction="#makeTableC" text="Generate Table" />
                            </children>
                         </AnchorPane>
                      </content>
@@ -79,10 +79,10 @@
                            <children>
                               <Label layoutX="79.0" layoutY="44.0" text="Period" />
                               <Label layoutX="70.0" layoutY="89.0" text="Country" />
-                              <ListView layoutX="132.0" layoutY="89.0" prefHeight="200.0" prefWidth="200.0" />
-                              <DatePicker layoutX="132.0" layoutY="40.0" promptText="Select Starting Date" />
-                              <Button layoutX="360.0" layoutY="266.0" mnemonicParsing="false" text="Generate Chart" />
-                              <DatePicker layoutX="332.0" layoutY="40.0" promptText="Select Ending Date" />
+                              <ListView fx:id="listviewCountries" layoutX="132.0" layoutY="89.0" prefHeight="200.0" prefWidth="200.0" />
+                              <DatePicker fx:id="datepickerStartDate" layoutX="132.0" layoutY="40.0" promptText="Select Starting Date" />
+                              <Button fx:id="buttonChartA" layoutX="360.0" layoutY="266.0" mnemonicParsing="false" onAction="#makeChartA" text="Generate Chart" />
+                              <DatePicker fx:id="datepickerEndDate" layoutX="332.0" layoutY="40.0" promptText="Select Ending Date" />
                            </children>
                         </AnchorPane>
                      </content>
@@ -93,10 +93,10 @@
                            <children>
                               <Label layoutX="79.0" layoutY="44.0" text="Period" />
                               <Label layoutX="70.0" layoutY="89.0" text="Country" />
-                              <ListView layoutX="132.0" layoutY="89.0" prefHeight="200.0" prefWidth="200.0" />
-                              <DatePicker layoutX="132.0" layoutY="40.0" promptText="Select Starting Date" />
-                              <Button layoutX="360.0" layoutY="266.0" mnemonicParsing="false" text="Generate Chart" />
-                              <DatePicker layoutX="332.0" layoutY="40.0" promptText="Select Ending Date" />
+                              <ListView fx:id="listviewCountries" layoutX="132.0" layoutY="89.0" prefHeight="200.0" prefWidth="200.0" />
+                              <DatePicker fx:id="datepickerStartDate" layoutX="132.0" layoutY="40.0" promptText="Select Starting Date" />
+                              <Button fx:id="buttonChartB" layoutX="360.0" layoutY="266.0" mnemonicParsing="false" onAction="#makeChartB" text="Generate Chart" />
+                              <DatePicker fx:id="datepickerEndDate" layoutX="332.0" layoutY="40.0" promptText="Select Ending Date" />
                            </children>
                         </AnchorPane>
                      </content>
@@ -107,10 +107,10 @@
                            <children>
                               <Label layoutX="79.0" layoutY="44.0" text="Period" />
                               <Label layoutX="70.0" layoutY="89.0" text="Country" />
-                              <ListView layoutX="132.0" layoutY="89.0" prefHeight="200.0" prefWidth="200.0" />
-                              <DatePicker layoutX="132.0" layoutY="40.0" promptText="Select Starting Date" />
-                              <Button layoutX="360.0" layoutY="266.0" mnemonicParsing="false" text="Generate Chart" />
-                              <DatePicker layoutX="332.0" layoutY="40.0" promptText="Select Ending Date" />
+                              <ListView fx:id="listviewCountries" layoutX="132.0" layoutY="89.0" prefHeight="200.0" prefWidth="200.0" />
+                              <DatePicker fx:id="datepickerStartDate" layoutX="132.0" layoutY="40.0" promptText="Select Starting Date" />
+                              <Button fx:id="buttonChartC" layoutX="360.0" layoutY="266.0" mnemonicParsing="false" onAction="#makeChartC" text="Generate Chart" />
+                              <DatePicker fx:id="datepickerEndDate" layoutX="332.0" layoutY="40.0" promptText="Select Ending Date" />
                            </children>
                         </AnchorPane>
                      </content>

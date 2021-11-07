@@ -3,6 +3,8 @@ package comp3111.covid;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.ListView;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -30,6 +32,36 @@ public class Controller {
 
     @FXML
     private Button buttonConfirmedCases;
+    
+    @FXML
+    private Button buttonChartA;
+
+    @FXML
+    private Button buttonChartB;
+
+    @FXML
+    private Button buttonChartC;
+    
+    @FXML
+    private Button buttonTableA;
+
+    @FXML
+    private Button buttonTableB;
+
+    @FXML
+    private Button buttonTableC;
+
+    @FXML
+    private DatePicker datepickerDate;
+
+    @FXML
+    private DatePicker datepickerEndDate;
+
+    @FXML
+    private DatePicker datepickerStartDate;
+
+    @FXML
+    private ListView<?> listviewCountries;
 
     @FXML
     private Tab tabReport1;
@@ -93,7 +125,37 @@ public class Controller {
     	String iISO = textfieldISO.getText();
     	String oReport = DataAnalysis.getRateOfVaccination(iDataset, iISO);
     	textAreaConsole.setText(oReport);
-    }  
+    }
+    
+    @FXML // A1
+    void makeChartA(ActionEvent event) {
 
+    }
+
+    @FXML // B1
+    void makeChartB(ActionEvent event) {
+
+    }
+
+    @FXML // C1
+    void makeChartC(ActionEvent event) {
+
+    }
+
+    @FXML // A2
+    void makeTableA(ActionEvent event) {
+
+    }
+
+    @FXML // B2
+    void makeTableB(ActionEvent event) {
+
+    }
+
+    @FXML // C2
+    void makeTableC(ActionEvent event) {
+
+    }
+// For report, please fill it yourself
 }
 
