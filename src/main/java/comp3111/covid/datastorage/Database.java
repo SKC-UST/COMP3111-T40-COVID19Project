@@ -198,8 +198,9 @@ public class Database {
 	// TODO: use apache CSV
 	private void rowToData(String[] row) {
 		String isoCode = row[0];
+		long populationNum = 1;
 		if(!(hashStorage.containsKey(isoCode))) {
-			long populationNum = Long.parseLong(row[44]);
+			populationNum = Long.parseLong(row[44]);
 			hashStorage.put(isoCode, new LocationData(isoCode, row[1], row[2], populationNum));
 		}
 		long caseTotal, deathsTotal, vacTotal;
@@ -210,9 +211,25 @@ public class Database {
 		try { deathsTotal = Long.parseLong(row[5]); } catch(Exception e) { deathsTotal = 0; }
 		try { vacTotal = Long.parseLong(row[37]); } catch(Exception e) { vacTotal = 0; }
 		
+		try { caseRate = Double.parseDouble(row[10]);} catch (Exception e) { caseRate = 0;}
+		try { deathsRate = Double.parseDouble(row[11]);} catch (Exception e) { deathsRate = 0;}
+		vacRate = vacTotal / populationNum;
 		
-		hashStorage.get(isoCode).addDayData(hashStorage.get(isoCode).new DayData(row[3], caseData, deathsData, vacData));
+		SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+		Date date = new Date();
+		try {
+			date = dateFormat.parse(row[3]);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		hashStorage.get(isoCode).addDayData(DataTitle.CASE, new TotalDayData(date, caseTotal));
+		hashStorage.get(isoCode).addDayData(DataTitle.DEATH, new TotalDayData(date, deathsTotal));
+		hashStorage.get(isoCode).addDayData(DataTitle.VAC, new TotalDayData(date, vacTotal));
 		
+		hashStorage.get(isoCode).addDayData(DataTitle.CASE, new RateDayData(date, caseRate));
+		hashStorage.get(isoCode).addDayData(DataTitle.DEATH, new RateDayData(date, deathsRate));
+		hashStorage.get(isoCode).addDayData(DataTitle.VAC, new RateDayData(date, vacRate));
 	}
 	
 	public void importCSV(File csvDataset) {
