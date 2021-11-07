@@ -193,6 +193,12 @@ public class Database {
 			this.vacTotalList.clear();
 			this.vacRateList.clear();
 		}
+		
+		private void printLocationData() {
+			for(int i = 0; i < 10; ++i) {
+				System.out.println(this.caseTotalList.get(i).getData() + "\t" + this.caseRateList.get(i).getData() + "\t" + this.deathTotalList.get(i).getData() + "\t" + this.deathRateList.get(i).getData() + this.vacTotalList.get(i).getData() + "\t" + this.vacRateList.get(i).getData());
+			}
+		}
 	}
 	
 	// TODO: use apache CSV
@@ -207,12 +213,12 @@ public class Database {
 		double caseRate, deathsRate, vacRate;
 		
 		// TODO: change from new cases to cumulative/total cases as of given date
-		try { caseTotal = Long.parseLong(row[3]); } catch(Exception e) { caseTotal = 0; }
-		try { deathsTotal = Long.parseLong(row[5]); } catch(Exception e) { deathsTotal = 0; }
-		try { vacTotal = Long.parseLong(row[37]); } catch(Exception e) { vacTotal = 0; }
+		try { caseTotal = Long.parseLong(row[4]); } catch(Exception e) { caseTotal = 0; }
+		try { deathsTotal = Long.parseLong(row[7]); } catch(Exception e) { deathsTotal = 0; }
+		try { vacTotal = Long.parseLong(row[34]); } catch(Exception e) { vacTotal = 0; }
 		
 		try { caseRate = Double.parseDouble(row[10]);} catch (Exception e) { caseRate = 0;}
-		try { deathsRate = Double.parseDouble(row[11]);} catch (Exception e) { deathsRate = 0;}
+		try { deathsRate = Double.parseDouble(row[13]);} catch (Exception e) { deathsRate = 0;}
 		vacRate = vacTotal / populationNum;
 		
 		SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
@@ -291,6 +297,12 @@ public class Database {
 	}
 	
 	public void printDatabaseContent() {
-		
+		Iterator it = hashStorage.entrySet().iterator();
+		while(it.hasNext()) {
+			Map.Entry<String, LocationData> pair = (Map.Entry<String, Database.LocationData>)it.next();
+			LocationData targetLocation = pair.getValue();
+			System.out.println(targetLocation.locationIsoCode + "\t" + targetLocation.locationName);
+			//pair.getValue().printLocationData();
+		}
 	}
 }
