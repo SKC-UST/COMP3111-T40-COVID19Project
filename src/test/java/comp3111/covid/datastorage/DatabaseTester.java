@@ -1,12 +1,11 @@
 package comp3111.covid.datastorage;
 
 import static org.junit.Assert.*;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.util.Date;
 import java.text.SimpleDateFormat; 
-
-import org.junit.Before;
-import org.junit.Test;
 
 import comp3111.covid.MyApplication;
 import comp3111.covid.Controller;
@@ -16,14 +15,18 @@ import comp3111.covid.datastorage.Database.DataTitle;
  
 
 public class DatabaseTester {
+	Database database = new Database();
+	File file = new File("COVID_Dataset_v1.0.csv");
+	
 	@Before
 	public void setUp() throws Exception {
-		arrAscending = new int[] {1, 2, 3, 4, 5};
-		arrDescending = new int[] {5, 4, 3, 2, 1};
+		database.importCSV(file);
 	}
 
 	@Test
-	public void computeOneWithValidInput() {
-		assertEquals(-1, Database.searchRateData(String isoCode, Date targetDate, DataTitle title));
+	public void searchTotalDataNoResult() {
+	    String sDate1="31/12/1998";  
+	    Date date1=new SimpleDateFormat("dd/MM/yyyy").parse(sDate1);  
+		assertEquals(-1, Database.searchTotalData("HKG", date1, DataTitle.CASE));
 	}
 }
