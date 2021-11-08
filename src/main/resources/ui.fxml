@@ -30,6 +30,7 @@
                               <Label layoutX="114.0" layoutY="138.0" text="Report" />
                               <Button fx:id="buttonRateOfVaccination" layoutX="423.0" layoutY="134.0" mnemonicParsing="false" onAction="#doRateOfVaccination" text="Rate of Vaccination" />
                               <Button fx:id="buttonConfirmedCases" layoutX="185.0" layoutY="134.0" mnemonicParsing="false" onAction="#doConfirmedCases" text="Confirmed Cases" />
+                              <Button fx:id="fileChoosingButton" layoutX="256.0" layoutY="219.0" mnemonicParsing="false" onAction="#importCSVtoDatabase" text="Choose a Datasource" />
                            </children>
                         </AnchorPane>
                   </content>

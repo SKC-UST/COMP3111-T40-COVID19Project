@@ -34,6 +34,7 @@ import javafx.scene.Scene;
 public class MyApplication extends Application {
 
     private static final String UI_FILE = "/ui.fxml";  //file in the folder of src/main/resources/
+    
 	
 	/** 
 	 * @see javafx.application.Application#start(javafx.stage.Stage)
@@ -47,7 +48,7 @@ public class MyApplication extends Application {
    		VBox root = (VBox) loader.load();
    		Scene scene =  new Scene(root);
    		stage.setScene(scene);
-   		stage.setTitle("T-40 Project COVID19 Data Explorer");
+   		stage.setTitle("T40 Project COVID19 Data Explorer");
    		stage.show();
 	}
 
