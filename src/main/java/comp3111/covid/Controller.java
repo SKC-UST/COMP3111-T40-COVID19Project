@@ -1,5 +1,21 @@
 package comp3111.covid;
 
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
+import comp3111.covid.datastorage.Database;
+import comp3111.covid.datastorage.Database.DataTitle;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -30,6 +46,9 @@ public class Controller {
 
     @FXML
     private Button buttonConfirmedCases;
+    
+    @FXML
+    private Button fileChoosingButton;
 
     @FXML
     private Tab tabReport1;
@@ -52,6 +71,7 @@ public class Controller {
     @FXML
     private TextArea textAreaConsole;
 
+    private static final Database database = new Database();
   
 
     /**
@@ -94,6 +114,26 @@ public class Controller {
     	String oReport = DataAnalysis.getRateOfVaccination(iDataset, iISO);
     	textAreaConsole.setText(oReport);
     }  
-
+    
+    private File chooseCSVFile() {
+    	JFileChooser csvChooser = new JFileChooser("./src/main/resources/dataset");
+    	FileNameExtensionFilter csvFilter = new FileNameExtensionFilter("CSV files", "csv");
+    	csvChooser.setFileFilter(csvFilter);
+    	int chooserReturnVal = csvChooser.showOpenDialog(null);
+    	if(chooserReturnVal == JFileChooser.APPROVE_OPTION) {
+    		return csvChooser.getSelectedFile();
+    	}
+    	return null;
+    }
+    
+    @FXML
+    void importCSVtoDatabase(ActionEvent event) {
+    	File csvFile = chooseCSVFile();
+    	// TODO: handle file not chosen
+    	if(csvFile != null) {
+    		Controller.database.importCSV(csvFile);
+        	System.out.println("successfully imported");        	
+    	}
+    }
 }
 
