@@ -116,10 +116,8 @@
                         </AnchorPane>
                      </content>
                   </Tab>
-                  <Tab fx:id="tabCReport" text="Report C">
-                    <content>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                    </content>
+                  <Tab fx:id="tabC3" text="Report C">
+                    <fx:include fx:id="tabCReportPage" source="tabs/tabC3.fxml"/>
                   </Tab>
               </tabs>
             </TabPane>
