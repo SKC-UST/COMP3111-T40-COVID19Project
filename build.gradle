@@ -51,6 +51,11 @@ javafx {
 	modules = [ 'javafx.controls', 'javafx.fxml' ]
 }
 
+jacoco { 
+    toolVersion = '0.8.7' 
+}
+
+
 run {
 	if (javafx.platform.classifier == 'win') {
 		// Temporal fix for Eclipse with JDK 1.8 and Windows
