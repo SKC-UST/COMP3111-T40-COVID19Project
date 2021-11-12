@@ -22,6 +22,7 @@ import java.text.SimpleDateFormat;
 public class Database {
 	
 	private ArrayList<String[]> arrayStorage = new ArrayList<String[]>();
+	private ArrayList<String> locationNames = new ArrayList<String>();
 	private HashMap<String, LocationData> hashStorage = new HashMap<String, LocationData>(); //isoCode as key
 	private boolean datasetPresent = false;
 	public enum DataTitle {CASE, DEATH, VAC}
@@ -201,14 +202,25 @@ public class Database {
 		}
 	}
 	
+	public boolean hasDataset() {
+		return this.datasetPresent;
+	}
+	
+	public ArrayList<String> getLocationNames(){
+		return this.locationNames;
+	}
+	
 	// TODO: use apache CSV
 	private void rowToData(String[] row) {
 		String isoCode = row[0];
 		String populationStr = row[44];
 		long populationNum = 1;
 		try {populationNum = Long.parseLong(populationStr);} catch(Exception e) {return;}
+		
+		// if is new location
 		if(!(hashStorage.containsKey(isoCode))) {
 			hashStorage.put(isoCode, new LocationData(isoCode, row[1], row[2], populationNum));
+			this.locationNames.add(row[2]);
 		}
 		long caseTotal, deathsTotal, vacTotal;
 		double caseRate, deathsRate, vacRate;
@@ -240,6 +252,7 @@ public class Database {
 	}
 	
 	public void importCSV(File csvDataset) {
+		this.clearDatabase();
 		try {
 			CSVReader csvReader = new CSVReader(new FileReader(csvDataset));
 			String[] nextRecord = csvReader.readNext();
@@ -251,6 +264,7 @@ public class Database {
 		catch(Exception e) {
 			e.printStackTrace();
 		}
+		this.datasetPresent = true;
 	}
 	
 	// search single data - for Table
@@ -293,12 +307,16 @@ public class Database {
 	}
 	
 	public void clearDatabase () {
+		if(this.hasDataset() == false) {
+			return;
+		}
 		Iterator it = hashStorage.entrySet().iterator();
 		while (it.hasNext()) {
 			Map.Entry<String, LocationData> pair = (Map.Entry<String, LocationData>)it.next();
 			pair.getValue().clearLocationData();
 		}
 		hashStorage.clear();
+		this.datasetPresent = false;
 	}
 	
 	public void printDatabaseContent() {
