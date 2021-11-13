@@ -17,7 +17,7 @@ import javafx.scene.chart.XYChart;
 import javafx.stage.Stage;
  
 // source: https://docs.oracle.com/javafx/2/charts/line-chart.htm#CIHGBCFI
-public class LineChartSample extends Application {
+public class LineChart extends Application {
  
     @Override public void start(Stage stage) {
         stage.setTitle("Line Chart Sample"); // window title

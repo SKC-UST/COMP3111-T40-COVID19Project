@@ -205,7 +205,7 @@ public class Controller {
     	// make chart with object LineChartSample
     	// todo: replace that chart making object
     	// source of LineChartSample(): https://docs.oracle.com/javafx/2/charts/line-chart.htm#CIHGBCFI
-    	LineChartSample test = new LineChartSample(); // new object of chart
+    	LineChart test = new LineChart(); // new object of chart
     	Stage stage = new Stage(); // make a new stage(window)
     	test.start(stage); // to make a chart on window
     }
@@ -229,33 +229,8 @@ public class Controller {
     	// todo: make functions to get data from database and input
     	// todo2: probably make the code below an object/turn it to function
     	// reference: https://www.zentut.com/java-swing/how-to-use-jtable-to-display-data/
-        /*final JFrame frame = new JFrame("JTable Demo"); // need to be replaced
 
-        String[] columns = {"Code", "Name", "High", "Low",
-                            "Close", "Volume", "Change","Change %"}; // table column (need replaced)
-
-        Object[][] data = {
-            {"MBF", "CITYGROUP", 10.16, 10.16, 10.16, 200, 0.08,0.79},
-            {"MBL", "BANK OF AMERICA", 12.66, 12.66, 12.66, 6600, 0.13,1.04},
-            {"MJP", "Morgan Stanley Dean Witter & Co.", 24.97, 24.97, 24.97, 1000, -0.04,-0.16}
-        }; // 2D array for data [row][column], todo is may make it dynamic and get data from database (need replaced)
-
-        JTable table = new JTable(data, columns); // make table
-        JScrollPane scrollPane = new JScrollPane(table); // make scrollbars
-        table.setFillsViewportHeight(true); // always make it large enough to fullfill height of enclosing viewpoint
-
-        JLabel lblHeading = new JLabel("Stock Quotes"); // title (need replaced)
-        lblHeading.setFont(new Font("Arial",Font.TRUETYPE_FONT,24)); // fonttype used for title
-
-        frame.getContentPane().setLayout(new BorderLayout()); // make new layout manager for layout setting below
-
-        frame.getContentPane().add(lblHeading,BorderLayout.PAGE_START); // heading in start of page
-        frame.getContentPane().add(scrollPane,BorderLayout.CENTER);  // scrollpane is in center
-
-        //frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); no need this as make entire program close when this window closed
-        frame.setSize(550, 200); // window size
-        frame.setVisible(true); // show window*/
-        new TableExample();
+        new Table(); // making table code now in table class
 
     }
 
