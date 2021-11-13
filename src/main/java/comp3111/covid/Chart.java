@@ -19,7 +19,7 @@ import javafx.stage.Stage;
 // source: https://docs.oracle.com/javafx/2/charts/line-chart.htm#CIHGBCFI
 public class Chart extends Application {
  
-    @Override public void start(Stage stage) {
+    @Override public void start(Stage stage) { // probably need parameter of date, country and type (a/b/c) if able
         stage.setTitle("Line Chart Sample"); // window title
         final CategoryAxis xAxis = new CategoryAxis(); // new xaxis
         final NumberAxis yAxis = new NumberAxis(); // new yaxis
@@ -27,11 +27,11 @@ public class Chart extends Application {
         final LineChart<String,Number> lineChart = 
                 new LineChart<String,Number>(xAxis,yAxis); // seems making a new line chart, x is string, y is int here
        
-        lineChart.setTitle("Stock Monitoring, 2010"); // linechart title
+        lineChart.setTitle("Stock Monitoring, 2010"); // linechart title (depend on task)
                           
-        XYChart.Series series1 = new XYChart.Series(); // new series of data (aka new country)
+        XYChart.Series series1 = new XYChart.Series(); // new series of data (aka new country), may use for loop to add new series
         series1.setName("Portfolio 1"); // name of instance of data (aka country)
-        
+        // may use for loop to add new data for a instance
         series1.getData().add(new XYChart.Data("Jan", 23)); // lots of instances
         series1.getData().add(new XYChart.Data("Feb", 14));
         series1.getData().add(new XYChart.Data("Mar", 15));
@@ -81,4 +81,4 @@ public class Chart extends Application {
         stage.setScene(scene); // set window with chart
         stage.show(); // show chart
     }
-}
+}// todo, find a way to insert data, series with for loop and also insert completed series to chart with loop

@@ -17,15 +17,16 @@ import javax.swing.table.DefaultTableModel;
 
 public class Table extends JFrame
 {
-    public Table()
+    public Table() // probably need parameter of date, country and type (a/b/c)
     {
     	
         //headers for the table, table column (need replaced)
+    	// this will be different depend on caller (a, b or c)
         String[] columns = new String[] {
             "Id", "Name", "Hourly Rate", "Part Time"
         };
          
-        //actual data for the table in a 2d array
+        //actual data for the table in a 2d array (probably no need to initialize but just append data from database)
         // 2D array for data [row][column], todo is may make it dynamic and get data from database (need replaced)
         Object[][] data = new Object[][] {
             {1, "John", 40.0, false },
@@ -33,7 +34,7 @@ public class Table extends JFrame
             {3, "Zorro", 60.0, true },
         };
          
-        final Class[] columnClass = new Class[] { // datatype of column?
+        final Class[] columnClass = new Class[] { // datatype of column? (may depend on type a/b/c)
             Integer.class, String.class, Double.class, Boolean.class
         };
         //create table model with data
@@ -52,6 +53,10 @@ public class Table extends JFrame
 
 
         JTable table = new JTable(model); // make table (with model)
+        
+        model.addRow(new Object[]{4, "PIZZA", 90.0, true}); // test line which add extra row (4th) with those new data
+        // added new row to model, for us, maybe use for loop, add row for different countries with different data
+        
         JScrollPane scrollPane = new JScrollPane(table); // make scrollbars
         table.setFillsViewportHeight(true); // always make it large enough to fullfill height of enclosing viewpoint
 
