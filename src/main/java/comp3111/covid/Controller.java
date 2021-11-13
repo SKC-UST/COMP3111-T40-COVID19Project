@@ -229,7 +229,7 @@ public class Controller {
     	// todo: make functions to get data from database and input
     	// todo2: probably make the code below an object/turn it to function
     	// reference: https://www.zentut.com/java-swing/how-to-use-jtable-to-display-data/
-        final JFrame frame = new JFrame("JTable Demo"); // need to be replaced
+        /*final JFrame frame = new JFrame("JTable Demo"); // need to be replaced
 
         String[] columns = {"Code", "Name", "High", "Low",
                             "Close", "Volume", "Change","Change %"}; // table column (need replaced)
@@ -254,7 +254,8 @@ public class Controller {
 
         //frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); no need this as make entire program close when this window closed
         frame.setSize(550, 200); // window size
-        frame.setVisible(true); // show window
+        frame.setVisible(true); // show window*/
+        new TableExample();
 
     }
 

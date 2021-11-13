@@ -1,42 +1,26 @@
 package comp3111.covid;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.SwingUtilities;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
+import java.awt.BorderLayout;
+import java.awt.Font;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+
 public class TableExample extends JFrame
 {
     public TableExample()
     {
-        //headers for the table
-        String[] columns = new String[] {
-            "Id", "Name", "Hourly Rate", "Part Time"
-        };
-         
-        //actual data for the table in a 2d array
-        Object[][] data = new Object[][] {
-            {1, "John", 40.0, false },
-            {2, "Rambo", 70.0, false },
-            {3, "Zorro", 60.0, true },
-        };
-        //create table with data
-        JTable table = new JTable(data, columns);
-         
-        //add the table to the frame
-        this.add(new JScrollPane(table));
-         
-        this.setTitle("Table Example");
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);       
-        this.pack();
-        this.setVisible(true);
     }
-     
-    public static void main(String[] args)
-    {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                new TableExample();
-            }
-        });
-    }   
 } // from https://www.codejava.net/java-se/swing/a-simple-jtable-example-for-display
