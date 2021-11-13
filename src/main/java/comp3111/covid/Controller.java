@@ -205,7 +205,7 @@ public class Controller {
     	// make chart with object LineChartSample
     	// todo: replace that chart making object
     	// source of LineChartSample(): https://docs.oracle.com/javafx/2/charts/line-chart.htm#CIHGBCFI
-    	LineChart test = new LineChart(); // new object of chart
+    	Chart test = new Chart(); // new object of chart
     	Stage stage = new Stage(); // make a new stage(window)
     	test.start(stage); // to make a chart on window
     }
