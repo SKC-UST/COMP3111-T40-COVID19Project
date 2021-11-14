@@ -286,7 +286,8 @@ public class Controller {
     	// TODO: handle file not chosen
     	if(csvFile != null) {
     		Controller.database.importCSV(csvFile);
-        	System.out.println("successfully imported");        	
+        	System.out.println("successfully imported");
+        	Controller.database.printDatabaseContent();
     	}
     }
 }

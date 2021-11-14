@@ -22,6 +22,7 @@ import java.text.SimpleDateFormat;
 public class Database {
 	
 	private ArrayList<String[]> arrayStorage = new ArrayList<String[]>();
+	private ArrayList<String> locationNames = new ArrayList<String>();
 	private HashMap<String, LocationData> hashStorage = new HashMap<String, LocationData>(); //isoCode as key
 	private boolean datasetPresent = false;
 	public enum DataTitle {CASE, DEATH, VAC}
@@ -201,13 +202,25 @@ public class Database {
 		}
 	}
 	
+	public boolean hasDataset() {
+		return this.datasetPresent;
+	}
+	
+	public ArrayList<String> getLocationNames(){
+		return this.locationNames;
+	}
+	
 	// TODO: use apache CSV
 	private void rowToData(String[] row) {
 		String isoCode = row[0];
+		String populationStr = row[44];
 		long populationNum = 1;
+		try {populationNum = Long.parseLong(populationStr);} catch(Exception e) {return;}
+		
+		// if is new location
 		if(!(hashStorage.containsKey(isoCode))) {
-			populationNum = Long.parseLong(row[44]);
 			hashStorage.put(isoCode, new LocationData(isoCode, row[1], row[2], populationNum));
+			this.locationNames.add(row[2]);
 		}
 		long caseTotal, deathsTotal, vacTotal;
 		double caseRate, deathsRate, vacRate;
@@ -239,6 +252,7 @@ public class Database {
 	}
 	
 	public void importCSV(File csvDataset) {
+		this.clearDatabase();
 		try {
 			CSVReader csvReader = new CSVReader(new FileReader(csvDataset));
 			String[] nextRecord = csvReader.readNext();
@@ -250,6 +264,7 @@ public class Database {
 		catch(Exception e) {
 			e.printStackTrace();
 		}
+		this.datasetPresent = true;
 	}
 	
 	// search single data - for Table
@@ -261,12 +276,14 @@ public class Database {
 	
 	public ArrayList<Long> searchTotalData(String isoCode, Date startDate, Date endDate, DataTitle title) {
 		ArrayList<Long> result = new ArrayList<Long>();
-		ArrayList<TotalDayData> targetList = this.hashStorage.get(isoCode).getTotalDayList(title);
-		for(TotalDayData elem : targetList) {
-			if(!elem.getDate().before(startDate) && !elem.getDate().after(endDate)) {
+		LocationData targetLocation = this.hashStorage.get(isoCode);
+		ArrayList<TotalDayData> targetList = targetLocation.getTotalDayList(title);
+		
+		for(DayData<Long> elem : targetList) {
+			if(!elem.getDate().before(startDate) && !elem.getDate().after(endDate))
 				result.add(elem.getData());
-			}
 		}
+		
 		return result;
 	}
 	
@@ -278,7 +295,9 @@ public class Database {
 	
 	public ArrayList<Double> searchRateData(String isoCode, Date startDate, Date endDate, DataTitle title) {
 		ArrayList<Double> result = new ArrayList<Double>();
-		ArrayList<RateDayData> targetList = this.hashStorage.get(isoCode).getRateDayList(title);
+		LocationData targetLocation = this.hashStorage.get(isoCode);
+		ArrayList<RateDayData> targetList = targetLocation.getRateDayList(title);
+		
 		for(RateDayData elem : targetList) {
 			if(!elem.getDate().before(startDate) && !elem.getDate().after(endDate)) {
 				result.add(elem.getData());
@@ -288,21 +307,32 @@ public class Database {
 	}
 	
 	public void clearDatabase () {
+		if(this.hasDataset() == false) {
+			return;
+		}
 		Iterator it = hashStorage.entrySet().iterator();
 		while (it.hasNext()) {
 			Map.Entry<String, LocationData> pair = (Map.Entry<String, LocationData>)it.next();
 			pair.getValue().clearLocationData();
 		}
 		hashStorage.clear();
+		this.datasetPresent = false;
 	}
 	
 	public void printDatabaseContent() {
-		Iterator it = hashStorage.entrySet().iterator();
-		while(it.hasNext()) {
-			Map.Entry<String, LocationData> pair = (Map.Entry<String, Database.LocationData>)it.next();
-			LocationData targetLocation = pair.getValue();
-			System.out.println(targetLocation.locationIsoCode + "\t" + targetLocation.locationName);
-			//pair.getValue().printLocationData();
+		
+		SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+		Date targetDate = new Date(); 
+		Date startDate = new Date();
+		Date endDate = new Date();
+		try {
+			targetDate = dateFormat.parse("2/5/2020");
+			startDate = dateFormat.parse("2/5/2020");
+			endDate = dateFormat.parse("2/15/2020");
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+		this.searchTotalData("HKG", startDate, endDate, DataTitle.CASE);
 	}
 }
