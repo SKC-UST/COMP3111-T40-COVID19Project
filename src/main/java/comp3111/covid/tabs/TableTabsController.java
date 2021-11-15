@@ -24,23 +24,23 @@ import comp3111.covid.datastorage.Database.DataTitle;
 
 public class TableTabsController extends TabController {
 	@FXML private DatePicker datePicker;
-	@FXML private TableColumn<TableView<TableData>,String> countryCol;
-	@FXML private TableColumn<TableView<TableData>,Long> totalCol;
-	@FXML private TableColumn<TableView<TableData>,Double> rateCol;
-	@FXML private TableView<TableData> dataTable;
-	@FXML private Label tableTitlelbl;
+	@FXML protected TableColumn<TableView<TableData>,String> countryCol;
+	@FXML protected TableColumn<TableView<TableData>,Long> totalCol;
+	@FXML protected TableColumn<TableView<TableData>,String> rateCol;
+	@FXML protected TableView<TableData> dataTable;
+	@FXML protected Label tableTitlelbl;
 	
 	private LocalDate selectedDate = null;
 	
 	public class TableData {
 		private final SimpleStringProperty countryName;
 		private final SimpleLongProperty totalData;
-		private final SimpleDoubleProperty rateData;
+		private final SimpleStringProperty rateData;
 
 		TableData (String location, long total, double rate) {
 			this.countryName = new SimpleStringProperty(location);
 			this.totalData = new SimpleLongProperty(total);
-			this.rateData = new SimpleDoubleProperty(rate);
+			this.rateData = new SimpleStringProperty(rate + "%");
 		}
 		
 		public String getCountryName() {
@@ -51,7 +51,7 @@ public class TableTabsController extends TabController {
 			return this.totalData.get();
 		}
 		
-		public Double getRateData() {
+		public String getRateData() {
 			return this.rateData.get();
 		}
 	}
@@ -66,12 +66,12 @@ public class TableTabsController extends TabController {
 		return null;
 	}
 	
-	private void generateTable(ArrayList<TableData> data) {
+	protected void generateTable(ArrayList<TableData> data, LocalDate date) {
 		ObservableList<TableData> oList = FXCollections.observableArrayList(data);
 		
 		this.countryCol.setCellValueFactory(new PropertyValueFactory<TableView<TableData>, String>("countryName"));
 		this.totalCol.setCellValueFactory(new PropertyValueFactory<TableView<TableData>, Long>("totalData"));
-		this.rateCol.setCellValueFactory(new PropertyValueFactory<TableView<TableData>, Double>("rateData"));
+		this.rateCol.setCellValueFactory(new PropertyValueFactory<TableView<TableData>, String>("rateData"));
 		
 		this.dataTable.setItems(oList);
 	}
@@ -87,7 +87,7 @@ public class TableTabsController extends TabController {
 		}
 		try {
 			ArrayList<TableData> dataList = this.generateDataList(selectedIso, selectedDate);
-			this.generateTable(dataList);
+			this.generateTable(dataList, this.selectedDate);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

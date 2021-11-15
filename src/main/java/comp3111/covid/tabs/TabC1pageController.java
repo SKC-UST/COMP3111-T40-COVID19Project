@@ -6,7 +6,11 @@ import java.util.ArrayList;
 import comp3111.covid.datastorage.Database;
 import comp3111.covid.datastorage.Database.DataTitle;
 import comp3111.covid.tabs.TableTabsController.TableData;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 
 public class TabC1pageController extends TableTabsController{
 	
@@ -25,5 +29,18 @@ public class TabC1pageController extends TableTabsController{
 			result.add(new TableData(db.getLocationName(isoCode), totalData, rateData));
 		}
 		return result;
+	}
+	
+	@Override
+	protected void generateTable(ArrayList<TableData> data, LocalDate date) {
+		ObservableList<TableData> oList = FXCollections.observableArrayList(data);
+		
+		this.tableTitlelbl.setText("Rate of Vaccination against COVID-19 as of " + date);
+		
+		this.countryCol.setCellValueFactory(new PropertyValueFactory<TableView<TableData>, String>("countryName"));
+		this.totalCol.setCellValueFactory(new PropertyValueFactory<TableView<TableData>, Long>("totalData"));
+		this.rateCol.setCellValueFactory(new PropertyValueFactory<TableView<TableData>, String>("rateData"));
+		
+		this.dataTable.setItems(oList);
 	}
 }
