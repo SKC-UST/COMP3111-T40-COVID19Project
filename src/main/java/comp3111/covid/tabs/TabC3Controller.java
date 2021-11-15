@@ -30,6 +30,7 @@ public class TabC3Controller {
 
     @FXML
     void handleButton(ActionEvent event) {
+    	/*
     	ArrayList<String> locations = database.getLocationNames();
     	// create the data to show in the CheckListView  
     	final ObservableList<String> strings = FXCollections.observableArrayList(); 
@@ -41,6 +42,7 @@ public class TabC3Controller {
     	// and listen to the relevant events (e.g. when the selected indices or  // selected items change). 
     	
     	this.lblText.setText("bye");
+    	*/
     }
 
 }

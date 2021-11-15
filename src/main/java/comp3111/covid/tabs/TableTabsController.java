@@ -61,9 +61,10 @@ public class TableTabsController extends TabController {
 		
 		this.dataTable.setItems(data);
 	}
-	
+	/*
 	@Override
 	void handleConfirmSelection(ActionEvent event) {
 		this.generateTable();
 	}
+	*/
 }

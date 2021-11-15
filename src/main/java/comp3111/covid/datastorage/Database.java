@@ -6,7 +6,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -20,6 +19,7 @@ import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
 
 import edu.duke.FileResource;
+import javafx.util.Pair;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -27,13 +27,6 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 public class Database {
-	
-	private ArrayList<String[]> arrayStorage = new ArrayList<String[]>();
-	private ArrayList<String> locationNames = new ArrayList<String>();
-	private HashMap<String, LocationData> hashStorage = new HashMap<String, LocationData>(); //isoCode as key
-	private boolean datasetPresent = false;
-	public enum DataTitle {CASE, DEATH, VAC}
-	final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("M/d/yyyy");
 	
 	private interface DayData<T> {
 		public LocalDate getDate();
@@ -208,12 +201,18 @@ public class Database {
 			}
 		}
 	}
+
+	private ArrayList<Pair<String, String>> locationNames = new ArrayList<Pair<String, String>>(); //<isocode, locationName>
+	private HashMap<String, LocationData> hashStorage = new HashMap<String, LocationData>(); //isoCode as key
+	private boolean datasetPresent = false;
+	public enum DataTitle {CASE, DEATH, VAC}
+	final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("M/d/yyyy");
 	
 	public boolean hasDataset() {
 		return this.datasetPresent;
 	}
 	
-	public ArrayList<String> getLocationNames(){
+	public ArrayList<Pair<String, String>> getLocationNames(){
 		return this.locationNames;
 	}
 	
@@ -232,7 +231,7 @@ public class Database {
 		if(!this.hashStorage.containsKey(isoCode)) {
 			String locationName = record.get("location");
 			this.hashStorage.put(isoCode, new LocationData(isoCode, record.get("continent"), record.get("location")));
-			this.locationNames.add(locationName);
+			this.locationNames.add(new Pair(isoCode, locationName));
 		}
 		
 		String s = record.get("total_cases");
