@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -16,31 +17,19 @@ import comp3111.covid.datastorage.Database.DataTitle;
 public class DatabaseTester {
 	Database database;
 	File csvFile;
-	Date targetDate, startDate, endDate;
+	LocalDate targetDate, startDate, endDate;
 	String location = "HKG";
 	Long[] sampleOutput;
 	
-	@SuppressWarnings("deprecation")
 	@Before
 	public void setUp() throws Exception {
 		database = new Database();
 		this.csvFile = new File("./src/main/resources/dataset/COVID_Dataset_v1.0.csv");
 		database.importCSV(csvFile);
 		
-		targetDate = new Date(2020, 2, 5);
-		startDate = new Date(2020, 2, 5);
-		endDate = new Date(2020, 2, 15);
-		
-		SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
-		Date date = new Date();
-		try {
-			targetDate = dateFormat.parse("2/5/2020");
-			startDate = dateFormat.parse("2/5/2020");
-			endDate = dateFormat.parse("2/15/2020");
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		targetDate = LocalDate.of(2020, 2, 5);
+		startDate = targetDate;
+		endDate = LocalDate.of(2020, 2, 15);
 		
 		this.sampleOutput = new Long[] {21L, 24L, 25L, 26L, 29L, 38L, 49L, 50L, 53L, 56L, 56L};
 	}
@@ -48,7 +37,7 @@ public class DatabaseTester {
 	@Test
 	public void testSingleData() {
 		try {
-			assertEquals(21, database.searchTotalData(location, targetDate, DataTitle.CASE));
+			assertEquals(2, database.searchTotalData(location, LocalDate.of(2021, 3, 3), DataTitle.VAC));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -64,3 +53,4 @@ public class DatabaseTester {
 		assertArrayEquals(this.sampleOutput, testArr.toArray());
 	}
 }
+;

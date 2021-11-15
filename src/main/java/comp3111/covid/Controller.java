@@ -12,6 +12,8 @@ import com.sun.prism.paint.Color;
 
 import comp3111.covid.datastorage.Database;
 import comp3111.covid.datastorage.Database.DataTitle;
+import comp3111.covid.tabs.TabC3Controller;
+import comp3111.covid.tabs.TabC1pageController;
 
 import java.awt.BorderLayout;
 import java.awt.Font;
@@ -155,8 +157,14 @@ public class Controller {
 
     @FXML
     private TextArea textAreaConsole;
-
-    private static final Database database = new Database();
+    
+    @FXML private Tab tabC3;
+    @FXML private Tab tabC1;
+    @FXML private TabC1pageController tabC1pageController;
+    @FXML private TabC3Controller tabC3Controller;
+    
+    private Context context = Context.getInstance();
+    private Database database = context.getDatabase();
   
 
     /**
@@ -261,10 +269,15 @@ public class Controller {
     	File csvFile = chooseCSVFile();
     	// TODO: handle file not chosen
     	if(csvFile != null) {
-    		Controller.database.importCSV(csvFile);
+    		this.database.importCSV(csvFile);
         	System.out.println("successfully imported");
-        	Controller.database.printDatabaseContent();
+        	this.database.printDatabaseContent();
     	}
+    	this.tabC1pageController.updateCheckboxList();
+    }
+    
+    Database getDatabase() {
+    	return this.database;
     }
 }
 

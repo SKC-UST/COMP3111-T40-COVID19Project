@@ -6,43 +6,44 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVRecord;
+
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
 
+import edu.duke.FileResource;
+import javafx.util.Pair;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class Database {
 	
-	private ArrayList<String[]> arrayStorage = new ArrayList<String[]>();
-	private ArrayList<String> locationNames = new ArrayList<String>();
-	private HashMap<String, LocationData> hashStorage = new HashMap<String, LocationData>(); //isoCode as key
-	private boolean datasetPresent = false;
-	public enum DataTitle {CASE, DEATH, VAC}
-	
 	private interface DayData<T> {
-		public Date getDate();
+		public LocalDate getDate();
 		public T getData();
 	}
 	
 	private class TotalDayData implements DayData<Long> {
-		private Date dataDate;
+		private LocalDate dataDate;
 		private long totalData;
 		
-		TotalDayData(Date date, long data){
+		TotalDayData(LocalDate date, long data){
 			this.dataDate = date;
 			this.totalData = data;
 		}
 		
 		@Override
-		public Date getDate() {
+		public LocalDate getDate() {
 			return this.dataDate;
 		}
 		
@@ -53,16 +54,16 @@ public class Database {
 	}
 	
 	private class RateDayData implements DayData<Double> {
-		private Date dataDate;
+		private LocalDate dataDate;
 		private double rateData;
 		
-		RateDayData(Date date, double data){
+		RateDayData(LocalDate date, double data){
 			this.dataDate = date;
 			this.rateData = data;
 		}
 		
 		@Override
-		public Date getDate() {
+		public LocalDate getDate() {
 			return this.dataDate;
 		}
 		
@@ -84,11 +85,14 @@ public class Database {
 		private ArrayList<RateDayData> deathRateList = new ArrayList<RateDayData>();
 		private ArrayList<RateDayData> vacRateList = new ArrayList<RateDayData>();
 		
-		LocationData(String isoCode, String continent, String location, long population) {
+		LocationData(String isoCode, String continent, String location) {
 			this.locationIsoCode = isoCode;
 			this.locationContinent = continent;
 			this.locationName = location;
-			this.locationPopulation = population;
+		}
+		
+		public String getLocationName() {
+			return this.locationName;
 		}
 		
 		private void addDayData(DataTitle dataTitle, DayData newDayData) {
@@ -101,7 +105,7 @@ public class Database {
 						this.deathTotalList.add((TotalDayData) newDayData);
 						break;
 					case VAC:
-						this.deathTotalList.add((TotalDayData) newDayData);
+						this.vacTotalList.add((TotalDayData) newDayData);
 						break;
 				}
 			}
@@ -114,7 +118,7 @@ public class Database {
 						this.deathRateList.add((RateDayData) newDayData);
 						break;
 					case VAC:
-						this.deathRateList.add((RateDayData) newDayData);
+						this.vacRateList.add((RateDayData) newDayData);
 						break;
 				}
 			}
@@ -144,7 +148,7 @@ public class Database {
 			return null;
 		}
 		
-		private long getTotalDayData(Date targetDate, DataTitle dataTitle) {
+		private long getTotalDayData(LocalDate targetDate, DataTitle dataTitle) {
 			ArrayList<TotalDayData> targetTitle = null;
 			switch(dataTitle) {
 				case CASE:
@@ -165,7 +169,7 @@ public class Database {
 			return -1; // not found
 		}
 		
-		private double getRateDayData(Date targetDate, DataTitle dataTitle) {
+		private double getRateDayData(LocalDate targetDate, DataTitle dataTitle) {
 			ArrayList<RateDayData> targetTitle = null;
 			switch(dataTitle) {
 				case CASE:
@@ -201,86 +205,72 @@ public class Database {
 			}
 		}
 	}
+
+	private ArrayList<Pair<String, String>> locationNames = new ArrayList<Pair<String, String>>(); //<isocode, locationName>
+	private HashMap<String, LocationData> hashStorage = new HashMap<String, LocationData>(); //isoCode as key
+	private boolean datasetPresent = false;
+	public enum DataTitle {CASE, DEATH, VAC}
+	final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("M/d/yyyy");
 	
 	public boolean hasDataset() {
 		return this.datasetPresent;
 	}
 	
-	public ArrayList<String> getLocationNames(){
+	public String getLocationName(String isoCode) {
+		return this.hashStorage.get(isoCode).getLocationName();
+	}
+	
+	public ArrayList<Pair<String, String>> getLocationNames(){
 		return this.locationNames;
 	}
 	
-	// TODO: use apache CSV
-	private void rowToData(String[] row) {
-		String isoCode = row[0];
-		String populationStr = row[44];
-		long populationNum = 1;
-		try {populationNum = Long.parseLong(populationStr);} catch(Exception e) {return;}
+	public void importCSV(File dataset) {
+		FileResource fr = new FileResource(dataset);
+		CSVParser parser = fr.getCSVParser(true);
 		
-		// if is new location
-		if(!(hashStorage.containsKey(isoCode))) {
-			hashStorage.put(isoCode, new LocationData(isoCode, row[1], row[2], populationNum));
-			this.locationNames.add(row[2]);
+		for(CSVRecord rec : parser) {
+			rowToData(rec);
 		}
-		long caseTotal, deathsTotal, vacTotal;
-		double caseRate, deathsRate, vacRate;
-		
-		// TODO: change from new cases to cumulative/total cases as of given date
-		try { caseTotal = Long.parseLong(row[4]); } catch(Exception e) { caseTotal = 0; }
-		try { deathsTotal = Long.parseLong(row[7]); } catch(Exception e) { deathsTotal = 0; }
-		try { vacTotal = Long.parseLong(row[34]); } catch(Exception e) { vacTotal = 0; }
-		
-		try { caseRate = Double.parseDouble(row[10]);} catch (Exception e) { caseRate = 0;}
-		try { deathsRate = Double.parseDouble(row[13]);} catch (Exception e) { deathsRate = 0;}
-		vacRate = vacTotal / populationNum;
-		
-		SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
-		Date date = new Date();
-		try {
-			date = dateFormat.parse(row[3]);
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		hashStorage.get(isoCode).addDayData(DataTitle.CASE, new TotalDayData(date, caseTotal));
-		hashStorage.get(isoCode).addDayData(DataTitle.DEATH, new TotalDayData(date, deathsTotal));
-		hashStorage.get(isoCode).addDayData(DataTitle.VAC, new TotalDayData(date, vacTotal));
-		
-		hashStorage.get(isoCode).addDayData(DataTitle.CASE, new RateDayData(date, caseRate));
-		hashStorage.get(isoCode).addDayData(DataTitle.DEATH, new RateDayData(date, deathsRate));
-		hashStorage.get(isoCode).addDayData(DataTitle.VAC, new RateDayData(date, vacRate));
 	}
 	
-	public void importCSV(File csvDataset) {
-		this.clearDatabase();
-		try {
-			CSVReader csvReader = new CSVReader(new FileReader(csvDataset));
-			String[] nextRecord = csvReader.readNext();
-			
-			while((nextRecord = csvReader.readNext()) != null) {
-				rowToData(nextRecord); // add DayData to LocationData
-			}
+	private void rowToData(CSVRecord record) {
+		String isoCode = record.get("iso_code");
+		LocalDate date = LocalDate.parse(record.get("date"), this.DATE_FORMAT);
+		if(!this.hashStorage.containsKey(isoCode)) {
+			String locationName = record.get("location");
+			this.hashStorage.put(isoCode, new LocationData(isoCode, record.get("continent"), record.get("location")));
+			this.locationNames.add(new Pair(isoCode, locationName));
 		}
-		catch(Exception e) {
-			e.printStackTrace();
-		}
-		this.datasetPresent = true;
+		LocationData loc = this.hashStorage.get(isoCode);
+		String s = record.get("total_cases");
+		if(!s.equals("")) { loc.addDayData(DataTitle.CASE, new TotalDayData(date, Long.parseLong(s)));}
+		s = record.get("total_cases_per_million");
+		if(!s.equals("")) {loc.addDayData(DataTitle.CASE, new RateDayData(date, Double.parseDouble(s)));};
+		s = record.get("total_deaths");
+		if(!s.equals("")) { loc.addDayData(DataTitle.DEATH, new TotalDayData(date, Long.parseLong(s)));}
+		s = record.get("total_deaths_per_million");
+		if(!s.equals("")) {loc.addDayData(DataTitle.DEATH, new RateDayData(date, Double.parseDouble(s)));};
+		s = record.get("people_fully_vaccinated");
+		if(!s.equals("")) { loc.addDayData(DataTitle.VAC, new TotalDayData(date, Long.parseLong(s)));}
+		s = record.get("people_fully_vaccinated_per_hundred");
+		if(!s.equals("")) {loc.addDayData(DataTitle.VAC, new RateDayData(date, Double.parseDouble(s)));};
 	}
+	
 	
 	// search single data - for Table
 	// return -1 if not found
-	public long searchTotalData(String isoCode, Date targetDate, DataTitle title) throws Exception {
+	public long searchTotalData(String isoCode, LocalDate targetDate, DataTitle title) throws Exception {
 		long result = this.hashStorage.get(isoCode).getTotalDayData(targetDate, title);
 		return result;
 	}
 	
-	public ArrayList<Long> searchTotalData(String isoCode, Date startDate, Date endDate, DataTitle title) {
+	public ArrayList<Long> searchTotalData(String isoCode, LocalDate startDate, LocalDate endDate, DataTitle title) {
 		ArrayList<Long> result = new ArrayList<Long>();
 		LocationData targetLocation = this.hashStorage.get(isoCode);
 		ArrayList<TotalDayData> targetList = targetLocation.getTotalDayList(title);
 		
 		for(DayData<Long> elem : targetList) {
-			if(!elem.getDate().before(startDate) && !elem.getDate().after(endDate))
+			if(!elem.getDate().isBefore(startDate) && !elem.getDate().isAfter(endDate))
 				result.add(elem.getData());
 		}
 		
@@ -288,18 +278,18 @@ public class Database {
 	}
 	
 	//return -1 if not found
-	public double searchRateData(String isoCode, Date targetDate, DataTitle title) throws Exception {
+	public double searchRateData(String isoCode, LocalDate targetDate, DataTitle title) throws Exception {
 		double result = this.hashStorage.get(isoCode).getRateDayData(targetDate, title);
 		return result;
 	}
 	
-	public ArrayList<Double> searchRateData(String isoCode, Date startDate, Date endDate, DataTitle title) {
+	public ArrayList<Double> searchRateData(String isoCode, LocalDate startDate, LocalDate endDate, DataTitle title) {
 		ArrayList<Double> result = new ArrayList<Double>();
 		LocationData targetLocation = this.hashStorage.get(isoCode);
 		ArrayList<RateDayData> targetList = targetLocation.getRateDayList(title);
 		
 		for(RateDayData elem : targetList) {
-			if(!elem.getDate().before(startDate) && !elem.getDate().after(endDate)) {
+			if(!elem.getDate().isBefore(startDate) && !elem.getDate().isAfter(endDate)) {
 				result.add(elem.getData());
 			}
 		}
@@ -310,8 +300,9 @@ public class Database {
 		if(this.hasDataset() == false) {
 			return;
 		}
-		Iterator it = hashStorage.entrySet().iterator();
+		Iterator<Entry<String, LocationData>> it = hashStorage.entrySet().iterator();
 		while (it.hasNext()) {
+			@SuppressWarnings("unchecked")
 			Map.Entry<String, LocationData> pair = (Map.Entry<String, LocationData>)it.next();
 			pair.getValue().clearLocationData();
 		}
@@ -320,19 +311,12 @@ public class Database {
 	}
 	
 	public void printDatabaseContent() {
-		
-		SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
-		Date targetDate = new Date(); 
-		Date startDate = new Date();
-		Date endDate = new Date();
-		try {
-			targetDate = dateFormat.parse("2/5/2020");
-			startDate = dateFormat.parse("2/5/2020");
-			endDate = dateFormat.parse("2/15/2020");
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		/*
+		ArrayList<RateDayData> data = this.hashStorage.get("HKG").vacRateList;
+		System.out.println("printing");
+		for(RateDayData d : data) {
+			System.out.println(d.getDate() + "\t" + d.getData());
 		}
-		this.searchTotalData("HKG", startDate, endDate, DataTitle.CASE);
+		*/
 	}
 }
