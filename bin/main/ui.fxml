@@ -14,7 +14,7 @@
 
 <VBox prefHeight="679.0" prefWidth="719.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="comp3111.covid.Controller">
   <children>
-    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="437.0" prefWidth="719.0">
+    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="490.0" prefWidth="719.0">
       <children>
             <TabPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="350.0" prefWidth="719.0" tabClosingPolicy="UNAVAILABLE">
               <tabs>
@@ -62,7 +62,7 @@
                      </content>
                 </Tab>
                   <Tab fx:id="tabReport3" text="Table C">
-                     <fx:include fx:id="tabC1page" source="tabs/tabC1.fxml"/>
+                     <fx:include fx:id="tabC1page" source="tabs/tabC1.fxml" />
                   </Tab>
                   <Tab fx:id="tabApp1" text="Chart A">
                      <content>
@@ -107,16 +107,16 @@
                      </content>
                   </Tab>
                   <Tab fx:id="tabC3" text="Report C">
-                    <fx:include fx:id="tabC3page" source="tabs/tabC3.fxml"/>
+                    <fx:include fx:id="tabC3page" source="tabs/tabC3.fxml" />
                   </Tab>
               </tabs>
             </TabPane>
       </children>
     </AnchorPane>
       <Label text="Console" />
-      <ScrollPane prefHeight="387.0" prefWidth="719.0">
+      <ScrollPane prefHeight="169.0" prefWidth="719.0">
          <content>
-            <TextArea fx:id="textAreaConsole" prefHeight="300.0" prefWidth="718.0" />
+            <TextArea fx:id="textAreaConsole" prefHeight="152.0" prefWidth="718.0" />
          </content>
       </ScrollPane>
   </children>
