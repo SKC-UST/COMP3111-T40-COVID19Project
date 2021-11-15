@@ -11,9 +11,21 @@ import org.controlsfx.control.CheckListView;
 
 public class TableTabsController extends TabController {
 	@FXML private DatePicker datePicker;
-	@FXML private TableColumn<?,?> contryCol;
-	@FXML private TableColumn<?,?> totalCol;
-	@FXML private TableColumn<?,?> rateCol;
-	@FXML private TableView<?> dataTable;
+	@FXML private TableColumn<TableView<TableData>,String> contryCol;
+	@FXML private TableColumn<TableView<TableData>,Long> totalCol;
+	@FXML private TableColumn<TableView<TableData>,Double> rateCol;
+	@FXML private TableView<TableData> dataTable;
 	@FXML private Label tableTitlelbl;
+	
+	private class TableData {
+		private String countryName;
+		private long totalData;
+		private double rateData;
+
+		private TableData (String location, long total, double rate) {
+			this.countryName = location;
+			this.totalData = total;
+			this.rateData = rate;
+		}
+	}
 }
