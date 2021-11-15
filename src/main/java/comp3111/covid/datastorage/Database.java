@@ -24,6 +24,7 @@ import edu.duke.FileResource;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class Database {
 	
@@ -32,6 +33,7 @@ public class Database {
 	private HashMap<String, LocationData> hashStorage = new HashMap<String, LocationData>(); //isoCode as key
 	private boolean datasetPresent = false;
 	public enum DataTitle {CASE, DEATH, VAC}
+	final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("M/d/yyyy");
 	
 	private interface DayData<T> {
 		public LocalDate getDate();
@@ -90,11 +92,10 @@ public class Database {
 		private ArrayList<RateDayData> deathRateList = new ArrayList<RateDayData>();
 		private ArrayList<RateDayData> vacRateList = new ArrayList<RateDayData>();
 		
-		LocationData(String isoCode, String continent, String location, long population) {
+		LocationData(String isoCode, String continent, String location) {
 			this.locationIsoCode = isoCode;
 			this.locationContinent = continent;
 			this.locationName = location;
-			this.locationPopulation = population;
 		}
 		
 		private void addDayData(DataTitle dataTitle, DayData newDayData) {
@@ -226,7 +227,26 @@ public class Database {
 	}
 	
 	private void rowToData(CSVRecord record) {
+		String isoCode = record.get("iso_code");
+		LocalDate date = LocalDate.parse(record.get("date"), this.DATE_FORMAT);
+		if(!this.hashStorage.containsKey(isoCode)) {
+			String locationName = record.get("location");
+			this.hashStorage.put(isoCode, new LocationData(isoCode, record.get("continent"), record.get("location")));
+			this.locationNames.add(locationName);
+		}
 		
+		String s = record.get("total_cases");
+		if(!s.equals("")) { this.hashStorage.get(isoCode).addDayData(DataTitle.CASE, new TotalDayData(date, Long.parseLong(s)));}
+		s = record.get("total_cases_per_million");
+		if(!s.equals("")) {this.hashStorage.get(isoCode).addDayData(DataTitle.CASE, new RateDayData(date, Double.parseDouble(s)));};
+		s = record.get("total_deaths");
+		if(!s.equals("")) { this.hashStorage.get(isoCode).addDayData(DataTitle.DEATH, new TotalDayData(date, Long.parseLong(s)));}
+		s = record.get("total_deaths_per_million");
+		if(!s.equals("")) {this.hashStorage.get(isoCode).addDayData(DataTitle.DEATH, new RateDayData(date, Double.parseDouble(s)));};
+		s = record.get("people_fully_vaccinated");
+		if(!s.equals("")) { this.hashStorage.get(isoCode).addDayData(DataTitle.VAC, new TotalDayData(date, Long.parseLong(s)));}
+		s = record.get("people_fully_vaccinated_per_hundred");
+		if(!s.equals("")) {this.hashStorage.get(isoCode).addDayData(DataTitle.VAC, new RateDayData(date, Double.parseDouble(s)));};
 	}
 	
 	
@@ -284,6 +304,6 @@ public class Database {
 	}
 	
 	public void printDatabaseContent() {
-		
+				
 	}
 }
