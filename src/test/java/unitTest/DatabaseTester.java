@@ -37,7 +37,7 @@ public class DatabaseTester {
 	@Test
 	public void testSingleData() {
 		try {
-			assertEquals(21, database.searchTotalData(location, targetDate, DataTitle.CASE));
+			assertEquals(2, database.searchTotalData(location, LocalDate.of(2021, 3, 3), DataTitle.VAC));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

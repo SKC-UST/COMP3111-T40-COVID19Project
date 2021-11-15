@@ -35,6 +35,10 @@ public class TabController {
     @FXML
     private CheckListView<Pair<String, String>> locationsCheckboxList;
     
+    protected Database getDatabase() {
+    	return this.database;
+    }
+    
     public void updateCheckboxList() {
     	
     	System.out.println("update");
@@ -86,7 +90,7 @@ public class TabController {
     	});
     }
     
-    private ArrayList<String> getSelectedIso(){
+    protected ArrayList<String> getSelectedIso(){
     	ArrayList<String> results = new ArrayList<String>();
     	for(Pair<String, String> pair : this.checkedPair) {
     		results.add(pair.getKey());

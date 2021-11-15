@@ -91,6 +91,10 @@ public class Database {
 			this.locationName = location;
 		}
 		
+		public String getLocationName() {
+			return this.locationName;
+		}
+		
 		private void addDayData(DataTitle dataTitle, DayData newDayData) {
 			if(newDayData instanceof TotalDayData) {
 				switch(dataTitle) {
@@ -101,7 +105,7 @@ public class Database {
 						this.deathTotalList.add((TotalDayData) newDayData);
 						break;
 					case VAC:
-						this.deathTotalList.add((TotalDayData) newDayData);
+						this.vacTotalList.add((TotalDayData) newDayData);
 						break;
 				}
 			}
@@ -114,7 +118,7 @@ public class Database {
 						this.deathRateList.add((RateDayData) newDayData);
 						break;
 					case VAC:
-						this.deathRateList.add((RateDayData) newDayData);
+						this.vacRateList.add((RateDayData) newDayData);
 						break;
 				}
 			}
@@ -212,6 +216,10 @@ public class Database {
 		return this.datasetPresent;
 	}
 	
+	public String getLocationName(String isoCode) {
+		return this.hashStorage.get(isoCode).getLocationName();
+	}
+	
 	public ArrayList<Pair<String, String>> getLocationNames(){
 		return this.locationNames;
 	}
@@ -233,19 +241,19 @@ public class Database {
 			this.hashStorage.put(isoCode, new LocationData(isoCode, record.get("continent"), record.get("location")));
 			this.locationNames.add(new Pair(isoCode, locationName));
 		}
-		
+		LocationData loc = this.hashStorage.get(isoCode);
 		String s = record.get("total_cases");
-		if(!s.equals("")) { this.hashStorage.get(isoCode).addDayData(DataTitle.CASE, new TotalDayData(date, Long.parseLong(s)));}
+		if(!s.equals("")) { loc.addDayData(DataTitle.CASE, new TotalDayData(date, Long.parseLong(s)));}
 		s = record.get("total_cases_per_million");
-		if(!s.equals("")) {this.hashStorage.get(isoCode).addDayData(DataTitle.CASE, new RateDayData(date, Double.parseDouble(s)));};
+		if(!s.equals("")) {loc.addDayData(DataTitle.CASE, new RateDayData(date, Double.parseDouble(s)));};
 		s = record.get("total_deaths");
-		if(!s.equals("")) { this.hashStorage.get(isoCode).addDayData(DataTitle.DEATH, new TotalDayData(date, Long.parseLong(s)));}
+		if(!s.equals("")) { loc.addDayData(DataTitle.DEATH, new TotalDayData(date, Long.parseLong(s)));}
 		s = record.get("total_deaths_per_million");
-		if(!s.equals("")) {this.hashStorage.get(isoCode).addDayData(DataTitle.DEATH, new RateDayData(date, Double.parseDouble(s)));};
+		if(!s.equals("")) {loc.addDayData(DataTitle.DEATH, new RateDayData(date, Double.parseDouble(s)));};
 		s = record.get("people_fully_vaccinated");
-		if(!s.equals("")) { this.hashStorage.get(isoCode).addDayData(DataTitle.VAC, new TotalDayData(date, Long.parseLong(s)));}
+		if(!s.equals("")) { loc.addDayData(DataTitle.VAC, new TotalDayData(date, Long.parseLong(s)));}
 		s = record.get("people_fully_vaccinated_per_hundred");
-		if(!s.equals("")) {this.hashStorage.get(isoCode).addDayData(DataTitle.VAC, new RateDayData(date, Double.parseDouble(s)));};
+		if(!s.equals("")) {loc.addDayData(DataTitle.VAC, new RateDayData(date, Double.parseDouble(s)));};
 	}
 	
 	
@@ -303,6 +311,12 @@ public class Database {
 	}
 	
 	public void printDatabaseContent() {
-				
+		/*
+		ArrayList<RateDayData> data = this.hashStorage.get("HKG").vacRateList;
+		System.out.println("printing");
+		for(RateDayData d : data) {
+			System.out.println(d.getDate() + "\t" + d.getData());
+		}
+		*/
 	}
 }
