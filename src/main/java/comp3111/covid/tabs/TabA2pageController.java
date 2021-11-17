@@ -12,7 +12,7 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 
-public class TabC1pageController extends TableTabsController{
+public class TabA2pageController extends TableTabsController{
 	
 	@Override
 	protected ArrayList<TableData> generateDataList(ArrayList<String> isoCodes, LocalDate targetDate) throws Exception{

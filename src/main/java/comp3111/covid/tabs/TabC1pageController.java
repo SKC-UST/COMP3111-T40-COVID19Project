@@ -19,8 +19,8 @@ public class TabC1pageController extends TableTabsController{
 		ArrayList<TableData> result = new ArrayList<TableData>();
 		Database db = this.getDatabase();
 		for(String isoCode : isoCodes) {
-			long totalData = db.searchTotalData(isoCode, targetDate, DataTitle.VAC);
-			double rateData = db.searchRateData(isoCode, targetDate, DataTitle.VAC);
+			long totalData = db.searchTotalData(isoCode, targetDate, DataTitle.VAC); // search all vac data
+			double rateData = db.searchRateData(isoCode, targetDate, DataTitle.VAC); // search all vac rate data
 			if(totalData < 0 || rateData < 0) {
 				//handle error
 				System.out.println("Error: " + isoCode + " " + targetDate + " " + (totalData < 0 ? "total" : "rate"));
