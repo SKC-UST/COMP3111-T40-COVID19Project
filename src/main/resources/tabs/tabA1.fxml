@@ -10,7 +10,7 @@
 <?import javafx.scene.text.Font?>
 <?import org.controlsfx.control.CheckListView?>
 
-<VBox prefHeight="600.0" prefWidth="725.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="comp3111.covid.tabs.TabC1pageController">
+<VBox prefHeight="600.0" prefWidth="725.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="comp3111.covid.tabs.TabA2pageController">
    <AnchorPane prefHeight="600.0" prefWidth="725.0">
       <children>
          <CheckListView fx:id="locationsCheckboxList" layoutX="14.0" layoutY="43.0" prefHeight="413.0" prefWidth="190.0" />
