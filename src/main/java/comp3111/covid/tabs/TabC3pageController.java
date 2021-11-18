@@ -41,32 +41,62 @@ public class TabC3pageController {
 	
 	@FXML
 	void handleTestButton(ActionEvent event) {
-		ArrayList<Pair<Number, Number>> rawData = this.database.searchDataPair(LocalDate.of(2021, 4, 25));
-		this.generateRegression(rawData);
-		this.generateChart(rawData);
+		this.regressionChart.getData().clear();
+		
+		ArrayList<Pair<Number, Number>> rawData = this.database.searchDataPair(LocalDate.of(2021, 5, 25));
+		
+		for(Pair<Number, Number> data : rawData) {
+			System.out.println(data.getKey());
+		}
+		
+		Pair<Double, Double> regressionResults = this.generateRegression(rawData);
+		this.generateChart(rawData, regressionResults.getKey(), regressionResults.getValue());
 		
 	}
 	
-	private void generateChart(ArrayList<Pair<Number, Number>> sourceData) {
+	private double getLastX(ArrayList<Pair<Number, Number>> sourceData) {
+		double maxX = 0;
+		for(Pair<Number, Number> pair : sourceData) {
+			double x = pair.getKey().doubleValue();
+			maxX = (maxX > x) ? maxX : x; 
+		}
+		return maxX;
+	}
+	
+	private void generateChart(ArrayList<Pair<Number, Number>> sourceData, double regressionSlope, double regressionInt) {
 		XYChart.Series<Number, Number> scatter = new XYChart.Series<>();
+		XYChart.Series<Number, Number> regression = new XYChart.Series<>();
 		scatter.setName("actual data points");
+		regression.setName("Regression Line");
+		
 		ArrayList<Data<Number, Number>> dataList = new ArrayList<Data<Number, Number>>();
 		for(Pair<Number, Number> pair: sourceData) {
 			scatter.getData().add(new Data<Number, Number>(pair.getKey(), pair.getValue()));
 		}
-		this.regressionChart.getData().add(scatter);
-		this.regressionChart.getData().add(scatter);
-		System.out.println(System.getProperty("user.dir"));
-		File css = new File("./src/main/resources/stylesheet/root1.css");
-		System.out.println(css.toString());
+		double lastX = getLastX(sourceData);
+		double lastY = regressionSlope * lastX + regressionInt;
+		regression.getData().add(new Data<Number, Number>(0, regressionInt));
+		regression.getData().add(new Data<Number, Number>(lastX, lastY));
+		
+		this.regressionChart.setAnimated(false);
+		this.regressionChart.setCreateSymbols(true);
+		this.regressionChart.getData().addAll(scatter, regression);
+		
 		this.regressionChart.getScene().getStylesheets().add(getClass().getResource("/stylesheet/root.css").toExternalForm());
 	}
 	
-	private void generateRegression(ArrayList<Pair<Number, Number>> rawData) {
+	private Pair<Double, Double> generateRegression(ArrayList<Pair<Number, Number>> rawData) {
 		SimpleRegression regression = new SimpleRegression(true);
 		for(Pair<Number, Number> datum : rawData) {
 			regression.addData(datum.getKey().doubleValue(), datum.getValue().doubleValue());
 		}
+		System.out.println("Intercep: " + regression.getIntercept());
+		System.out.println("Slope: " + regression.getSlope());
+		System.out.println("Statistical Significance of slope: " + regression.getSignificance());
+		System.out.println("R: " + regression.getR());
+		System.out.println("R-squared: " + regression.getRSquare());
+		
+		return new Pair<Double, Double>(regression.getSlope(), regression.getIntercept());
 	}
 	
 }

@@ -229,6 +229,7 @@ public class Database {
 	private HashMap<String, LocationData> hashStorage = new HashMap<String, LocationData>(); //isoCode as key
 	private boolean datasetPresent = false;
 	public enum DataTitle {CASE, DEATH, VAC}
+	public enum LocationAttribute {POPULATION, POPULATION_DENSITY, AGE_MEDIAN, AGE_65}
 	final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("M/d/yyyy");
 	
 	public boolean hasDataset() {
@@ -371,7 +372,7 @@ public class Database {
 		while (it.hasNext()) {
 			Map.Entry<String, LocationData> pair = (Map.Entry<String, LocationData>)it.next();
 			Number rateValue = pair.getValue().getRateDayData(targetDate, DataTitle.VAC);
-			if(rateValue.intValue() < 0)
+			if(rateValue.intValue() < 0 || pair.getKey().contains("OWID"))
 					continue;
 			Number xValue = pair.getValue().getPopulation();
 			result.add(new Pair<Number, Number>(xValue, rateValue));
