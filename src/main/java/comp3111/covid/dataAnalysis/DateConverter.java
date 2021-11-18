@@ -14,4 +14,8 @@ public class DateConverter {
 	public LocalDate longToDate(long dateValue) {
 		return START_DATE.plusDays(dateValue);
 	}
+	
+	public String longToString(long dateValue) {
+		return longToDate(dateValue).toString();
+	}
 }

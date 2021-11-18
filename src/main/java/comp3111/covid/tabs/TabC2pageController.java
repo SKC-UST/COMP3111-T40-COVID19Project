@@ -35,6 +35,7 @@ public class TabC2pageController extends ChartTabsController {
     	
     	xAxis.setLabel("Date");
     	xAxis.setForceZeroInRange(false);
+    	
     	yAxis.setLabel("Rate");
     	
     	this.dataChart.getData().clear();
