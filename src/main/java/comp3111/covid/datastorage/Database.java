@@ -229,6 +229,7 @@ public class Database {
 	private HashMap<String, LocationData> hashStorage = new HashMap<String, LocationData>(); //isoCode as key
 	private boolean datasetPresent = false;
 	public enum DataTitle {CASE, DEATH, VAC}
+	public enum LocationAttribute {POPULATION, POPULATION_DENSITY, AGE_MEDIAN, AGE_65}
 	final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("M/d/yyyy");
 	
 	public boolean hasDataset() {
@@ -236,7 +237,10 @@ public class Database {
 	}
 	
 	public String getLocationName(String isoCode) {
-		return this.hashStorage.get(isoCode).getLocationName();
+		LocationData loc = this.hashStorage.get(isoCode);
+		if(loc == null)
+			return null;
+		return loc.getLocationName();
 	}
 	
 	private void sortLocations() {
@@ -361,6 +365,20 @@ public class Database {
 			if(!day.getDate().isBefore(startDate) && !day.getDate().isAfter(endDate)) {
 				result.add(new Pair<LocalDate, Number>(day.getDate(), day.getData()));
 			}
+		}
+		return result;
+	}
+	
+	public ArrayList<Pair<Number, Number>> searchDataPair(LocalDate targetDate){
+		ArrayList<Pair<Number, Number>> result = new ArrayList<Pair<Number, Number>>();
+		Iterator<Entry<String, LocationData>> it = hashStorage.entrySet().iterator();
+		while (it.hasNext()) {
+			Map.Entry<String, LocationData> pair = (Map.Entry<String, LocationData>)it.next();
+			Number rateValue = pair.getValue().getRateDayData(targetDate, DataTitle.VAC);
+			if(rateValue.intValue() < 0 || pair.getKey().contains("OWID"))
+					continue;
+			Number xValue = pair.getValue().getPopulation();
+			result.add(new Pair<Number, Number>(xValue, rateValue));
 		}
 		return result;
 	}

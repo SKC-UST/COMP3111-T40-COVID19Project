@@ -38,24 +38,24 @@
 				        <Tab fx:id="tabReport1" text="Table A">
 					        <fx:include fx:id="tabA1page" source="tabs/tabA1.fxml" />
 				        </Tab>
-                <Tab fx:id="tabReport2" text="Table B">
-                  <fx:include fx:id="tabB1page" source="tabs/tabB1.fxml" />
-                </Tab>
-                <Tab fx:id="tabReport3" text="Table C">
-                  <fx:include fx:id="tabC1page" source="tabs/tabC1.fxml" />
-                </Tab>
-                <Tab fx:id="tabApp1" text="Chart A">
-                 	<fx:include fx:id="tabA2page" source="tabs/tabA2.fxml" />
-                </Tab>
-                <Tab fx:id="tabApp2" text="Chart B">
-                  	<fx:include fx:id="tabB2page" source="tabs/tabB2.fxml" />
-                </Tab>
-                <Tab fx:id="tabApp3" text="Chart C">
-                  	<fx:include fx:id="tabC2page" source="tabs/tabC2.fxml" />
-                </Tab>
-                <Tab fx:id="tabC3" text="Report C">
-                  	<fx:include fx:id="tabC3page" source="tabs/tabC3.fxml" />
-                </Tab>
+				        <Tab fx:id="tabReport2" text="Table B">
+					        <fx:include fx:id="tabB1page" source="tabs/tabB1.fxml" />
+				        </Tab>
+				        <Tab fx:id="tabReport3" text="Table C">
+					        <fx:include fx:id="tabC1page" source="tabs/tabC1.fxml" />
+				        </Tab>
+                 <Tab fx:id="tabApp1" text="Chart A">
+                  <fx:include fx:id="tabA2page" source="tabs/tabA2.fxml"/>
+                 </Tab>
+                 <Tab fx:id="tabApp2" text="Chart B">
+                  <fx:include fx:id="tabB2page" source="tabs/tabB2.fxml"/>
+                 </Tab>
+                 <Tab fx:id="tabApp3" text="Chart C">
+                  <fx:include fx:id="tabC2page" source="tabs/tabC2.fxml" />
+                 </Tab>
+                 <Tab fx:id="tabC3" text="Report C">
+                  <fx:include fx:id="tabC3page" source="tabs/tabC3.fxml" />
+                 </Tab>
               </tabs>
             </TabPane>
       </children>
