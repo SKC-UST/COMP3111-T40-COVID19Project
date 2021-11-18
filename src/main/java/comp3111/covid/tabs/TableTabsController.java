@@ -24,6 +24,7 @@ import comp3111.covid.datastorage.Database.DataTitle;
 
 public class TableTabsController extends TabController {
 	@FXML private DatePicker datePicker;
+	@FXML private Button confirmButton;
 	@FXML protected TableColumn<TableView<TableData>,String> countryCol;
 	@FXML protected TableColumn<TableView<TableData>,Long> totalCol;
 	@FXML protected TableColumn<TableView<TableData>,String> rateCol;

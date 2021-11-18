@@ -12,8 +12,7 @@ import com.sun.prism.paint.Color;
 
 import comp3111.covid.datastorage.Database;
 import comp3111.covid.datastorage.Database.DataTitle;
-import comp3111.covid.tabs.TabC3Controller;
-import comp3111.covid.tabs.TabC1pageController;
+import comp3111.covid.tabs.*;
 
 import java.awt.BorderLayout;
 import java.awt.Font;
@@ -161,7 +160,7 @@ public class Controller {
     @FXML private Tab tabC3;
     @FXML private Tab tabC1;
     @FXML private TabC1pageController tabC1pageController;
-    @FXML private TabC3Controller tabC3Controller;
+    @FXML private TabC3pageController tabC3pageController;
     
     private Context context = Context.getInstance();
     private Database database = context.getDatabase();
@@ -298,6 +297,7 @@ public class Controller {
         	this.database.printDatabaseContent();
     	}
     	this.tabC1pageController.updateCheckboxList();
+    	this.tabC3pageController.updateCheckboxList();
     }
     
     Database getDatabase() {

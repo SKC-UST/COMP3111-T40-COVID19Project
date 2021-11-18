@@ -24,7 +24,7 @@
                <TableColumn fx:id="rateCol" prefWidth="167.55850516094029" text="Vaccination Rate" />
            </columns>
          </TableView>
-         <Label fx:id="tableTitlelbl" layoutX="369.0" layoutY="62.0" text="Table Title" textAlignment="CENTER">
+         <Label fx:id="tableTitlelbl" layoutX="214.0" layoutY="62.0" text="Table Title" textAlignment="CENTER">
             <font>
                <Font name="System Bold" size="16.0" />
             </font>

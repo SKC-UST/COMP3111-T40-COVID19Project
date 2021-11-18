@@ -30,9 +30,6 @@ public class TabController {
 	private HashMap<String, Boolean> checkedLocations = new HashMap<String, Boolean>();
 
     @FXML
-    private Button confirmButton;
-
-    @FXML
     private CheckListView<Pair<String, String>> locationsCheckboxList;
     
     protected Database getDatabase() {
@@ -64,24 +61,6 @@ public class TabController {
     			setText(pair == null ? "" : pair.getValue());
     		}
     	});
-    	/*
-    	this.locationsCheckboxList.getCheckModel().getCheckedIndices().addListener(new ListChangeListener<Integer>(){
-    		@Override
-    		public void onChanged(ListChangeListener.Change<? extends Integer> c) {
-    			while(c.next()) {
-    				if(c.wasAdded()) {
-    					for(int i : c.getAddedSubList()) {
-    						checkedLocations.put(locationsCheckboxList.getItems().get(i).getKey(), true);
-    					}
-    				}
-    				if(c.wasRemoved()) {
-    					for(int i : c.getRemoved()) {
-    						checkedLocations.put(locationsCheckboxList.getItems().get(i).getKey(), false);
-    					}
-    				}
-    			}
-    		}
-    	}); */
     	
     	this.locationsCheckboxList.getCheckModel().getCheckedItems().addListener(new ListChangeListener<Pair<String, String>>(){
     		public void onChanged(ListChangeListener.Change<? extends Pair<String, String>> c) {
