@@ -71,100 +71,29 @@ public class Controller {
     private Button buttonConfirmedCases;
     
     @FXML
-    private Button buttonChartA;
-
-    @FXML
-    private Button buttonChartB;
-
-    @FXML
-    private Button buttonChartC;
-    
-    @FXML
-    private Button buttonTableA;
-
-    @FXML
-    private Button buttonTableB;
-
-    @FXML
-    private Button buttonTableC;
-
-    @FXML
-    private DatePicker datepickerDateA;
-
-    @FXML
-    private DatePicker datepickerDateB;
-
-    @FXML
-    private DatePicker datepickerDateC;
-
-    @FXML
-    private DatePicker datepickerEndDateA;
-
-    @FXML
-    private DatePicker datepickerEndDateB;
-
-    @FXML
-    private DatePicker datepickerEndDateC;
-
-    @FXML
-    private DatePicker datepickerStartDateA;
-
-    @FXML
-    private DatePicker datepickerStartDateB;
-
-    @FXML
-    private DatePicker datepickerStartDateC;
-
-    @FXML
-    private ListView<?> listviewCountriesA1;
-
-    @FXML
-    private ListView<?> listviewCountriesA2;
-
-    @FXML
-    private ListView<?> listviewCountriesB1;
-
-    @FXML
-    private ListView<?> listviewCountriesB2;
-
-    @FXML
-    private ListView<?> listviewCountriesC1;
-
-    @FXML
-    private ListView<?> listviewCountriesC2;
-    
-    @FXML
     private Button fileChoosingButton;
 
     @FXML
-    private Tab tabReport1;
-
-    @FXML
-    private Tab tabReport2;
-
-    @FXML
-    private Tab tabReport3;
-
-    @FXML
-    private Tab tabApp1;
-
-    @FXML
-    private Tab tabApp2;
-
-    @FXML
-    private Tab tabApp3;
-
-    @FXML
-    private TextArea textAreaConsole;
+    private TextArea textAreaConsole; // the console that was gone
     
+    // all tabs in program
     @FXML private Tab tabC3;
     @FXML private Tab tabC2;
     @FXML private Tab tabC1;
+    @FXML private Tab tabB2;
+    @FXML private Tab tabB1;
+    @FXML private Tab tabA2;
+    @FXML private Tab tabA1;
+    
+    // controller for all tabs
     @FXML private TabA1pageController tabA1pageController;
     @FXML private TabA2pageController tabA2pageController;
     @FXML private TabB1pageController tabB1pageController;
     @FXML private TabB2pageController tabB2pageController;
     @FXML private TabC1pageController tabC1pageController;
+    @FXML private TabA2pageController tabA2pageController;
+    @FXML private TabB2pageController tabB2pageController;
+
     @FXML private TabC2pageController tabC2pageController;
     @FXML private TabC3pageController tabC3pageController;
     
@@ -213,51 +142,6 @@ public class Controller {
     	textAreaConsole.setText(oReport);
     }
     
-    @FXML // click A2 button
-    void makeChartA(ActionEvent event) {
-    	// make chart with object LineChartSample
-    	// todo: replace that chart making object
-    	// source of LineChartSample(): https://docs.oracle.com/javafx/2/charts/line-chart.htm#CIHGBCFI
-    	Chart test = new Chart(); // new object of chart
-    	Stage stage = new Stage(); // make a new stage(window)
-    	test.start(stage); // to make a chart on window
-    }
-
-    @FXML // click B2 button
-    void makeChartB(ActionEvent event) {
-
-    }
-
-    @FXML // click C2 button
-    void makeChartC(ActionEvent event) {
-
-    }
-
-    @FXML // click A1 button
-    void makeTableA(ActionEvent event) {
-
-    	// System.out.println("Testing A1");   
-    	
-    	// code below is make a jtable (popup when button is clicked)
-    	// todo: make functions to get data from database and input
-    	// todo2: probably make the code below an object/turn it to function
-    	// reference: https://www.zentut.com/java-swing/how-to-use-jtable-to-display-data/
-
-        new Table(); // making table code now in table class
-
-    }
-
-    @FXML // click B1 button
-    void makeTableB(ActionEvent event) {
-
-    }
-
-    @FXML // click C1 button
-    void makeTableC(ActionEvent event) {
-
-    }
-// For report, please fill it yourself
-    
     private File chooseCSVFile() {
     	JFileChooser csvChooser = new JFileChooser("./src/main/resources/dataset");
     	FileNameExtensionFilter csvFilter = new FileNameExtensionFilter("CSV files", "csv");
@@ -288,6 +172,7 @@ public class Controller {
     	}
     	
     	//this.tabC3pageController.updateCheckboxList();
+
     }
     
     Database getDatabase() {
