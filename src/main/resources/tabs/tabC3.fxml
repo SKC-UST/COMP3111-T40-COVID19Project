@@ -16,7 +16,7 @@
                 <NumberAxis side="BOTTOM" fx:id="xAxis" />
               </xAxis>
               <yAxis>
-                <NumberAxis fx:id="yAxis" side="LEFT" />
+                <NumberAxis fx:id="yAxis" label="Vaccination Rate" side="LEFT" />
               </yAxis>
             </LineChart>
             <Button fx:id="testButton" layoutX="925.0" layoutY="14.0" mnemonicParsing="false" onAction="#handleTestButton" text="Button" />

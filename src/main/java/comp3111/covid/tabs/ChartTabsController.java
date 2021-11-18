@@ -35,9 +35,6 @@ public class ChartTabsController extends TabController{
     protected LocalDate endDate = null;
     
     public void initialize() {
-    	this.setYAxisTitle();
-    	this.dataChart.setCreateSymbols(false);
-    	this.xAxis.setForceZeroInRange(false);
     	
     	xAxis.setTickLabelFormatter(new StringConverter<Number>() {
     		DateConverter dc = new DateConverter();
@@ -89,11 +86,6 @@ public class ChartTabsController extends TabController{
     		result.add(series);
     	}
     	return result;
-    }
-    
-    //to be overriden
-    protected void setYAxisTitle() {
-    	this.yAxis.setLabel("y-axis");
     }
     
     //to be overriden

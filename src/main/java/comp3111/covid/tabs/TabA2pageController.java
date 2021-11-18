@@ -21,9 +21,4 @@ public class TabA2pageController extends ChartTabsController{
 	protected ArrayList<Pair<LocalDate, Number>> getDateDataPair(String iso, LocalDate startDate, LocalDate endDate) { 
     	return this.getDatabase().searchChartData(iso, startDate, endDate, DataTitle.CASE);
     }
-	
-	@Override
-	protected void setYAxisTitle() {
-    	this.yAxis.setLabel("Number of Cases (per 1M)");
-    }
 }

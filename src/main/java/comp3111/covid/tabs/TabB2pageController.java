@@ -13,8 +13,4 @@ public class TabB2pageController extends ChartTabsController {
     	return this.getDatabase().searchChartData(iso, startDate, endDate, DataTitle.DEATH);
     }
 	
-	@Override
-	protected void setYAxisTitle() {
-    	this.yAxis.setLabel("Number of deaths (per 1M)");
-    }
 }
