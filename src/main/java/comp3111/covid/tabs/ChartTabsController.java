@@ -23,10 +23,10 @@ public class ChartTabsController extends TabController{
     @FXML protected Button confirmButton;
     @FXML protected DatePicker startDatePicker;
     @FXML protected DatePicker endDatePicker;
-    @FXML protected CategoryAxis xAxis;
+    @FXML protected NumberAxis xAxis;
     @FXML protected NumberAxis yAxis;
     @FXML
-	protected LineChart<String, Number> dataChart;
+	protected LineChart<Number, Number> dataChart;
     
     protected LocalDate startDate = null;    
     protected LocalDate endDate = null;
@@ -39,8 +39,8 @@ public class ChartTabsController extends TabController{
     	yAxis.setLabel("Rate");
     	
     	this.dataChart.getData().clear();
-    	ArrayList<XYChart.Series<String, Number>> data = generateChartData();
-    	for(XYChart.Series<String, Number> series : data) {
+    	ArrayList<XYChart.Series<Number, Number>> data = generateChartData();
+    	for(XYChart.Series<Number, Number> series : data) {
     		this.dataChart.getData().add(series);
     	}
     }
@@ -56,7 +56,7 @@ public class ChartTabsController extends TabController{
     }
     
     //to be overriden
-    protected ArrayList<XYChart.Series<String, Number>> generateChartData(){
+    protected ArrayList<XYChart.Series<Number, Number>> generateChartData(){
     	return null;
     }
 }
