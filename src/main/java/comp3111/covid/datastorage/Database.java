@@ -328,6 +328,18 @@ public class Database {
 		return result;
 	}
 	
+	public ArrayList<Pair<LocalDate, Number>> searchChartData(String isoCode, LocalDate startDate, LocalDate endDate, DataTitle title){
+		ArrayList<Pair<LocalDate, Number>> result = new ArrayList<Pair<LocalDate, Number>>();
+		LocationData loc = this.hashStorage.get(isoCode);
+		ArrayList<RateDayData> rateList = loc.vacRateList;
+		for(RateDayData day : rateList) {
+			if(!day.getDate().isBefore(startDate) && !day.getDate().isAfter(endDate)) {
+				result.add(new Pair<LocalDate, Number>(day.getDate(), day.getData()));
+			}
+		}
+		return result;
+	}
+	
 	public void clearDatabase () {
 		if(this.hasDataset() == false) {
 			return;
