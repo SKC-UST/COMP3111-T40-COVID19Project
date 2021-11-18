@@ -26,7 +26,7 @@ public class TabB1pageController extends TableTabsController{
 				System.out.println("Error: " + isoCode + " " + targetDate + " " + (totalData < 0 ? "total" : "rate"));
 				return null;
 			}
-			result.add(new TableData(db.getLocationName(isoCode), totalData, rateData));
+			result.add(new TableData(db.getLocationName(isoCode), totalData, rateData, false));
 		}
 		return result;
 	}
