@@ -96,6 +96,10 @@ public class Database {
 			return this.locationName;
 		}
 		
+		public long getPopulation() {
+			return this.locationPopulation;
+		}
+		
 		private void addDayData(DataTitle dataTitle, DayData newDayData) {
 			if(newDayData instanceof TotalDayData) {
 				switch(dataTitle) {
@@ -206,7 +210,9 @@ public class Database {
 			}
 		}
 	}
-
+	
+	
+	//Database 
 	private ArrayList<Pair<String, String>> locationNames = new ArrayList<Pair<String, String>>(); //<isocode, locationName>
 	private HashMap<String, LocationData> hashStorage = new HashMap<String, LocationData>(); //isoCode as key
 	private boolean datasetPresent = false;
@@ -224,6 +230,24 @@ public class Database {
 	public ArrayList<Pair<String, String>> getLocationNames(){
 		return this.locationNames;
 	}
+	
+	public ArrayList<Pair<Number, Number>> getRateLocationPair(LocalDate date){
+		ArrayList<Pair<Number, Number>> result = new ArrayList<Pair<Number, Number>>();
+		Iterator<Entry<String, LocationData>> it = hashStorage.entrySet().iterator();
+		while (it.hasNext()) {
+			@SuppressWarnings("unchecked")
+			Map.Entry<String, LocationData> pair = (Map.Entry<String, LocationData>)it.next();
+			LocationData loc = pair.getValue();
+			double rate = loc.getRateDayData(date, DataTitle.VAC);
+			if(rate < 0) {
+				continue;
+			}
+			Pair<Number, Number> newPair = new Pair<Number, Number>(loc.getPopulation(), loc.getRateDayData(date, DataTitle.VAC));
+			result.add(newPair);
+		}
+		return result;
+	}
+	
 	
 	public void importCSV(File dataset) {
 		FileResource fr = new FileResource(dataset);
