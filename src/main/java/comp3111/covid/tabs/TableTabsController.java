@@ -38,10 +38,10 @@ public class TableTabsController extends TabController {
 		private final SimpleLongProperty totalData;
 		private final SimpleStringProperty rateData;
 
-		TableData (String location, long total, double rate) {
+		TableData (String location, long total, double rate, boolean needPercentage) {
 			this.countryName = new SimpleStringProperty(location);
 			this.totalData = new SimpleLongProperty(total);
-			this.rateData = new SimpleStringProperty(rate + "%");
+			this.rateData = new SimpleStringProperty(rate + (needPercentage ? "%" : ""));
 		}
 		
 		public String getCountryName() {
