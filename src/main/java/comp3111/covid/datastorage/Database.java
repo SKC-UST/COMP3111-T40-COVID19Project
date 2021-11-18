@@ -353,9 +353,10 @@ public class Database {
 	}
 	
 	public ArrayList<Pair<LocalDate, Number>> searchChartData(String isoCode, LocalDate startDate, LocalDate endDate, DataTitle title){
+		
 		ArrayList<Pair<LocalDate, Number>> result = new ArrayList<Pair<LocalDate, Number>>();
 		LocationData loc = this.hashStorage.get(isoCode);
-		ArrayList<RateDayData> rateList = loc.vacRateList;
+		ArrayList<RateDayData> rateList = (title == DataTitle.CASE ? loc.caseRateList : (title == DataTitle.DEATH ? loc.deathRateList : loc.vacRateList)); 
 		for(RateDayData day : rateList) {
 			if(!day.getDate().isBefore(startDate) && !day.getDate().isAfter(endDate)) {
 				result.add(new Pair<LocalDate, Number>(day.getDate(), day.getData()));

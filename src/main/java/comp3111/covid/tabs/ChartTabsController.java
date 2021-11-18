@@ -25,10 +25,11 @@ public class ChartTabsController extends TabController{
     @FXML protected DatePicker endDatePicker;
     @FXML protected CategoryAxis xAxis;
     @FXML protected NumberAxis yAxis;
-    @FXML private LineChart<String, Number> dataChart;
+    @FXML
+	protected LineChart<String, Number> dataChart;
     
-    private LocalDate startDate = null;    
-    private LocalDate endDate = null;
+    protected LocalDate startDate = null;    
+    protected LocalDate endDate = null;
     
     
     @FXML
@@ -54,21 +55,8 @@ public class ChartTabsController extends TabController{
     	this.endDate = this.endDatePicker.getValue();
     }
     
+    //to be overriden
     protected ArrayList<XYChart.Series<String, Number>> generateChartData(){
-    	
-    	ArrayList<XYChart.Series<String, Number>> result = new ArrayList<XYChart.Series<String, Number>>();
-    	for(String iso : this.getSelectedIso()) {
-    		ArrayList<Pair<LocalDate, Number>> source = this.getDatabase().searchChartData(iso, startDate, endDate, DataTitle.VAC);    		
-    		XYChart.Series<String, Number> series = new XYChart.Series<>();
-    		//
-    		for(Pair<LocalDate, Number> data : source) {
-    			series.getData().add(new XYChart.Data<String, Number>(data.getKey().toString(), data.getValue()));
-    		}
-    		
-    		series.setName(iso);
-    		result.add(series);
-    	}
-    	return result;
-    	
+    	return null;
     }
 }
