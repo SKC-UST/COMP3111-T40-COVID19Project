@@ -10,11 +10,11 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefHeight="650.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="comp3111.covid.Controller">
+<VBox prefHeight="650.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="comp3111.covid.Controller">
   <children>
     <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="680.0" prefWidth="719.0">
       <children>
-            <TabPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="650.0" prefWidth="750.0" tabClosingPolicy="UNAVAILABLE">
+            <TabPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="650.0" prefWidth="1000.0" tabClosingPolicy="UNAVAILABLE">
               <tabs>
                 <Tab fx:id="tabTaskZero" text="Task Zero">
                   <content>
@@ -91,10 +91,10 @@
                      </content>
                   </Tab>
                   <Tab fx:id="tabApp3" text="Chart C">
-                  	<fx:include fx:id="tabC2page" source="tabs/tabC2.fxml"/>
+                  	<fx:include fx:id="tabC2page" source="tabs/tabC2.fxml" />
                   </Tab>
                   <Tab fx:id="tabC3" text="Report C">
-                  	<fx:include fx:id="tabC3page" source="tabs/tabC3.fxml"/>
+                  	<fx:include fx:id="tabC3page" source="tabs/tabC3.fxml" />
                   </Tab>
               </tabs>
             </TabPane>

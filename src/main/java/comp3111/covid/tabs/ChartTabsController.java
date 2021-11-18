@@ -29,6 +29,10 @@ public class ChartTabsController extends TabController{
     
     @FXML
     void handleConfirmSelection(ActionEvent event) {
+    	
+    	xAxis.setLabel("Date");
+    	yAxis.setLabel("Rate");
+    	
     	ArrayList<XYChart.Series<String, Number>> data = generateChartData();
     	for(XYChart.Series<String, Number> series : data) {
     		this.dataChart.getData().add(series);
@@ -39,7 +43,7 @@ public class ChartTabsController extends TabController{
     void selectStartDate(ActionEvent event) {
     	System.out.println("Select start date");
     	this.startDate = this.startDatePicker.getValue();
-    	System.out.println(startDate);
+    	System.out.println(startDate.toString());
     }
 
     @FXML

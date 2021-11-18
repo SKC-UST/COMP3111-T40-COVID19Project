@@ -10,18 +10,18 @@
 <?import javafx.scene.layout.VBox?>
 <?import org.controlsfx.control.CheckListView?>
 
-<VBox prefHeight="600.0" prefWidth="725.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="comp3111.covid.tabs.TabC2pageController">
+<VBox prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="comp3111.covid.tabs.TabC2pageController">
    <AnchorPane prefHeight="600.0" prefWidth="725.0">
       <children>
          <CheckListView fx:id="locationsCheckboxList" layoutX="14.0" layoutY="43.0" prefHeight="547.0" prefWidth="190.0" />
          <Label layoutX="21.0" layoutY="14.0" text="Select target Countries" />
-         <Button fx:id="confirmButton" layoutX="591.0" layoutY="9.0" mnemonicParsing="false" onAction="#handleConfirmSelection" text="Confirm Selection" />
-         <DatePicker fx:id="startDatePicker" layoutX="218.0" layoutY="9.0" onAction="#selectStartDate" prefHeight="25.0" prefWidth="166.0" />
-         <Label layoutX="403.0" layoutY="14.0" text="to" />
-         <DatePicker fx:id="endDatePicker" layoutX="424.0" layoutY="10.0" onAction="#selectEndDate" prefHeight="25.0" prefWidth="151.0" />
-         <LineChart fx:id="dataChart" layoutX="218.0" layoutY="43.0" prefHeight="548.0" prefWidth="501.0">
+         <Button fx:id="confirmButton" layoutX="852.0" layoutY="10.0" mnemonicParsing="false" onAction="#handleConfirmSelection" text="Confirm Selection" />
+         <DatePicker fx:id="startDatePicker" layoutX="397.0" layoutY="9.0" onAction="#selectStartDate" prefHeight="25.0" prefWidth="166.0" />
+         <Label layoutX="596.0" layoutY="14.0" text="to" />
+         <DatePicker fx:id="endDatePicker" layoutX="671.0" layoutY="9.0" onAction="#selectEndDate" prefHeight="25.0" prefWidth="151.0" />
+         <LineChart fx:id="dataChart" layoutX="218.0" layoutY="43.0" prefHeight="549.0" prefWidth="770.0">
            <xAxis>
-             <CategoryAxis side="BOTTOM" fx:id="xAxis" />
+             <CategoryAxis animated="false" side="BOTTOM" fx:id="xAxis" />
            </xAxis>
            <yAxis>
              <NumberAxis fx:id="yAxis" side="LEFT" />
