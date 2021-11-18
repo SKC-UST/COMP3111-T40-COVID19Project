@@ -8,11 +8,13 @@
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.VBox?>
 
 <VBox prefHeight="650.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="comp3111.covid.Controller">
   <children>
-    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="680.0" prefWidth="719.0">
+    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="680.0" prefWidth="1000.0">
       <children>
             <TabPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="650.0" prefWidth="1000.0" tabClosingPolicy="UNAVAILABLE">
               <tabs>
@@ -33,49 +35,27 @@
                         </AnchorPane>
                   </content>
                 </Tab>
-				<Tab fx:id="tabReport1" text="Table A">
-					<fx:include fx:id="tabA1page" source="tabs/tabA1.fxml" />
-				</Tab>
-				<Tab fx:id="tabReport2" text="Table B">
-					<fx:include fx:id="tabB1page" source="tabs/tabB1.fxml" />
-				</Tab>
-				<Tab fx:id="tabReport3" text="Table C">
-					<fx:include fx:id="tabC1page" source="tabs/tabC1.fxml" />
-				</Tab>
-                  <Tab fx:id="tabApp1" text="Chart A">
-                     <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="384.0" prefWidth="719.0">
-                           <children>
-                              <Label layoutX="79.0" layoutY="44.0" text="Period" />
-                              <Label layoutX="70.0" layoutY="89.0" text="Country" />
-                              <ListView fx:id="listviewCountriesA2" layoutX="132.0" layoutY="89.0" prefHeight="200.0" prefWidth="200.0" />
-                              <DatePicker fx:id="datepickerStartDateA" layoutX="132.0" layoutY="40.0" promptText="Select Starting Date" />
-                              <Button fx:id="buttonChartA" layoutX="360.0" layoutY="266.0" mnemonicParsing="false" onAction="#makeChartA" text="Generate Chart" />
-                              <DatePicker fx:id="datepickerEndDateA" layoutX="332.0" layoutY="40.0" promptText="Select Ending Date" />
-                           </children>
-                        </AnchorPane>
-                     </content>
-                  </Tab>
-                  <Tab fx:id="tabApp2" text="Chart B">
-                     <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="384.0" prefWidth="719.0">
-                           <children>
-                              <Label layoutX="79.0" layoutY="44.0" text="Period" />
-                              <Label layoutX="70.0" layoutY="89.0" text="Country" />
-                              <ListView fx:id="listviewCountriesB2" layoutX="132.0" layoutY="89.0" prefHeight="200.0" prefWidth="200.0" />
-                              <DatePicker fx:id="datepickerStartDateB" layoutX="132.0" layoutY="40.0" promptText="Select Starting Date" />
-                              <Button fx:id="buttonChartB" layoutX="360.0" layoutY="266.0" mnemonicParsing="false" onAction="#makeChartB" text="Generate Chart" />
-                              <DatePicker fx:id="datepickerEndDateB" layoutX="332.0" layoutY="40.0" promptText="Select Ending Date" />
-                           </children>
-                        </AnchorPane>
-                     </content>
-                  </Tab>
-                  <Tab fx:id="tabApp3" text="Chart C">
+				        <Tab fx:id="tabReport1" text="Table A">
+					        <fx:include fx:id="tabA1page" source="tabs/tabA1.fxml" />
+				        </Tab>
+                <Tab fx:id="tabReport2" text="Table B">
+                  <fx:include fx:id="tabB1page" source="tabs/tabB1.fxml" />
+                </Tab>
+                <Tab fx:id="tabReport3" text="Table C">
+                  <fx:include fx:id="tabC1page" source="tabs/tabC1.fxml" />
+                </Tab>
+                <Tab fx:id="tabApp1" text="Chart A">
+                 	<fx:include fx:id="tabA2page" source="tabs/tabA2.fxml" />
+                </Tab>
+                <Tab fx:id="tabApp2" text="Chart B">
+                  	<fx:include fx:id="tabB2page" source="tabs/tabB2.fxml" />
+                </Tab>
+                <Tab fx:id="tabApp3" text="Chart C">
                   	<fx:include fx:id="tabC2page" source="tabs/tabC2.fxml" />
-                  </Tab>
-                  <Tab fx:id="tabC3" text="Report C">
+                </Tab>
+                <Tab fx:id="tabC3" text="Report C">
                   	<fx:include fx:id="tabC3page" source="tabs/tabC3.fxml" />
-                  </Tab>
+                </Tab>
               </tabs>
             </TabPane>
       </children>
