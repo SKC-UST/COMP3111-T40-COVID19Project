@@ -14,7 +14,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Pair;
 
-public class TabA2pageController extends ChartTabsController{
+public class TabB2pageController extends ChartTabsController{
 	
 	
 	@Override
@@ -22,7 +22,7 @@ public class TabA2pageController extends ChartTabsController{
     	
     	ArrayList<XYChart.Series<String, Number>> result = new ArrayList<XYChart.Series<String, Number>>();
     	for(String iso : this.getSelectedIso()) {
-    		ArrayList<Pair<LocalDate, Number>> source = this.getDatabase().searchChartData(iso, startDate, endDate, DataTitle.CASE);    		
+    		ArrayList<Pair<LocalDate, Number>> source = this.getDatabase().searchChartData(iso, startDate, endDate, DataTitle.DEATH);    		
     		XYChart.Series<String, Number> series = new XYChart.Series<>();
     		//
     		for(Pair<LocalDate, Number> data : source) {
@@ -42,7 +42,7 @@ public class TabA2pageController extends ChartTabsController{
     	yAxis.setLabel("Rate");
     	
     	this.dataChart.getData().clear();
-    	this.dataChart.setTitle("Cumulative Confirmed COVID-19 Cases (per 1M)");
+    	this.dataChart.setTitle("Cumulative Confirmed COVID-19 Deaths (per 1M)");
     	this.dataChart.setCreateSymbols(false);
     	
     	ArrayList<XYChart.Series<String, Number>> data = generateChartData();
