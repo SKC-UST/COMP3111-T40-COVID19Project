@@ -24,6 +24,7 @@ import comp3111.covid.datastorage.Database.DataTitle;
 
 public class TableTabsController extends TabController {
 	@FXML private DatePicker datePicker;
+	@FXML private Button confirmButton;
 	@FXML protected TableColumn<TableView<TableData>,String> countryCol;
 	@FXML protected TableColumn<TableView<TableData>,Long> totalCol;
 	@FXML protected TableColumn<TableView<TableData>,String> rateCol;
@@ -37,10 +38,10 @@ public class TableTabsController extends TabController {
 		private final SimpleLongProperty totalData;
 		private final SimpleStringProperty rateData;
 
-		TableData (String location, long total, double rate) {
+		TableData (String location, long total, double rate, boolean needPercentage) {
 			this.countryName = new SimpleStringProperty(location);
 			this.totalData = new SimpleLongProperty(total);
-			this.rateData = new SimpleStringProperty(rate + "%");
+			this.rateData = new SimpleStringProperty(rate + (needPercentage ? "%" : ""));
 		}
 		
 		public String getCountryName() {

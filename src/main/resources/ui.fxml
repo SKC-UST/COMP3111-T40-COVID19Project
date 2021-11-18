@@ -4,19 +4,17 @@
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
-<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefHeight="679.0" prefWidth="719.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="comp3111.covid.Controller">
+<VBox prefHeight="650.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="comp3111.covid.Controller">
   <children>
-    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="490.0" prefWidth="719.0">
+    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="680.0" prefWidth="719.0">
       <children>
-            <TabPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="491.0" prefWidth="719.0" tabClosingPolicy="UNAVAILABLE">
+            <TabPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="650.0" prefWidth="1000.0" tabClosingPolicy="UNAVAILABLE">
               <tabs>
                 <Tab fx:id="tabTaskZero" text="Task Zero">
                   <content>
@@ -73,31 +71,14 @@
                      </content>
                   </Tab>
                   <Tab fx:id="tabApp3" text="Chart C">
-                     <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="384.0" prefWidth="719.0">
-                           <children>
-                              <Label layoutX="79.0" layoutY="44.0" text="Period" />
-                              <Label layoutX="70.0" layoutY="89.0" text="Country" />
-                              <ListView fx:id="listviewCountriesC2" layoutX="132.0" layoutY="89.0" prefHeight="200.0" prefWidth="200.0" />
-                              <DatePicker fx:id="datepickerStartDateC" layoutX="132.0" layoutY="40.0" promptText="Select Starting Date" />
-                              <Button fx:id="buttonChartC" layoutX="360.0" layoutY="266.0" mnemonicParsing="false" onAction="#makeChartC" text="Generate Chart" />
-                              <DatePicker fx:id="datepickerEndDateC" layoutX="332.0" layoutY="40.0" promptText="Select Ending Date" />
-                           </children>
-                        </AnchorPane>
-                     </content>
+                  	<fx:include fx:id="tabC2page" source="tabs/tabC2.fxml" />
                   </Tab>
                   <Tab fx:id="tabC3" text="Report C">
-                    <fx:include fx:id="tabC3page" source="tabs/tabC3.fxml" />
+                  	<fx:include fx:id="tabC3page" source="tabs/tabC3.fxml" />
                   </Tab>
               </tabs>
             </TabPane>
       </children>
     </AnchorPane>
-      <Label text="Console" />
-      <ScrollPane prefHeight="169.0" prefWidth="719.0">
-         <content>
-            <TextArea fx:id="textAreaConsole" prefHeight="152.0" prefWidth="718.0" />
-         </content>
-      </ScrollPane>
   </children>
 </VBox>

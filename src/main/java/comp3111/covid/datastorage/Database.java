@@ -6,6 +6,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -33,7 +35,7 @@ public class Database {
 		public T getData();
 	}
 	
-	private class TotalDayData implements DayData<Long> {
+	private class TotalDayData implements DayData<Long>, Comparable<TotalDayData>{
 		private LocalDate dataDate;
 		private long totalData;
 		
@@ -51,9 +53,14 @@ public class Database {
 		public Long getData() {
 			return this.totalData;
 		}
+		
+		@Override
+		public int compareTo(TotalDayData o) {
+			return this.dataDate.compareTo(o.dataDate);
+		}
 	}
 	
-	private class RateDayData implements DayData<Double> {
+	private class RateDayData implements DayData<Double>, Comparable<RateDayData> {
 		private LocalDate dataDate;
 		private double rateData;
 		
@@ -71,6 +78,11 @@ public class Database {
 		public Double getData() {
 			return this.rateData;
 		}
+		
+		@Override
+		public int compareTo(RateDayData o) {
+			return this.dataDate.compareTo(o.dataDate);
+		}
 	}
 	
 	private class LocationData {
@@ -85,14 +97,19 @@ public class Database {
 		private ArrayList<RateDayData> deathRateList = new ArrayList<RateDayData>();
 		private ArrayList<RateDayData> vacRateList = new ArrayList<RateDayData>();
 		
-		LocationData(String isoCode, String continent, String location) {
+		LocationData(String isoCode, String continent, String location, long population) {
 			this.locationIsoCode = isoCode;
 			this.locationContinent = continent;
 			this.locationName = location;
+			this.locationPopulation = population;
 		}
 		
 		public String getLocationName() {
 			return this.locationName;
+		}
+		
+		public long getPopulation() {
+			return this.locationPopulation;
 		}
 		
 		private void addDayData(DataTitle dataTitle, DayData newDayData) {
@@ -205,7 +222,9 @@ public class Database {
 			}
 		}
 	}
-
+	
+	
+	//Database 
 	private ArrayList<Pair<String, String>> locationNames = new ArrayList<Pair<String, String>>(); //<isocode, locationName>
 	private HashMap<String, LocationData> hashStorage = new HashMap<String, LocationData>(); //isoCode as key
 	private boolean datasetPresent = false;
@@ -220,9 +239,37 @@ public class Database {
 		return this.hashStorage.get(isoCode).getLocationName();
 	}
 	
+	private void sortLocations() {
+		Iterator<Entry<String, LocationData>> it = hashStorage.entrySet().iterator();
+		while (it.hasNext()) {
+			@SuppressWarnings("unchecked")
+			Map.Entry<String, LocationData> pair = (Map.Entry<String, LocationData>)it.next();
+			LocationData loc = pair.getValue();
+			Collections.sort(loc.vacRateList);
+		}
+	}
+	
 	public ArrayList<Pair<String, String>> getLocationNames(){
 		return this.locationNames;
 	}
+	
+	public ArrayList<Pair<Number, Number>> getRateLocationPair(LocalDate date){
+		ArrayList<Pair<Number, Number>> result = new ArrayList<Pair<Number, Number>>();
+		Iterator<Entry<String, LocationData>> it = hashStorage.entrySet().iterator();
+		while (it.hasNext()) {
+			@SuppressWarnings("unchecked")
+			Map.Entry<String, LocationData> pair = (Map.Entry<String, LocationData>)it.next();
+			LocationData loc = pair.getValue();
+			double rate = loc.getRateDayData(date, DataTitle.VAC);
+			if(rate < 0) {
+				continue;
+			}
+			Pair<Number, Number> newPair = new Pair<Number, Number>(loc.getPopulation(), loc.getRateDayData(date, DataTitle.VAC));
+			result.add(newPair);
+		}
+		return result;
+	}
+	
 	
 	public void importCSV(File dataset) {
 		FileResource fr = new FileResource(dataset);
@@ -231,6 +278,8 @@ public class Database {
 		for(CSVRecord rec : parser) {
 			rowToData(rec);
 		}
+		
+		this.sortLocations();
 	}
 	
 	private void rowToData(CSVRecord record) {
@@ -238,7 +287,11 @@ public class Database {
 		LocalDate date = LocalDate.parse(record.get("date"), this.DATE_FORMAT);
 		if(!this.hashStorage.containsKey(isoCode)) {
 			String locationName = record.get("location");
-			this.hashStorage.put(isoCode, new LocationData(isoCode, record.get("continent"), record.get("location")));
+			String populationStr = record.get("population");
+			if(populationStr.equals(""))
+				return;
+			long populationNum = Long.parseLong(populationStr);
+			this.hashStorage.put(isoCode, new LocationData(isoCode, record.get("continent"), record.get("location"), populationNum));
 			this.locationNames.add(new Pair(isoCode, locationName));
 		}
 		LocationData loc = this.hashStorage.get(isoCode);
@@ -251,9 +304,12 @@ public class Database {
 		s = record.get("total_deaths_per_million");
 		if(!s.equals("")) {loc.addDayData(DataTitle.DEATH, new RateDayData(date, Double.parseDouble(s)));};
 		s = record.get("people_fully_vaccinated");
-		if(!s.equals("")) { loc.addDayData(DataTitle.VAC, new TotalDayData(date, Long.parseLong(s)));}
-		s = record.get("people_fully_vaccinated_per_hundred");
-		if(!s.equals("")) {loc.addDayData(DataTitle.VAC, new RateDayData(date, Double.parseDouble(s)));};
+		if(!s.equals("")) { 
+			long total = Long.parseLong(s);
+			loc.addDayData(DataTitle.VAC, new TotalDayData(date, total));
+			double rate = ((((double)total)/((double)loc.locationPopulation)) * 100);
+			loc.addDayData(DataTitle.VAC, new RateDayData(date, rate));
+		}
 	}
 	
 	
@@ -291,6 +347,19 @@ public class Database {
 		for(RateDayData elem : targetList) {
 			if(!elem.getDate().isBefore(startDate) && !elem.getDate().isAfter(endDate)) {
 				result.add(elem.getData());
+			}
+		}
+		return result;
+	}
+	
+	public ArrayList<Pair<LocalDate, Number>> searchChartData(String isoCode, LocalDate startDate, LocalDate endDate, DataTitle title){
+		
+		ArrayList<Pair<LocalDate, Number>> result = new ArrayList<Pair<LocalDate, Number>>();
+		LocationData loc = this.hashStorage.get(isoCode);
+		ArrayList<RateDayData> rateList = (title == DataTitle.CASE ? loc.caseRateList : (title == DataTitle.DEATH ? loc.deathRateList : loc.vacRateList)); 
+		for(RateDayData day : rateList) {
+			if(!day.getDate().isBefore(startDate) && !day.getDate().isAfter(endDate)) {
+				result.add(new Pair<LocalDate, Number>(day.getDate(), day.getData()));
 			}
 		}
 		return result;
