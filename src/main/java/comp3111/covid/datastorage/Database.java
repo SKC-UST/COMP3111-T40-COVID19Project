@@ -365,6 +365,20 @@ public class Database {
 		return result;
 	}
 	
+	public ArrayList<Pair<Number, Number>> searchDataPair(LocalDate targetDate){
+		ArrayList<Pair<Number, Number>> result = new ArrayList<Pair<Number, Number>>();
+		Iterator<Entry<String, LocationData>> it = hashStorage.entrySet().iterator();
+		while (it.hasNext()) {
+			Map.Entry<String, LocationData> pair = (Map.Entry<String, LocationData>)it.next();
+			Number rateValue = pair.getValue().getRateDayData(targetDate, DataTitle.VAC);
+			if(rateValue.intValue() < 0)
+					continue;
+			Number xValue = pair.getValue().getPopulation();
+			result.add(new Pair<Number, Number>(xValue, rateValue));
+		}
+		return result;
+	}
+	
 	public void clearDatabase () {
 		if(this.hasDataset() == false) {
 			return;

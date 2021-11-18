@@ -281,7 +281,7 @@ public class Controller {
     	this.tabB1pageController.updateCheckboxList();
     	this.tabC1pageController.updateCheckboxList();
     	this.tabC2pageController.updateCheckboxList();
-    	this.tabC3pageController.updateCheckboxList();
+    	//this.tabC3pageController.updateCheckboxList();
     }
     
     Database getDatabase() {

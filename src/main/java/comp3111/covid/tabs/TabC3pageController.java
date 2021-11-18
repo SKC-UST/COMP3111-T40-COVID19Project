@@ -1,5 +1,6 @@
 package comp3111.covid.tabs;
 
+import java.io.File;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -16,36 +17,57 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.chart.XYChart.Data;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import javafx.util.Pair;
+import org.apache.commons.math3.stat.regression.SimpleRegression;
 
-public class TabC3pageController extends TabController{
+public class TabC3pageController {
 	
+	private Context context = Context.getInstance();
+	private Database database = context.getDatabase();
 	
 	@FXML private NumberAxis xAxis;
     @FXML private NumberAxis yAxis;
 	@FXML private LineChart<Number, Number> regressionChart;
 	@FXML private Button testButton;
+	@FXML private ComboBox<String> comboBox;
+	
+	public void initialize() {
+		ObservableList<String> oList = FXCollections.observableArrayList("ABCV", "B", "C");
+		this.comboBox.setItems(oList);
+	}
 	
 	@FXML
 	void handleTestButton(ActionEvent event) {
-		this.updateChart();
+		ArrayList<Pair<Number, Number>> rawData = this.database.searchDataPair(LocalDate.of(2021, 4, 25));
+		this.generateRegression(rawData);
+		this.generateChart(rawData);
+		
 	}
-		
-	private void updateChart() {
-		ArrayList<Pair<Number, Number>> populations = this.getDatabase().getRateLocationPair(LocalDate.of(2021, 4, 25));
-		
-		xAxis.setLabel("Population");
-		yAxis.setLabel("Vaccination Rate");
-		
-		XYChart.Series<Number, Number> series = new XYChart.Series<>();
-		series.setName("regression line");
-		
-		for(Pair<Number, Number> pop : populations) {
-			series.getData().add(new Data<Number, Number>(pop.getKey(), pop.getValue()));
+	
+	private void generateChart(ArrayList<Pair<Number, Number>> sourceData) {
+		XYChart.Series<Number, Number> scatter = new XYChart.Series<>();
+		scatter.setName("actual data points");
+		ArrayList<Data<Number, Number>> dataList = new ArrayList<Data<Number, Number>>();
+		for(Pair<Number, Number> pair: sourceData) {
+			scatter.getData().add(new Data<Number, Number>(pair.getKey(), pair.getValue()));
 		}
-		this.regressionChart.getData().add(series);
+		this.regressionChart.getData().add(scatter);
+		this.regressionChart.getData().add(scatter);
+		System.out.println(System.getProperty("user.dir"));
+		File css = new File("./src/main/resources/stylesheet/root1.css");
+		System.out.println(css.toString());
+		this.regressionChart.getScene().getStylesheets().add(getClass().getResource("/stylesheet/root.css").toExternalForm());
 	}
+	
+	private void generateRegression(ArrayList<Pair<Number, Number>> rawData) {
+		SimpleRegression regression = new SimpleRegression(true);
+		for(Pair<Number, Number> datum : rawData) {
+			regression.addData(datum.getKey().doubleValue(), datum.getValue().doubleValue());
+		}
+	}
+	
 }
 
