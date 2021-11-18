@@ -10,7 +10,7 @@
 <?import javafx.scene.text.Font?>
 <?import org.controlsfx.control.CheckListView?>
 
-<VBox prefHeight="600.0" prefWidth="725.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="comp3111.covid.tabs.TabC1pageController">
+<VBox prefHeight="600.0" prefWidth="725.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="comp3111.covid.tabs.TabB1pageController">
    <AnchorPane prefHeight="600.0" prefWidth="725.0">
       <children>
          <CheckListView fx:id="locationsCheckboxList" layoutX="14.0" layoutY="43.0" prefHeight="413.0" prefWidth="190.0" />
@@ -20,8 +20,8 @@
          <TableView fx:id="dataTable" layoutX="214.0" layoutY="83.0" prefHeight="510.0" prefWidth="502.0">
            <columns>
              <TableColumn fx:id="countryCol" prefWidth="86.77143859863281" text="Countries" />
-             <TableColumn fx:id="totalCol" prefWidth="245.35354614257812" text="Fully Vaccinated" />
-               <TableColumn fx:id="rateCol" prefWidth="167.55850516094029" text="Vaccination Rate" />
+             <TableColumn fx:id="totalCol" prefWidth="245.35354614257812" text="Total Deaths" />
+               <TableColumn fx:id="rateCol" prefWidth="167.55850516094029" text="Total Deaths (per 1M)" />
            </columns>
          </TableView>
          <Label fx:id="tableTitlelbl" layoutX="214.0" layoutY="61.0" text="Table Title">

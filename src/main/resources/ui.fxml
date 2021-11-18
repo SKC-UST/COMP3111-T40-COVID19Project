@@ -35,35 +35,15 @@
                         </AnchorPane>
                   </content>
                 </Tab>
-                  <Tab fx:id="tabReport1" text="Table A">
-                    <content>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="384.0" prefWidth="719.0">
-                           <children>
-                              <Label layoutX="79.0" layoutY="44.0" text="Date" />
-                              <Label layoutX="70.0" layoutY="89.0" text="Country" />
-                              <ListView fx:id="listviewCountriesA1" layoutX="132.0" layoutY="89.0" prefHeight="200.0" prefWidth="200.0" />
-                              <DatePicker fx:id="datepickerDateA" layoutX="132.0" layoutY="40.0" promptText="Select Date of Interest" />
-                              <Button fx:id="buttonTableA" layoutX="360.0" layoutY="266.0" mnemonicParsing="false" onAction="#makeTableA" text="Generate Table" />
-                           </children>
-                        </AnchorPane>
-                    </content>
-                  </Tab>
-                <Tab fx:id="tabReport2" text="Table B">
-                     <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="384.0" prefWidth="719.0">
-                           <children>
-                              <Label layoutX="79.0" layoutY="44.0" text="Date" />
-                              <Label layoutX="70.0" layoutY="89.0" text="Country" />
-                              <ListView fx:id="listviewCountriesB1" layoutX="132.0" layoutY="89.0" prefHeight="200.0" prefWidth="200.0" />
-                              <DatePicker fx:id="datepickerDateB" layoutX="132.0" layoutY="40.0" promptText="Select Date of Interest" />
-                              <Button fx:id="buttonTableB" layoutX="360.0" layoutY="266.0" mnemonicParsing="false" onAction="#makeTableB" text="Generate Table" />
-                           </children>
-                        </AnchorPane>
-                     </content>
-                </Tab>
-                  <Tab fx:id="tabReport3" text="Table C">
-                     <fx:include fx:id="tabC1page" source="tabs/tabC1.fxml" />
-                  </Tab>
+				<Tab fx:id="tabReport1" text="Table A">
+					<fx:include fx:id="tabA1page" source="tabs/tabA1.fxml" />
+				</Tab>
+				<Tab fx:id="tabReport2" text="Table B">
+					<fx:include fx:id="tabB1page" source="tabs/tabB1.fxml" />
+				</Tab>
+				<Tab fx:id="tabReport3" text="Table C">
+					<fx:include fx:id="tabC1page" source="tabs/tabC1.fxml" />
+				</Tab>
                   <Tab fx:id="tabApp1" text="Chart A">
                      <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="384.0" prefWidth="719.0">

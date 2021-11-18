@@ -13,6 +13,8 @@ import com.sun.prism.paint.Color;
 import comp3111.covid.datastorage.Database;
 import comp3111.covid.datastorage.Database.DataTitle;
 import comp3111.covid.tabs.TabC3Controller;
+import comp3111.covid.tabs.TabA1pageController;
+import comp3111.covid.tabs.TabB1pageController;
 import comp3111.covid.tabs.TabC1pageController;
 
 import java.awt.BorderLayout;
@@ -159,6 +161,10 @@ public class Controller {
     private TextArea textAreaConsole;
     
     @FXML private Tab tabC3;
+    @FXML private Tab tabA1;
+    @FXML private TabA1pageController tabA1pageController;
+    @FXML private Tab tabB1;
+    @FXML private TabB1pageController tabB1pageController;
     @FXML private Tab tabC1;
     @FXML private TabC1pageController tabC1pageController;
     @FXML private TabC3Controller tabC3Controller;
@@ -266,13 +272,16 @@ public class Controller {
     
     @FXML
     void importCSVtoDatabase(ActionEvent event) {
-    	File csvFile = chooseCSVFile();
+    	// File csvFile = chooseCSVFile(); // Official function
+    	File csvFile = new File("./src/main/resources/dataset/COVID_Dataset_v1.0.csv");
     	// TODO: handle file not chosen
     	if(csvFile != null) {
     		this.database.importCSV(csvFile);
         	System.out.println("successfully imported");
         	this.database.printDatabaseContent();
     	}
+    	this.tabA1pageController.updateCheckboxList();
+    	this.tabB1pageController.updateCheckboxList();
     	this.tabC1pageController.updateCheckboxList();
     }
     
