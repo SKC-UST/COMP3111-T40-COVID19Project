@@ -158,8 +158,10 @@ public class Controller {
     private TextArea textAreaConsole;
     
     @FXML private Tab tabC3;
+    @FXML private Tab tabC2;
     @FXML private Tab tabC1;
     @FXML private TabC1pageController tabC1pageController;
+    @FXML private TabC2pageController tabC2pageController;
     @FXML private TabC3pageController tabC3pageController;
     
     private Context context = Context.getInstance();
@@ -297,6 +299,7 @@ public class Controller {
         	this.database.printDatabaseContent();
     	}
     	this.tabC1pageController.updateCheckboxList();
+    	this.tabC2pageController.updateCheckboxList();
     	this.tabC3pageController.updateCheckboxList();
     }
     

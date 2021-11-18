@@ -3,8 +3,6 @@ package comp3111.covid.tabs;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-import org.controlsfx.control.CheckListView;
-
 import comp3111.covid.Context;
 import comp3111.covid.datastorage.Database;
 import comp3111.covid.datastorage.Database.DataTitle;
