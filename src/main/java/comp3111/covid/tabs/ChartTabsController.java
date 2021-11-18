@@ -1,8 +1,12 @@
 package comp3111.covid.tabs;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.chart.*;
+import javafx.scene.chart.XYChart.Data;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.util.Pair;
@@ -33,6 +37,7 @@ public class ChartTabsController extends TabController{
     	xAxis.setLabel("Date");
     	yAxis.setLabel("Rate");
     	
+    	this.dataChart.getData().clear();
     	ArrayList<XYChart.Series<String, Number>> data = generateChartData();
     	for(XYChart.Series<String, Number> series : data) {
     		this.dataChart.getData().add(series);
@@ -41,29 +46,29 @@ public class ChartTabsController extends TabController{
 
     @FXML
     void selectStartDate(ActionEvent event) {
-    	System.out.println("Select start date");
     	this.startDate = this.startDatePicker.getValue();
-    	System.out.println(startDate.toString());
     }
 
     @FXML
     void selectEndDate(ActionEvent event) {
-    	System.out.println("Select end date");
     	this.endDate = this.endDatePicker.getValue();
-    	System.out.println(endDate);
     }
     
     protected ArrayList<XYChart.Series<String, Number>> generateChartData(){
+    	
     	ArrayList<XYChart.Series<String, Number>> result = new ArrayList<XYChart.Series<String, Number>>();
     	for(String iso : this.getSelectedIso()) {
-    		ArrayList<Pair<LocalDate, Number>> source = this.getDatabase().searchChartData(iso, startDate, endDate, DataTitle.VAC);
+    		ArrayList<Pair<LocalDate, Number>> source = this.getDatabase().searchChartData(iso, startDate, endDate, DataTitle.VAC);    		
     		XYChart.Series<String, Number> series = new XYChart.Series<>();
-    		series.setName(iso);
+    		//
     		for(Pair<LocalDate, Number> data : source) {
     			series.getData().add(new XYChart.Data<String, Number>(data.getKey().toString(), data.getValue()));
     		}
+    		
+    		series.setName(iso);
     		result.add(series);
     	}
     	return result;
+    	
     }
 }

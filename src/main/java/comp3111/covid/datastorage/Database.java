@@ -6,6 +6,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -33,7 +35,7 @@ public class Database {
 		public T getData();
 	}
 	
-	private class TotalDayData implements DayData<Long> {
+	private class TotalDayData implements DayData<Long>, Comparable<TotalDayData>{
 		private LocalDate dataDate;
 		private long totalData;
 		
@@ -51,9 +53,14 @@ public class Database {
 		public Long getData() {
 			return this.totalData;
 		}
+		
+		@Override
+		public int compareTo(TotalDayData o) {
+			return this.dataDate.compareTo(o.dataDate);
+		}
 	}
 	
-	private class RateDayData implements DayData<Double> {
+	private class RateDayData implements DayData<Double>, Comparable<RateDayData> {
 		private LocalDate dataDate;
 		private double rateData;
 		
@@ -70,6 +77,11 @@ public class Database {
 		@Override
 		public Double getData() {
 			return this.rateData;
+		}
+		
+		@Override
+		public int compareTo(RateDayData o) {
+			return this.dataDate.compareTo(o.dataDate);
 		}
 	}
 	
@@ -227,6 +239,16 @@ public class Database {
 		return this.hashStorage.get(isoCode).getLocationName();
 	}
 	
+	private void sortLocations() {
+		Iterator<Entry<String, LocationData>> it = hashStorage.entrySet().iterator();
+		while (it.hasNext()) {
+			@SuppressWarnings("unchecked")
+			Map.Entry<String, LocationData> pair = (Map.Entry<String, LocationData>)it.next();
+			LocationData loc = pair.getValue();
+			Collections.sort(loc.vacRateList);
+		}
+	}
+	
 	public ArrayList<Pair<String, String>> getLocationNames(){
 		return this.locationNames;
 	}
@@ -256,6 +278,8 @@ public class Database {
 		for(CSVRecord rec : parser) {
 			rowToData(rec);
 		}
+		
+		this.sortLocations();
 	}
 	
 	private void rowToData(CSVRecord record) {
