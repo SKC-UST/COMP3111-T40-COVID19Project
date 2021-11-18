@@ -43,32 +43,10 @@
 					<fx:include fx:id="tabC1page" source="tabs/tabC1.fxml" />
 				</Tab>
                   <Tab fx:id="tabApp1" text="Chart A">
-                     <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="384.0" prefWidth="719.0">
-                           <children>
-                              <Label layoutX="79.0" layoutY="44.0" text="Period" />
-                              <Label layoutX="70.0" layoutY="89.0" text="Country" />
-                              <ListView fx:id="listviewCountriesA2" layoutX="132.0" layoutY="89.0" prefHeight="200.0" prefWidth="200.0" />
-                              <DatePicker fx:id="datepickerStartDateA" layoutX="132.0" layoutY="40.0" promptText="Select Starting Date" />
-                              <Button fx:id="buttonChartA" layoutX="360.0" layoutY="266.0" mnemonicParsing="false" onAction="#makeChartA" text="Generate Chart" />
-                              <DatePicker fx:id="datepickerEndDateA" layoutX="332.0" layoutY="40.0" promptText="Select Ending Date" />
-                           </children>
-                        </AnchorPane>
-                     </content>
+                     <fx:include fx:id="tabA2page" source="tabs/tabA2.fxml"/>
                   </Tab>
                   <Tab fx:id="tabApp2" text="Chart B">
-                     <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="384.0" prefWidth="719.0">
-                           <children>
-                              <Label layoutX="79.0" layoutY="44.0" text="Period" />
-                              <Label layoutX="70.0" layoutY="89.0" text="Country" />
-                              <ListView fx:id="listviewCountriesB2" layoutX="132.0" layoutY="89.0" prefHeight="200.0" prefWidth="200.0" />
-                              <DatePicker fx:id="datepickerStartDateB" layoutX="132.0" layoutY="40.0" promptText="Select Starting Date" />
-                              <Button fx:id="buttonChartB" layoutX="360.0" layoutY="266.0" mnemonicParsing="false" onAction="#makeChartB" text="Generate Chart" />
-                              <DatePicker fx:id="datepickerEndDateB" layoutX="332.0" layoutY="40.0" promptText="Select Ending Date" />
-                           </children>
-                        </AnchorPane>
-                     </content>
+                     <fx:include fx:id="tabB2page" source="tabs/tabB2.fxml"/>
                   </Tab>
                   <Tab fx:id="tabApp3" text="Chart C">
                   	<fx:include fx:id="tabC2page" source="tabs/tabC2.fxml" />

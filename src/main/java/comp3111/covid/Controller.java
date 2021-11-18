@@ -161,7 +161,9 @@ public class Controller {
     @FXML private Tab tabC2;
     @FXML private Tab tabC1;
     @FXML private TabA1pageController tabA1pageController;
+    @FXML private TabA2pageController tabA2pageController;
     @FXML private TabB1pageController tabB1pageController;
+    @FXML private TabB2pageController tabB2pageController;
     @FXML private TabC1pageController tabC1pageController;
     @FXML private TabC2pageController tabC2pageController;
     @FXML private TabC3pageController tabC3pageController;
@@ -276,11 +278,15 @@ public class Controller {
     		this.database.importCSV(csvFile);
         	System.out.println("successfully imported");
         	this.database.printDatabaseContent();
+        	
+        	this.tabA1pageController.updateCheckboxList();
+        	this.tabA2pageController.updateCheckboxList();
+        	this.tabB1pageController.updateCheckboxList();
+        	this.tabB2pageController.updateCheckboxList();
+        	this.tabC1pageController.updateCheckboxList();
+        	this.tabC2pageController.updateCheckboxList();
     	}
-    	this.tabA1pageController.updateCheckboxList();
-    	this.tabB1pageController.updateCheckboxList();
-    	this.tabC1pageController.updateCheckboxList();
-    	this.tabC2pageController.updateCheckboxList();
+    	
     	//this.tabC3pageController.updateCheckboxList();
     }
     

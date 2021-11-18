@@ -35,6 +35,10 @@ public class ChartTabsController extends TabController{
     protected LocalDate endDate = null;
     
     public void initialize() {
+    	this.setYAxisTitle();
+    	this.dataChart.setCreateSymbols(false);
+    	this.xAxis.setForceZeroInRange(false);
+    	
     	xAxis.setTickLabelFormatter(new StringConverter<Number>() {
     		DateConverter dc = new DateConverter();
     		@Override
@@ -51,9 +55,6 @@ public class ChartTabsController extends TabController{
     
     @FXML
     void handleConfirmSelection(ActionEvent event) {
-    	
-    	xAxis.setLabel("Date");
-    	yAxis.setLabel("Rate");
     	
     	this.dataChart.getData().clear();
     	ArrayList<XYChart.Series<Number, Number>> data = generateChartData();
@@ -72,8 +73,31 @@ public class ChartTabsController extends TabController{
     	this.endDate = this.endDatePicker.getValue();
     }
     
+	protected ArrayList<XYChart.Series<Number, Number>> generateChartData(){
+		DateConverter dateConverter = new DateConverter();
+    	ArrayList<XYChart.Series<Number, Number>> result = new ArrayList<XYChart.Series<Number, Number>>();
+    	
+    	for(String iso : this.getSelectedIso()) {
+    		ArrayList<Pair<LocalDate, Number>> source = this.getDateDataPair(iso, this.startDate, this.endDate);    		
+    		XYChart.Series<Number, Number> series = new XYChart.Series<>();
+    		//
+    		for(Pair<LocalDate, Number> data : source) {
+    			series.getData().add(new XYChart.Data<Number, Number>(dateConverter.dateToLong(data.getKey()), data.getValue()));
+    		}
+    		
+    		series.setName(this.getDatabase().getLocationName(iso));
+    		result.add(series);
+    	}
+    	return result;
+    }
+    
     //to be overriden
-    protected ArrayList<XYChart.Series<Number, Number>> generateChartData(){
-    	return null;
+    protected void setYAxisTitle() {
+    	this.yAxis.setLabel("y-axis");
+    }
+    
+    //to be overriden
+    protected ArrayList<Pair<LocalDate, Number>> getDateDataPair(String iso, LocalDate startDate, LocalDate endDate) { 
+    	return this.getDatabase().searchChartData(iso, startDate, endDate, null);
     }
 }

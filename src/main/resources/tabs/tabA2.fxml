@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.control.Button?>
@@ -10,22 +9,23 @@
 <?import javafx.scene.layout.VBox?>
 <?import org.controlsfx.control.CheckListView?>
 
-<VBox prefHeight="600.0" prefWidth="725.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="comp3111.covid.tabs.TabA2pageController">
+<VBox prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="comp3111.covid.tabs.TabA2pageController">
    <AnchorPane prefHeight="600.0" prefWidth="725.0">
       <children>
-         <CheckListView fx:id="locationsCheckboxList" layoutX="14.0" layoutY="43.0" prefHeight="413.0" prefWidth="190.0" />
+         <CheckListView fx:id="locationsCheckboxList" layoutX="14.0" layoutY="43.0" prefHeight="547.0" prefWidth="190.0" />
          <Label layoutX="21.0" layoutY="14.0" text="Select target Countries" />
-         <Button fx:id="confirmButton" layoutX="595.0" layoutY="11.0" mnemonicParsing="false" onAction="#handleConfirmSelection" text="Confirm Selection" />
-         <DatePicker fx:id="datePicker" layoutX="197.0" layoutY="11.0" onAction="#selectTargetDate" promptText="Select Start Date" />
-         <LineChart layoutX="212.0" layoutY="50.0" title="TestTitle">
+         <Button fx:id="confirmButton" layoutX="852.0" layoutY="10.0" mnemonicParsing="false" onAction="#handleConfirmSelection" text="Confirm Selection" />
+         <DatePicker fx:id="startDatePicker" layoutX="397.0" layoutY="9.0" onAction="#selectStartDate" prefHeight="25.0" prefWidth="166.0" />
+         <Label layoutX="596.0" layoutY="14.0" text="to" />
+         <DatePicker fx:id="endDatePicker" layoutX="671.0" layoutY="9.0" onAction="#selectEndDate" prefHeight="25.0" prefWidth="151.0" />
+         <LineChart fx:id="dataChart" layoutX="218.0" layoutY="43.0" prefHeight="549.0" prefWidth="750.0" title="Cumulative Confirmed COVID-19 Cases (per 1M)">
            <xAxis>
-             <NumberAxis label="TestMonth" side="BOTTOM" />
+             <NumberAxis animated="false" side="BOTTOM" fx:id="xAxis" />
            </xAxis>
            <yAxis>
-             <NumberAxis label="TestDaataAmount" side="LEFT" />
+             <NumberAxis fx:id="yAxis" side="LEFT" />
            </yAxis>
          </LineChart>
-         <DatePicker layoutX="394.0" layoutY="11.0" promptText="Select End Date" />
       </children>
    </AnchorPane>
 </VBox>
