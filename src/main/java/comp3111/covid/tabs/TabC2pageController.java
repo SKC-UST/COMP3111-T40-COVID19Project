@@ -24,7 +24,7 @@ public class TabC2pageController extends ChartTabsController {
     			series.getData().add(new XYChart.Data<Number, Number>(dateConverter.dateToLong(data.getKey()), data.getValue()));
     		}
     		
-    		series.setName(iso);
+    		series.setName(this.getDatabase().getLocationName(iso));
     		result.add(series);
     	}
     	return result;

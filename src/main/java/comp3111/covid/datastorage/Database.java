@@ -237,7 +237,10 @@ public class Database {
 	}
 	
 	public String getLocationName(String isoCode) {
-		return this.hashStorage.get(isoCode).getLocationName();
+		LocationData loc = this.hashStorage.get(isoCode);
+		if(loc == null)
+			return null;
+		return loc.getLocationName();
 	}
 	
 	private void sortLocations() {
