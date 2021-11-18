@@ -35,15 +35,15 @@
                         </AnchorPane>
                   </content>
                 </Tab>
-				<Tab fx:id="tabReport1" text="Table A">
-					<fx:include fx:id="tabA1page" source="tabs/tabA1.fxml" />
-				</Tab>
-				<Tab fx:id="tabReport2" text="Table B">
-					<fx:include fx:id="tabB1page" source="tabs/tabB1.fxml" />
-				</Tab>
-				<Tab fx:id="tabReport3" text="Table C">
-					<fx:include fx:id="tabC1page" source="tabs/tabC1.fxml" />
-				</Tab>
+				        <Tab fx:id="tabReport1" text="Table A">
+					        <fx:include fx:id="tabA1page" source="tabs/tabA1.fxml" />
+				        </Tab>
+                <Tab fx:id="tabReport2" text="Table B">
+                  <fx:include fx:id="tabB1page" source="tabs/tabB1.fxml" />
+                </Tab>
+                <Tab fx:id="tabReport3" text="Table C">
+                  <fx:include fx:id="tabC1page" source="tabs/tabC1.fxml" />
+                </Tab>
                 <Tab fx:id="tabApp1" text="Chart A">
                  	<fx:include fx:id="tabA2page" source="tabs/tabA2.fxml" />
                 </Tab>
@@ -60,11 +60,5 @@
             </TabPane>
       </children>
     </AnchorPane>
-      <Label text="Console" />
-      <ScrollPane prefHeight="169.0" prefWidth="719.0">
-         <content>
-            <TextArea fx:id="textAreaConsole" prefHeight="152.0" prefWidth="718.0" />
-         </content>
-      </ScrollPane>
   </children>
 </VBox>
