@@ -91,9 +91,6 @@ public class Controller {
     @FXML private TabB1pageController tabB1pageController;
     @FXML private TabB2pageController tabB2pageController;
     @FXML private TabC1pageController tabC1pageController;
-    @FXML private TabA2pageController tabA2pageController;
-    @FXML private TabB2pageController tabB2pageController;
-
     @FXML private TabC2pageController tabC2pageController;
     @FXML private TabC3pageController tabC3pageController;
     
