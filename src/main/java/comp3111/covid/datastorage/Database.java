@@ -85,10 +85,11 @@ public class Database {
 		private ArrayList<RateDayData> deathRateList = new ArrayList<RateDayData>();
 		private ArrayList<RateDayData> vacRateList = new ArrayList<RateDayData>();
 		
-		LocationData(String isoCode, String continent, String location) {
+		LocationData(String isoCode, String continent, String location, long population) {
 			this.locationIsoCode = isoCode;
 			this.locationContinent = continent;
 			this.locationName = location;
+			this.locationPopulation = population;
 		}
 		
 		public String getLocationName() {
@@ -238,7 +239,11 @@ public class Database {
 		LocalDate date = LocalDate.parse(record.get("date"), this.DATE_FORMAT);
 		if(!this.hashStorage.containsKey(isoCode)) {
 			String locationName = record.get("location");
-			this.hashStorage.put(isoCode, new LocationData(isoCode, record.get("continent"), record.get("location")));
+			String populationStr = record.get("population");
+			if(populationStr.equals(""))
+				return;
+			long populationNum = Long.parseLong(populationStr);
+			this.hashStorage.put(isoCode, new LocationData(isoCode, record.get("continent"), record.get("location"), populationNum));
 			this.locationNames.add(new Pair(isoCode, locationName));
 		}
 		LocationData loc = this.hashStorage.get(isoCode);
@@ -251,9 +256,12 @@ public class Database {
 		s = record.get("total_deaths_per_million");
 		if(!s.equals("")) {loc.addDayData(DataTitle.DEATH, new RateDayData(date, Double.parseDouble(s)));};
 		s = record.get("people_fully_vaccinated");
-		if(!s.equals("")) { loc.addDayData(DataTitle.VAC, new TotalDayData(date, Long.parseLong(s)));}
-		s = record.get("people_fully_vaccinated_per_hundred");
-		if(!s.equals("")) {loc.addDayData(DataTitle.VAC, new RateDayData(date, Double.parseDouble(s)));};
+		if(!s.equals("")) { 
+			long total = Long.parseLong(s);
+			loc.addDayData(DataTitle.VAC, new TotalDayData(date, total));
+			double rate = ((((double)total)/((double)loc.locationPopulation)) * 100);
+			loc.addDayData(DataTitle.VAC, new RateDayData(date, rate));
+		}
 	}
 	
 	
