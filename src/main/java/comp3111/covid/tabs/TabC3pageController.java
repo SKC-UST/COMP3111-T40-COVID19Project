@@ -94,6 +94,17 @@ public class TabC3pageController {
 			}
 		});
 		
+		this.dateSlider.setLabelFormatter(new StringConverter<>() {
+			@Override
+			public String toString(Double object) {
+				return dateConverter.longToString(object.longValue());
+			}
+			@Override
+			public Double fromString(String string) {
+				return (double)dateConverter.dateToLong(LocalDate.parse(string));
+			}
+		});
+		
 		// so that the graph updates itself when the slider is changed, and make increments in slider to be steps
 		this.dateSlider.valueProperty().addListener((obs, oldval, newval)->{
 			final double roundedValue = Math.floor(newval.doubleValue());
@@ -132,6 +143,7 @@ public class TabC3pageController {
 		//ArrayList<Pair<Number, Number>> data = database.searchDataPair(selectedDate, selectedProperty);
 		ArrayList<Pair<Number, Number>> data = database.searchDataPair(this.selectedDate, this.selectedProperty);
 		if(data.isEmpty()) {
+			this.regressionChart.setTitle("");
 			this.noDataLabel1.setText(noDataText1);
 			this.noDataLabel2.setText(noDataText2);
 			this.noDataLabel1.setVisible(true);
@@ -141,6 +153,8 @@ public class TabC3pageController {
 		
 		this.noDataLabel1.setVisible(false);
 		this.noDataLabel2.setVisible(false);
+		
+		this.regressionChart.setTitle("Rgerssion based on data on " + this.selectedDate);
 		
 		Pair<Double, Double> regressionResult = this.generateRegression(data);
 		Double regressionSlope = regressionResult.getKey();
