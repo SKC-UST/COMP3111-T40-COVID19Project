@@ -22,12 +22,7 @@ public class Database {
 	//Database 
 	private ArrayList<Pair<String, String>> locationNames = new ArrayList<Pair<String, String>>(); //<isocode, locationName>
 	private HashMap<String, LocationData> hashStorage = new HashMap<String, LocationData>(); //isoCode as key
-	private boolean datasetPresent = false;
 	final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("M/d/yyyy");
-	
-	public boolean hasDataset() {
-		return this.datasetPresent;
-	}
 	
 	public String getLocationName(String isoCode) {
 		LocationData loc = this.hashStorage.get(isoCode);
@@ -85,15 +80,28 @@ public class Database {
 	private void rowToData(CSVRecord record) {
 		String isoCode = record.get("iso_code");
 		LocalDate date = LocalDate.parse(record.get("date"), this.DATE_FORMAT);
+		
+		//Initializing a LocationData from record
 		if(!this.hashStorage.containsKey(isoCode)) {
 			String locationName = record.get("location");
 			String populationStr = record.get("population");
-			if(populationStr.equals(""))
-				return;
-			long populationNum = Long.parseLong(populationStr);
-			this.hashStorage.put(isoCode, new LocationData(isoCode, record.get("continent"), record.get("location"), populationNum));
+			long populationNum;
+			double populationDensity, medianAge, age65, age70, gdp, diabetes;
+			
+			try {populationNum = Long.parseLong(populationStr);} catch(Exception e){return;} //"countries" without population nubmers do not contain meaning data in any way
+			try {populationDensity = Double.parseDouble(record.get("population_density"));} catch(Exception e) {populationDensity = -1;}
+			try {medianAge = Double.parseDouble(record.get("median_age"));} catch(Exception e) {medianAge = -1;}
+			try {age65 = Double.parseDouble(record.get("aged_65_older"));} catch(Exception e) {age65 = -1;}
+			try {age70 = Double.parseDouble(record.get("aged_70_older"));} catch(Exception e) {age70 = -1;}
+			try {gdp = Double.parseDouble(record.get("gdp_per_capita"));} catch(Exception e) {gdp = -1;}
+			try {diabetes = Double.parseDouble(record.get("diabetes_prevalence"));} catch(Exception e) {diabetes = -1;}
+			if(populationStr.equals("")) return;
+			this.hashStorage.put(isoCode, new LocationData(
+					isoCode, record.get("continent"), record.get("location"), populationNum, populationDensity, medianAge, age65, age70, gdp, diabetes));
 			this.locationNames.add(new Pair(isoCode, locationName));
 		}
+		
+		//put DayData into LocationData
 		LocationData loc = this.hashStorage.get(isoCode);
 		String s = record.get("total_cases");
 		if(!s.equals("")) { loc.addDayData(DataTitle.CASE, new TotalDayData(date, Long.parseLong(s)));}
@@ -111,7 +119,6 @@ public class Database {
 			loc.addDayData(DataTitle.VAC, new RateDayData(date, rate));
 		}
 	}
-	
 	
 	// search single data - for Table
 	// return -1 if not found
@@ -165,24 +172,28 @@ public class Database {
 		return result;
 	}
 	
-	public ArrayList<Pair<Number, Number>> searchDataPair(LocalDate targetDate){
+	// for Tab C3 only
+	public ArrayList<Pair<Number, Number>> searchDataPair(LocalDate targetDate, LocationProperty lp){
 		ArrayList<Pair<Number, Number>> result = new ArrayList<Pair<Number, Number>>();
+		
 		Iterator<Entry<String, LocationData>> it = hashStorage.entrySet().iterator();
 		while (it.hasNext()) {
 			Map.Entry<String, LocationData> pair = (Map.Entry<String, LocationData>)it.next();
+			
+			//y-value
 			Number rateValue = pair.getValue().getRateDayData(targetDate, DataTitle.VAC);
 			if(rateValue.intValue() < 0 || pair.getKey().contains("OWID"))
 					continue;
-			Number xValue = pair.getValue().getPopulation();
+			//x-value
+			Number xValue = pair.getValue().getLocationProperty(lp);
+			if(xValue.intValue() < 0) //corresponding data field is blank in csv
+				continue;
 			result.add(new Pair<Number, Number>(xValue, rateValue));
 		}
 		return result;
 	}
 	
 	public void clearDatabase () {
-		if(this.hasDataset() == false) {
-			return;
-		}
 		Iterator<Entry<String, LocationData>> it = hashStorage.entrySet().iterator();
 		while (it.hasNext()) {
 			@SuppressWarnings("unchecked")
@@ -190,7 +201,6 @@ public class Database {
 			pair.getValue().clearLocationData();
 		}
 		hashStorage.clear();
-		this.datasetPresent = false;
 	}
 	
 	public void printDatabaseContent() {

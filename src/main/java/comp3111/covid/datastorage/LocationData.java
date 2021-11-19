@@ -8,6 +8,12 @@ public class LocationData {
 	private String locationContinent;
 	private String locationName;
 	private long locationPopulation;
+	private double locationDensity;
+	private double locationMedianAge;
+	private double location65Age;
+	private double location70Age;
+	private double locationGDPpc;
+	private double locationDiabetes;
 	private ArrayList<TotalDayData> caseTotalList = new ArrayList<TotalDayData>();
 	private ArrayList<TotalDayData> deathTotalList = new ArrayList<TotalDayData>();
 	private ArrayList<TotalDayData> vacTotalList = new ArrayList<TotalDayData>();
@@ -15,13 +21,20 @@ public class LocationData {
 	private ArrayList<RateDayData> deathRateList = new ArrayList<RateDayData>();
 	private ArrayList<RateDayData> vacRateList = new ArrayList<RateDayData>();
 	
-	LocationData(String isoCode, String continent, String location, long population) {
+	LocationData(String isoCode, String continent, String location, long population, double density, double medianAge, double age65, double age70, double gdp, double diabetes) {
 		this.locationIsoCode = isoCode;
 		this.locationContinent = continent;
 		this.locationName = location;
 		this.locationPopulation = population;
+		this.locationDensity = density;
+		this.locationMedianAge = medianAge;
+		this.location65Age = age65;
+		this.location70Age = age70;
+		this.locationGDPpc = gdp;
+		this.locationDiabetes = diabetes;
 	}
 	
+	// *Getters
 	public String getLocationName() {
 		return this.locationName;
 	}
@@ -123,6 +136,26 @@ public class LocationData {
 			}
 		}
 		return -1; // not found
+	}
+	
+	Number getLocationProperty(LocationProperty property) {
+		switch(property) {
+			case POPULATION:
+				return this.locationPopulation;
+			case POPULATION_DENSITY:
+				return this.locationDensity;
+			case AGE_MEDIAN:
+				return this.locationMedianAge;
+			case AGE_65:
+				return this.location65Age;
+			case AGE_70:
+				return this.location70Age;
+			case GDP:
+				return this.locationGDPpc;
+			case DIABETES:
+				return this.locationDiabetes;
+		}
+		return null;
 	}
 	
 	void clearLocationData() {

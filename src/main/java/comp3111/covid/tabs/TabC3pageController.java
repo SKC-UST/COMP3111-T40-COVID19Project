@@ -1,16 +1,17 @@
 package comp3111.covid.tabs;
 
-import java.io.File;
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
 import comp3111.covid.Context;
+import comp3111.covid.dataAnalysis.DateConverter;
 import comp3111.covid.datastorage.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
@@ -19,7 +20,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
-import javafx.stage.Stage;
 import javafx.util.Pair;
 import javafx.util.StringConverter;
 
@@ -37,6 +37,7 @@ public class TabC3pageController {
 	@FXML private ComboBox<Pair<String, LocationProperty>> xAxisCbx;
 	@FXML private Slider dateSlider;
 	@FXML private Label dateLbl;
+	
 	final private String[] LOC_PROP_TEXT = {"Population", "Population Density", "Median Age", "Number of People Aged 65 or above", "Number of People Aged 70 or above", "GDP per Capita", "Diabetes Prevalence"};
 	private LocationProperty selectedProperty = null;
 	private LocalDate selectedDate = null;
@@ -45,6 +46,27 @@ public class TabC3pageController {
 		ObservableList<Pair<String, LocationProperty>> pairs = this.generateLocPropPairs();
 		xAxisCbx.setItems(pairs);
 		
+		// So that y-axis displays percentage 
+		yAxis.setTickLabelFormatter(new StringConverter<Number>() {
+			@Override
+			public String toString(Number rate) {
+				return (rate + "%");
+			}
+			
+			@Override
+			public Number fromString(String string) {
+				NumberFormat percentage = NumberFormat.getPercentInstance();
+				try {
+					return percentage.parse(string);
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					return 0;
+				}
+			}
+		});
+		
+		// make combobox contains Pair objects but display the name of property
 		xAxisCbx.setConverter(new StringConverter<Pair<String, LocationProperty>>(){
 			@Override
 			public String toString(Pair<String, LocationProperty> object) {
@@ -57,13 +79,16 @@ public class TabC3pageController {
 			}
 		});
 		
+		// so that the graph updates itself when the combobox chosen value is changed
 		xAxisCbx.valueProperty().addListener((obs, oldval, newval) -> {
 			if(newval != null) {
 				System.out.println("Selected: " + newval.getValue());
 				this.selectedProperty = newval.getValue();
+				this.generateChart();
 			}
 		});
 		
+		// so that the graph updates itself when the slider is changed, and make increments in slider to be steps
 		this.dateSlider.valueProperty().addListener((obs, oldval, newval)->{
 			final double roundedValue = Math.floor(newval.doubleValue());
 			dateSlider.valueProperty().set(roundedValue);
@@ -83,19 +108,38 @@ public class TabC3pageController {
 		return result;
 	}
 	
+	//Main function for generating the chart
+	private void generateChart() {
+		this.regressionChart.getData().clear();
+		//ArrayList<Pair<Number, Number>> data = database.searchDataPair(selectedDate, selectedProperty);
+		ArrayList<Pair<Number, Number>> data = database.searchDataPair(LocalDate.of(2021, 4, 25), selectedProperty);
+		Pair<Double, Double> regressionResult = this.generateRegression(data);
+		Double regressionSlope = regressionResult.getKey();
+		Double regressionIntercept = regressionResult.getValue();
+		
+		//turn actual data into series
+		XYChart.Series<Number, Number> scatter = new XYChart.Series<>();
+		XYChart.Series<Number, Number> regression = new XYChart.Series<>();
+		scatter.setName("actual data points");
+		regression.setName("Regression Line");
+		for(Pair<Number, Number> pair : data) {
+			scatter.getData().add(new Data<Number, Number>(pair.getKey(), pair.getValue()));
+		}
+		//turn regression into series
+		double lastX = getLastX(data);
+		double lastY = regressionSlope * lastX + regressionIntercept;
+		regression.getData().add(new Data<Number, Number>(0, regressionIntercept));
+		regression.getData().add(new Data<Number, Number>(lastX, lastY));
+		
+		//display the chart
+		this.regressionChart.getData().addAll(scatter, regression);
+		this.regressionChart.getScene().getStylesheets().add(getClass().getResource("/stylesheet/root.css").toExternalForm());
+		
+	}
+	
 	@FXML
 	void handleTestButton(ActionEvent event) {
-		this.regressionChart.getData().clear();
-		
-		ArrayList<Pair<Number, Number>> rawData = this.database.searchDataPair(LocalDate.of(2021, 5, 25));
-		
-		for(Pair<Number, Number> data : rawData) {
-			System.out.println(data.getKey());
-		}
-		
-		Pair<Double, Double> regressionResults = this.generateRegression(rawData);
-		this.generateChart(rawData, regressionResults.getKey(), regressionResults.getValue());
-		
+		this.generateChart();		
 	}
 	
 	//Helper for generateChart()
@@ -108,25 +152,6 @@ public class TabC3pageController {
 		return maxX;
 	}
 	
-	private void generateChart(ArrayList<Pair<Number, Number>> sourceData, double regressionSlope, double regressionInt) {
-		XYChart.Series<Number, Number> scatter = new XYChart.Series<>();
-		XYChart.Series<Number, Number> regression = new XYChart.Series<>();
-		scatter.setName("actual data points");
-		regression.setName("Regression Line");
-		
-		ArrayList<Data<Number, Number>> dataList = new ArrayList<Data<Number, Number>>();
-		for(Pair<Number, Number> pair: sourceData) {
-			scatter.getData().add(new Data<Number, Number>(pair.getKey(), pair.getValue()));
-		}
-		double lastX = getLastX(sourceData);
-		double lastY = regressionSlope * lastX + regressionInt;
-		regression.getData().add(new Data<Number, Number>(0, regressionInt));
-		regression.getData().add(new Data<Number, Number>(lastX, lastY));
-		
-		this.regressionChart.getData().addAll(scatter, regression);
-		
-		this.regressionChart.getScene().getStylesheets().add(getClass().getResource("/stylesheet/root.css").toExternalForm());
-	}
 	
 	private Pair<Double, Double> generateRegression(ArrayList<Pair<Number, Number>> rawData) {
 		SimpleRegression regression = new SimpleRegression(true);
