@@ -19,11 +19,13 @@ public class TabC1pageController extends TableTabsController{
 		for(String isoCode : isoCodes) {
 			long totalData = db.searchTotalData(isoCode, targetDate, DataTitle.VAC); // search all vac data
 			double rateData = db.searchRateData(isoCode, targetDate, DataTitle.VAC); // search all vac rate data
+			/*
 			if(totalData < 0 || rateData < 0) {
 				//handle error
 				System.out.println("Error: " + isoCode + " " + targetDate + " " + (totalData < 0 ? "total" : "rate"));
 				return null;
 			}
+			*/
 			result.add(new TableData(db.getLocationName(isoCode), totalData, rateData, true));
 		}
 		return result;
@@ -36,7 +38,7 @@ public class TabC1pageController extends TableTabsController{
 		this.tableTitlelbl.setText("Rate of Vaccination against COVID-19 as of " + date);
 		
 		this.countryCol.setCellValueFactory(new PropertyValueFactory<TableView<TableData>, String>("countryName"));
-		this.totalCol.setCellValueFactory(new PropertyValueFactory<TableView<TableData>, Long>("totalData"));
+		this.totalCol.setCellValueFactory(new PropertyValueFactory<TableView<TableData>, String>("totalData"));
 		this.rateCol.setCellValueFactory(new PropertyValueFactory<TableView<TableData>, String>("rateData"));
 		
 		this.dataTable.setItems(oList);

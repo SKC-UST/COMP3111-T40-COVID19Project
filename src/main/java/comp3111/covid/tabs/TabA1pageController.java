@@ -36,7 +36,7 @@ public class TabA1pageController extends TableTabsController{
 		this.tableTitlelbl.setText("Number of Confirmed COVID-19 Cases as of " + date);
 		
 		this.countryCol.setCellValueFactory(new PropertyValueFactory<TableView<TableData>, String>("countryName"));
-		this.totalCol.setCellValueFactory(new PropertyValueFactory<TableView<TableData>, Long>("totalData"));
+		this.totalCol.setCellValueFactory(new PropertyValueFactory<TableView<TableData>, String>("totalData"));
 		this.rateCol.setCellValueFactory(new PropertyValueFactory<TableView<TableData>, String>("rateData"));
 		
 		this.dataTable.setItems(oList);

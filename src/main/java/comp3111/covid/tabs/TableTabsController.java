@@ -16,11 +16,15 @@ import javafx.scene.control.Label;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
+import comp3111.covid.datastorage.DataTitle;
+import comp3111.covid.datastorage.Database;
+import comp3111.covid.tabs.TableTabsController.TableData;
+
 public class TableTabsController extends TabController {
 	@FXML private DatePicker datePicker;
 	@FXML private Button confirmButton;
 	@FXML protected TableColumn<TableView<TableData>,String> countryCol;
-	@FXML protected TableColumn<TableView<TableData>,Long> totalCol;
+	@FXML protected TableColumn<TableView<TableData>,String> totalCol;
 	@FXML protected TableColumn<TableView<TableData>,String> rateCol;
 	@FXML protected TableView<TableData> dataTable;
 	@FXML protected Label tableTitlelbl;
@@ -29,20 +33,20 @@ public class TableTabsController extends TabController {
 	
 	public class TableData {
 		private final SimpleStringProperty countryName;
-		private final SimpleLongProperty totalData;
+		private final SimpleStringProperty totalData;
 		private final SimpleStringProperty rateData;
 
 		TableData (String location, long total, double rate, boolean needPercentage) {
 			this.countryName = new SimpleStringProperty(location);
-			this.totalData = new SimpleLongProperty(total);
-			this.rateData = new SimpleStringProperty(rate + (needPercentage ? "%" : ""));
+			this.totalData = new SimpleStringProperty(total >= 0 ? String.valueOf(total) : "No Data");
+			this.rateData = new SimpleStringProperty(rate >= 0 ? rate + (needPercentage ? "%" : "") : "No Data");
 		}
 		
 		public String getCountryName() {
 			return this.countryName.get();
 		}
 		
-		public Long getTotalData() {
+		public String getTotalData() {
 			return this.totalData.get();
 		}
 		
@@ -58,14 +62,26 @@ public class TableTabsController extends TabController {
 	
 	//to be overriden
 	protected ArrayList<TableData> generateDataList(ArrayList<String> isoCodes, LocalDate targetDate) throws Exception{
-		return null;
+		ArrayList<TableData> result = new ArrayList<TableData>();
+		Database db = this.getDatabase();
+		for(String isoCode : isoCodes) {
+			long totalData = db.searchTotalData(isoCode, targetDate, DataTitle.VAC); // search all vac data
+			double rateData = db.searchRateData(isoCode, targetDate, DataTitle.VAC); // search all vac rate data
+			if(totalData < 0 || rateData < 0) {
+				//handle error
+				System.out.println("Error: " + isoCode + " " + targetDate + " " + (totalData < 0 ? "total" : "rate"));
+				return null;
+			}
+			result.add(new TableData(db.getLocationName(isoCode), totalData, rateData, true));
+		}
+		return result;
 	}
 	
 	protected void generateTable(ArrayList<TableData> data, LocalDate date) {
 		ObservableList<TableData> oList = FXCollections.observableArrayList(data);
 		
 		this.countryCol.setCellValueFactory(new PropertyValueFactory<TableView<TableData>, String>("countryName"));
-		this.totalCol.setCellValueFactory(new PropertyValueFactory<TableView<TableData>, Long>("totalData"));
+		this.totalCol.setCellValueFactory(new PropertyValueFactory<TableView<TableData>, String>("totalData"));
 		this.rateCol.setCellValueFactory(new PropertyValueFactory<TableView<TableData>, String>("rateData"));
 		
 		this.dataTable.setItems(oList);
