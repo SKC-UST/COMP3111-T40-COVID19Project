@@ -36,6 +36,10 @@ public class TabController {
     	return this.database;
     }
     
+    protected Context getContext() {
+    	return this.context;
+    }
+    
     public void updateCheckboxList() {
     	
     	System.out.println("update");

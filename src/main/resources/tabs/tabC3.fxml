@@ -8,6 +8,7 @@
 <?import javafx.scene.control.Slider?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
 <VBox prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="comp3111.covid.tabs.TabC3pageController">
    <children>
@@ -18,13 +19,19 @@
                 <NumberAxis side="BOTTOM" fx:id="xAxis" />
               </xAxis>
               <yAxis>
-                <NumberAxis fx:id="yAxis" label="Vaccination Rate" side="LEFT" />
+                <NumberAxis fx:id="yAxis" label="Vaccination Rate" lowerBound="1.0" side="LEFT" />
               </yAxis>
             </LineChart>
             <Button fx:id="testButton" layoutX="52.0" layoutY="537.0" mnemonicParsing="false" onAction="#handleTestButton" text="Button" />
             <ComboBox layoutX="14.0" layoutY="108.0" prefWidth="150.0" promptText="x-axis" fx:id="xAxisCbx" />
             <Slider fx:id="dateSlider" blockIncrement="5.0" layoutX="14.0" layoutY="193.0" prefHeight="16.0" prefWidth="165.0" />
             <Label fx:id="dateLbl" layoutX="14.0" layoutY="168.0" prefHeight="17.0" prefWidth="40.0" text="Date" />
+            <Label fx:id="noDataLabel1" layoutX="435.0" layoutY="273.0" text="No Data Available">
+               <font>
+                  <Font name="Hack Bold" size="29.0" />
+               </font>
+            </Label>
+            <Label fx:id="noDataLabel2" layoutX="425.0" layoutY="320.0" text="Change the value of the slider or the x-axis to data" />
          </children>
       </AnchorPane>
    </children>

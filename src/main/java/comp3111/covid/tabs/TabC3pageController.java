@@ -29,6 +29,7 @@ public class TabC3pageController {
 	
 	private Context context = Context.getInstance();
 	private Database database = context.getDatabase();
+	private DateConverter dateConverter = context.getDateConverter();
 	
 	@FXML private NumberAxis xAxis;
     @FXML private NumberAxis yAxis;
@@ -37,11 +38,14 @@ public class TabC3pageController {
 	@FXML private ComboBox<Pair<String, LocationProperty>> xAxisCbx;
 	@FXML private Slider dateSlider;
 	@FXML private Label dateLbl;
+	@FXML private Label noDataLabel1;
+	@FXML private Label noDataLabel2;
 	
 	final private String[] LOC_PROP_TEXT = {"Population", "Population Density", "Median Age", "Number of People Aged 65 or above", "Number of People Aged 70 or above", "GDP per Capita", "Diabetes Prevalence"};
 	private LocationProperty selectedProperty = null;
 	private LocalDate selectedDate = null;
 	
+	// run after importing FX elements, before import dataset
 	public void initialize() {
 		ObservableList<Pair<String, LocationProperty>> pairs = this.generateLocPropPairs();
 		xAxisCbx.setItems(pairs);
@@ -84,7 +88,8 @@ public class TabC3pageController {
 			if(newval != null) {
 				System.out.println("Selected: " + newval.getValue());
 				this.selectedProperty = newval.getValue();
-				this.generateChart();
+				if(this.selectedDate != null)
+					this.generateChart();
 			}
 		});
 		
@@ -92,8 +97,20 @@ public class TabC3pageController {
 		this.dateSlider.valueProperty().addListener((obs, oldval, newval)->{
 			final double roundedValue = Math.floor(newval.doubleValue());
 			dateSlider.valueProperty().set(roundedValue);
-			System.out.println(roundedValue);
+			this.selectedDate = dateConverter.longToDate((long)roundedValue);
+			System.out.println(selectedDate);
+			if(this.selectedProperty != null) {
+				this.generateChart();
+			}
 		});
+	}
+	
+	public void initAfterImport() {
+		LocalDate maxDate = this.database.getLatest();
+		LocalDate minDate = this.database.getEarliest();
+		this.selectedDate = minDate;
+		this.dateSlider.maxProperty().set(dateConverter.dateToLong(maxDate));
+		this.dateSlider.minProperty().set(dateConverter.dateToLong(minDate));
 	}
 	
 	//Helper for initialize()
@@ -112,7 +129,16 @@ public class TabC3pageController {
 	private void generateChart() {
 		this.regressionChart.getData().clear();
 		//ArrayList<Pair<Number, Number>> data = database.searchDataPair(selectedDate, selectedProperty);
-		ArrayList<Pair<Number, Number>> data = database.searchDataPair(LocalDate.of(2021, 4, 25), selectedProperty);
+		ArrayList<Pair<Number, Number>> data = database.searchDataPair(this.selectedDate, this.selectedProperty);
+		if(data.isEmpty()) {
+			this.noDataLabel1.setVisible(true);
+			this.noDataLabel2.setVisible(true);
+			return;
+		}
+		
+		this.noDataLabel1.setVisible(false);
+		this.noDataLabel2.setVisible(false);
+		
 		Pair<Double, Double> regressionResult = this.generateRegression(data);
 		Double regressionSlope = regressionResult.getKey();
 		Double regressionIntercept = regressionResult.getValue();
@@ -158,12 +184,13 @@ public class TabC3pageController {
 		for(Pair<Number, Number> datum : rawData) {
 			regression.addData(datum.getKey().doubleValue(), datum.getValue().doubleValue());
 		}
-		System.out.println("Intercep: " + regression.getIntercept());
+		/*
+		System.out.println("Intercept: " + regression.getIntercept());
 		System.out.println("Slope: " + regression.getSlope());
 		System.out.println("Statistical Significance of slope: " + regression.getSignificance());
 		System.out.println("R: " + regression.getR());
 		System.out.println("R-squared: " + regression.getRSquare());
-		
+		*/
 		return new Pair<Double, Double>(regression.getSlope(), regression.getIntercept());
 	}
 	

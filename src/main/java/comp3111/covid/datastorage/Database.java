@@ -22,7 +22,16 @@ public class Database {
 	//Database 
 	private ArrayList<Pair<String, String>> locationNames = new ArrayList<Pair<String, String>>(); //<isocode, locationName>
 	private HashMap<String, LocationData> hashStorage = new HashMap<String, LocationData>(); //isoCode as key
+	private LocalDate earliest = LocalDate.now(), latest = LocalDate.of(2000, 1, 1); //earliest = date that the first data is found, latest = last data found in dataset -- initialized in such a way to facilitate searching
 	final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("M/d/yyyy");
+	
+	public LocalDate getEarliest() {
+		return this.earliest;
+	}
+	
+	public LocalDate getLatest() {
+		return this.latest;
+	}
 	
 	public String getLocationName(String isoCode) {
 		LocationData loc = this.hashStorage.get(isoCode);
@@ -34,7 +43,6 @@ public class Database {
 	private void sortLocations() {
 		Iterator<Entry<String, LocationData>> it = hashStorage.entrySet().iterator();
 		while (it.hasNext()) {
-			@SuppressWarnings("unchecked")
 			Map.Entry<String, LocationData> pair = (Map.Entry<String, LocationData>)it.next();
 			LocationData loc = pair.getValue();
 			for(DataTitle title : DataTitle.values()) {
@@ -52,7 +60,6 @@ public class Database {
 		ArrayList<Pair<Number, Number>> result = new ArrayList<Pair<Number, Number>>();
 		Iterator<Entry<String, LocationData>> it = hashStorage.entrySet().iterator();
 		while (it.hasNext()) {
-			@SuppressWarnings("unchecked")
 			Map.Entry<String, LocationData> pair = (Map.Entry<String, LocationData>)it.next();
 			LocationData loc = pair.getValue();
 			double rate = loc.getRateDayData(date, DataTitle.VAC);
@@ -80,6 +87,8 @@ public class Database {
 	private void rowToData(CSVRecord record) {
 		String isoCode = record.get("iso_code");
 		LocalDate date = LocalDate.parse(record.get("date"), this.DATE_FORMAT);
+		if(date.isAfter(latest)) { latest = date;}
+		if(date.isBefore(earliest)) { earliest = date;}
 		
 		//Initializing a LocationData from record
 		if(!this.hashStorage.containsKey(isoCode)) {
@@ -88,7 +97,7 @@ public class Database {
 			long populationNum;
 			double populationDensity, medianAge, age65, age70, gdp, diabetes;
 			
-			try {populationNum = Long.parseLong(populationStr);} catch(Exception e){return;} //"countries" without population nubmers do not contain meaning data in any way
+			try {populationNum = Long.parseLong(populationStr);} catch(Exception e){return;} //"countries" without population numbers do not contain meaning data in any way
 			try {populationDensity = Double.parseDouble(record.get("population_density"));} catch(Exception e) {populationDensity = -1;}
 			try {medianAge = Double.parseDouble(record.get("median_age"));} catch(Exception e) {medianAge = -1;}
 			try {age65 = Double.parseDouble(record.get("aged_65_older"));} catch(Exception e) {age65 = -1;}
@@ -98,7 +107,7 @@ public class Database {
 			if(populationStr.equals("")) return;
 			this.hashStorage.put(isoCode, new LocationData(
 					isoCode, record.get("continent"), record.get("location"), populationNum, populationDensity, medianAge, age65, age70, gdp, diabetes));
-			this.locationNames.add(new Pair(isoCode, locationName));
+			this.locationNames.add(new Pair<String, String>(isoCode, locationName));
 		}
 		
 		//put DayData into LocationData
@@ -196,7 +205,6 @@ public class Database {
 	public void clearDatabase () {
 		Iterator<Entry<String, LocationData>> it = hashStorage.entrySet().iterator();
 		while (it.hasNext()) {
-			@SuppressWarnings("unchecked")
 			Map.Entry<String, LocationData> pair = (Map.Entry<String, LocationData>)it.next();
 			pair.getValue().clearLocationData();
 		}
@@ -204,12 +212,7 @@ public class Database {
 	}
 	
 	public void printDatabaseContent() {
-		/*
-		ArrayList<RateDayData> data = this.hashStorage.get("HKG").vacRateList;
-		System.out.println("printing");
-		for(RateDayData d : data) {
-			System.out.println(d.getDate() + "\t" + d.getData());
-		}
-		*/
+		System.out.println("Earliest: " + this.earliest);
+		System.out.println("Latest: " + this.latest);
 	}
 }

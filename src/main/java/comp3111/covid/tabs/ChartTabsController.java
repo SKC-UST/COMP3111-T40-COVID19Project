@@ -16,8 +16,7 @@ import javafx.util.StringConverter;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-import org.controlsfx.control.CheckListView;
-
+import comp3111.covid.Context;
 import comp3111.covid.dataAnalysis.DateConverter;
 import comp3111.covid.datastorage.*;
 
@@ -28,16 +27,16 @@ public class ChartTabsController extends TabController{
     @FXML protected DatePicker endDatePicker;
     @FXML protected NumberAxis xAxis;
     @FXML protected NumberAxis yAxis;
-    @FXML
-	protected LineChart<Number, Number> dataChart;
+    @FXML protected LineChart<Number, Number> dataChart;
     
     protected LocalDate startDate = null;    
     protected LocalDate endDate = null;
     
+    private DateConverter dc = Context.getInstance().getDateConverter();
+    
     public void initialize() {
     	
     	xAxis.setTickLabelFormatter(new StringConverter<Number>() {
-    		DateConverter dc = new DateConverter();
     		@Override
     		public String toString(Number dateNum) {
     			return dc.longToString(dateNum.longValue());

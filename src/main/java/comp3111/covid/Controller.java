@@ -134,6 +134,7 @@ public class Controller {
         	this.tabB2pageController.updateCheckboxList();
         	this.tabC1pageController.updateCheckboxList();
         	this.tabC2pageController.updateCheckboxList();
+        	this.tabC3pageController.initAfterImport();
         	
         	this.tabReport1.setDisable(false);
         	this.tabReport2.setDisable(false);
