@@ -3,7 +3,7 @@ package comp3111.covid.tabs;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-import comp3111.covid.datastorage.Database.DataTitle;
+import comp3111.covid.datastorage.DataTitle;
 import javafx.util.Pair;
 
 public class TabB2pageController extends ChartTabsController {

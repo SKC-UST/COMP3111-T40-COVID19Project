@@ -1,13 +1,10 @@
 package comp3111.covid.tabs;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.collections.transformation.SortedList;
+
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.chart.*;
-import javafx.scene.chart.XYChart.Data;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.util.Pair;
@@ -16,10 +13,8 @@ import javafx.util.StringConverter;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-import org.controlsfx.control.CheckListView;
-
+import comp3111.covid.Context;
 import comp3111.covid.dataAnalysis.DateConverter;
-import comp3111.covid.datastorage.Database.DataTitle;
 
 public class ChartTabsController extends TabController{
 
@@ -28,16 +23,16 @@ public class ChartTabsController extends TabController{
     @FXML protected DatePicker endDatePicker;
     @FXML protected NumberAxis xAxis;
     @FXML protected NumberAxis yAxis;
-    @FXML
-	protected LineChart<Number, Number> dataChart;
+    @FXML protected LineChart<Number, Number> dataChart;
     
     protected LocalDate startDate = null;    
     protected LocalDate endDate = null;
     
+    private DateConverter dc = Context.getInstance().getDateConverter();
+    
     public void initialize() {
     	
     	xAxis.setTickLabelFormatter(new StringConverter<Number>() {
-    		DateConverter dc = new DateConverter();
     		@Override
     		public String toString(Number dateNum) {
     			return dc.longToString(dateNum.longValue());
