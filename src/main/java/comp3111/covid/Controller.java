@@ -65,8 +65,8 @@ public class Controller {
     @FXML
     //triggered by button
     void importCSVtoDatabase(ActionEvent event) {
-    	File csvFile = chooseCSVFile(); // Official function
-    	//File csvFile = new File("./src/main/resources/dataset/COVID_Dataset_v1.0.csv");
+    	//File csvFile = chooseCSVFile(); // Official function
+    	File csvFile = new File("./src/main/resources/dataset/COVID_Dataset_v1.0.csv");
 
     	if(csvFile != null) {
     		this.database.importCSV(csvFile);
