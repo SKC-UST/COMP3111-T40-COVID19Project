@@ -21,4 +21,8 @@ public enum LocationProperty {
 	public static Optional<LocationProperty> valueOf(int value){
 		return Arrays.stream(values()).filter(LocationProperty -> LocationProperty.value == value).findFirst();
 	}
+	
+	public int value() {
+		return this.value;
+	}
 }

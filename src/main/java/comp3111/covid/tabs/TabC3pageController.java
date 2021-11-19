@@ -34,14 +34,14 @@ public class TabC3pageController {
 	@FXML private NumberAxis xAxis;
     @FXML private NumberAxis yAxis;
 	@FXML private LineChart<Number, Number> regressionChart;
-	@FXML private Button testButton;
 	@FXML private ComboBox<Pair<String, LocationProperty>> xAxisCbx;
 	@FXML private Slider dateSlider;
-	@FXML private Label dateLbl;
 	@FXML private Label noDataLabel1;
 	@FXML private Label noDataLabel2;
 	
 	final private String[] LOC_PROP_TEXT = {"Population", "Population Density", "Median Age", "Number of People Aged 65 or above", "Number of People Aged 70 or above", "GDP per Capita", "Diabetes Prevalence"};
+	final private String noDataText1 = "No Data Avaialble for the given time and x-axis";
+	final private String noDataText2 = "Change the slider to find data in another day!";
 	private LocationProperty selectedProperty = null;
 	private LocalDate selectedDate = null;
 	
@@ -88,6 +88,7 @@ public class TabC3pageController {
 			if(newval != null) {
 				System.out.println("Selected: " + newval.getValue());
 				this.selectedProperty = newval.getValue();
+				xAxis.setLabel(LOC_PROP_TEXT[selectedProperty.value()]);
 				if(this.selectedDate != null)
 					this.generateChart();
 			}
@@ -131,6 +132,8 @@ public class TabC3pageController {
 		//ArrayList<Pair<Number, Number>> data = database.searchDataPair(selectedDate, selectedProperty);
 		ArrayList<Pair<Number, Number>> data = database.searchDataPair(this.selectedDate, this.selectedProperty);
 		if(data.isEmpty()) {
+			this.noDataLabel1.setText(noDataText1);
+			this.noDataLabel2.setText(noDataText2);
 			this.noDataLabel1.setVisible(true);
 			this.noDataLabel2.setVisible(true);
 			return;
@@ -161,11 +164,6 @@ public class TabC3pageController {
 		this.regressionChart.getData().addAll(scatter, regression);
 		this.regressionChart.getScene().getStylesheets().add(getClass().getResource("/stylesheet/root.css").toExternalForm());
 		
-	}
-	
-	@FXML
-	void handleTestButton(ActionEvent event) {
-		this.generateChart();		
 	}
 	
 	//Helper for generateChart()

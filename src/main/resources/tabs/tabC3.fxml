@@ -2,10 +2,11 @@
 
 <?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
-<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
@@ -14,24 +15,28 @@
    <children>
       <AnchorPane prefHeight="668.0" prefWidth="720.0">
          <children>
-            <LineChart fx:id="regressionChart" animated="false" layoutX="194.0" layoutY="38.0" prefHeight="564.0" prefWidth="806.0">
+            <LineChart fx:id="regressionChart" animated="false" layoutX="266.0" prefHeight="551.0" prefWidth="735.0">
               <xAxis>
                 <NumberAxis side="BOTTOM" fx:id="xAxis" />
               </xAxis>
               <yAxis>
-                <NumberAxis fx:id="yAxis" label="Vaccination Rate" lowerBound="1.0" side="LEFT" />
+                <NumberAxis fx:id="yAxis" autoRanging="false" label="Vaccination Rate" side="LEFT" />
               </yAxis>
             </LineChart>
-            <Button fx:id="testButton" layoutX="52.0" layoutY="537.0" mnemonicParsing="false" onAction="#handleTestButton" text="Button" />
-            <ComboBox layoutX="14.0" layoutY="108.0" prefWidth="150.0" promptText="x-axis" fx:id="xAxisCbx" />
-            <Slider fx:id="dateSlider" blockIncrement="5.0" layoutX="14.0" layoutY="193.0" prefHeight="16.0" prefWidth="165.0" />
-            <Label fx:id="dateLbl" layoutX="14.0" layoutY="168.0" prefHeight="17.0" prefWidth="40.0" text="Date" />
-            <Label fx:id="noDataLabel1" layoutX="435.0" layoutY="273.0" text="No Data Available">
+            <ComboBox layoutX="62.0" layoutY="97.0" prefWidth="150.0" promptText="x-axis" fx:id="xAxisCbx" />
+            <Slider fx:id="dateSlider" blockIncrement="5.0" layoutX="336.0" layoutY="560.0" prefHeight="18.0" prefWidth="651.0" />
+            <Label fx:id="noDataLabel1" layoutX="390.0" layoutY="262.0" text="To Begin, Select an X-axis">
                <font>
-                  <Font name="Hack Bold" size="29.0" />
+                  <Font name="Hack Bold" size="21.0" />
                </font>
             </Label>
-            <Label fx:id="noDataLabel2" layoutX="425.0" layoutY="320.0" text="Change the value of the slider or the x-axis to data" />
+            <Label fx:id="noDataLabel2" layoutX="390.0" layoutY="300.0" text="Change the slider value to se the changes of value as time goes on" />
+            <TableView layoutX="14.0" layoutY="199.0" prefHeight="391.0" prefWidth="247.0">
+              <columns>
+                <TableColumn prefWidth="96.74511528015137" text="Rgerssion" />
+                <TableColumn prefWidth="148.60845692957705" text="Value" />
+              </columns>
+            </TableView>
          </children>
       </AnchorPane>
    </children>
