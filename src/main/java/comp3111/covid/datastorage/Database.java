@@ -136,40 +136,13 @@ public class Database {
 		return result;
 	}
 	
-	public ArrayList<Long> searchTotalData(String isoCode, LocalDate startDate, LocalDate endDate, DataTitle title) {
-		ArrayList<Long> result = new ArrayList<Long>();
-		LocationData targetLocation = this.hashStorage.get(isoCode);
-		ArrayList<TotalDayData> targetList = targetLocation.getTotalDayList(title);
-		
-		for(DayData<Long> elem : targetList) {
-			if(!elem.getDate().isBefore(startDate) && !elem.getDate().isAfter(endDate))
-				result.add(elem.getData());
-		}
-		
-		return result;
-	}
-	
 	//return -1 if not found
 	public double searchRateData(String isoCode, LocalDate targetDate, DataTitle title) throws Exception {
 		double result = this.hashStorage.get(isoCode).getRateDayData(targetDate, title);
 		return result;
 	}
 	
-	public ArrayList<Double> searchRateData(String isoCode, LocalDate startDate, LocalDate endDate, DataTitle title) {
-		ArrayList<Double> result = new ArrayList<Double>();
-		LocationData targetLocation = this.hashStorage.get(isoCode);
-		ArrayList<RateDayData> targetList = targetLocation.getRateDayList(title);
-		
-		for(RateDayData elem : targetList) {
-			if(!elem.getDate().isBefore(startDate) && !elem.getDate().isAfter(endDate)) {
-				result.add(elem.getData());
-			}
-		}
-		return result;
-	}
-	
 	public ArrayList<Pair<LocalDate, Number>> searchChartData(String isoCode, LocalDate startDate, LocalDate endDate, DataTitle title){
-		
 		ArrayList<Pair<LocalDate, Number>> result = new ArrayList<Pair<LocalDate, Number>>();
 		LocationData loc = this.hashStorage.get(isoCode);
 		ArrayList<RateDayData> rateList = loc.getRateDayList(title); 

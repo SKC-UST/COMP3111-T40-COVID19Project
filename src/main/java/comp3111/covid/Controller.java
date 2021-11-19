@@ -14,7 +14,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 
 /**
@@ -22,20 +21,8 @@ import javafx.scene.text.Text;
  */
 public class Controller {
 
-    @FXML private Tab tabTaskZero;
-
-    @FXML private TextField textfieldISO;
-
-    @FXML private Button buttonConfirmedDeaths;
-
-    @FXML private TextField textfieldDataset;
-
-    @FXML private Button buttonRateOfVaccination;
-
-    @FXML private Button buttonConfirmedCases;
     
     @FXML private Button fileChoosingButton;
-
     @FXML private TextArea textAreaConsole; // the console that was gone
     
     // Tabs under the main Tab pane
@@ -62,48 +49,6 @@ public class Controller {
     
     private Context context = Context.getInstance();
     private Database database = context.getDatabase();
-  
-
-    /**
-     *  Task Zero
-     *  To be triggered by the "Confirmed Cases" button on the Task Zero Tab 
-     *  
-     */
-    @FXML
-    void doConfirmedCases(ActionEvent event) {
-    	String iDataset = textfieldDataset.getText();
-    	String iISO = textfieldISO.getText();
-    	String oReport = DataAnalysis.getConfirmedCases(iDataset, iISO);
-    	textAreaConsole.setText(oReport);
-    }
-
-  
-    /**
-     *  Task Zero
-     *  To be triggered by the "Confirmed Deaths" button on the Task Zero Tab
-     *  
-     */
-    @FXML
-    void doConfirmedDeaths(ActionEvent event) {
-    	String iDataset = textfieldDataset.getText();
-    	String iISO = textfieldISO.getText();
-    	String oReport = DataAnalysis.getConfirmedDeaths(iDataset, iISO);
-    	textAreaConsole.setText(oReport);
-    }
-
-  
-    /**
-     *  Task Zero
-     *  To be triggered by the "Rate of Vaccination" button on the Task Zero Tab
-     *  
-     */
-    @FXML
-    void doRateOfVaccination(ActionEvent event) {
-    	String iDataset = textfieldDataset.getText();
-    	String iISO = textfieldISO.getText();
-    	String oReport = DataAnalysis.getRateOfVaccination(iDataset, iISO);
-    	textAreaConsole.setText(oReport);
-    }
     
     //launch the CSV file chooser
     private File chooseCSVFile() {

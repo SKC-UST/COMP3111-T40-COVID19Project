@@ -10,13 +10,11 @@ import comp3111.covid.dataAnalysis.DateConverter;
 import comp3111.covid.datastorage.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.chart.XYChart.Data;
-import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
@@ -138,6 +136,7 @@ public class TabC3pageController {
 	}
 	
 	//Main function for generating the chart
+	@SuppressWarnings("unchecked")
 	private void generateChart() {
 		this.regressionChart.getData().clear();
 		//ArrayList<Pair<Number, Number>> data = database.searchDataPair(selectedDate, selectedProperty);

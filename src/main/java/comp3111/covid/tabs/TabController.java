@@ -5,16 +5,11 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.MultipleSelectionModel;
 import javafx.scene.control.cell.CheckBoxListCell;
 import javafx.util.Pair;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Map.Entry;
 
 import org.controlsfx.control.CheckListView;
 
@@ -26,7 +21,6 @@ public class TabController {
 	private Context context = Context.getInstance();
 	private Database database = context.getDatabase();
 	private ObservableList<Pair<String, String>> checkedPair;
-	private ArrayList<String> locations;
 	private HashMap<String, Boolean> checkedLocations = new HashMap<String, Boolean>();
 
     @FXML

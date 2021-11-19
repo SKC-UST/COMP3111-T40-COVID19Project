@@ -5,10 +5,7 @@ import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-import comp3111.covid.dataAnalysis.DateConverter;
 import comp3111.covid.datastorage.*;
-import javafx.event.ActionEvent;
-import javafx.scene.chart.XYChart;
 import javafx.util.Pair;
 import javafx.util.StringConverter;
 

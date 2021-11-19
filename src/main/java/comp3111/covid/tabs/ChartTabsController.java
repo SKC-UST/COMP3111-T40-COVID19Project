@@ -1,13 +1,10 @@
 package comp3111.covid.tabs;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.collections.transformation.SortedList;
+
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.chart.*;
-import javafx.scene.chart.XYChart.Data;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.util.Pair;
@@ -18,7 +15,6 @@ import java.util.ArrayList;
 
 import comp3111.covid.Context;
 import comp3111.covid.dataAnalysis.DateConverter;
-import comp3111.covid.datastorage.*;
 
 public class ChartTabsController extends TabController{
 
