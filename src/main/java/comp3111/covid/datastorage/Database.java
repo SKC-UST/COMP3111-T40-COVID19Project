@@ -1,235 +1,28 @@
 package comp3111.covid.datastorage;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 
-import com.opencsv.CSVReader;
-import com.opencsv.CSVReaderBuilder;
-
 import edu.duke.FileResource;
 import javafx.util.Pair;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 public class Database {
 	
-	private interface DayData<T> {
-		public LocalDate getDate();
-		public T getData();
-	}
-	
-	private class TotalDayData implements DayData<Long>, Comparable<TotalDayData>{
-		private LocalDate dataDate;
-		private long totalData;
-		
-		TotalDayData(LocalDate date, long data){
-			this.dataDate = date;
-			this.totalData = data;
-		}
-		
-		@Override
-		public LocalDate getDate() {
-			return this.dataDate;
-		}
-		
-		@Override
-		public Long getData() {
-			return this.totalData;
-		}
-		
-		@Override
-		public int compareTo(TotalDayData o) {
-			return this.dataDate.compareTo(o.dataDate);
-		}
-	}
-	
-	private class RateDayData implements DayData<Double>, Comparable<RateDayData> {
-		private LocalDate dataDate;
-		private double rateData;
-		
-		RateDayData(LocalDate date, double data){
-			this.dataDate = date;
-			this.rateData = data;
-		}
-		
-		@Override
-		public LocalDate getDate() {
-			return this.dataDate;
-		}
-		
-		@Override
-		public Double getData() {
-			return this.rateData;
-		}
-		
-		@Override
-		public int compareTo(RateDayData o) {
-			return this.dataDate.compareTo(o.dataDate);
-		}
-	}
-	
-	private class LocationData {
-		private String locationIsoCode;
-		private String locationContinent;
-		private String locationName;
-		private long locationPopulation;
-		private ArrayList<TotalDayData> caseTotalList = new ArrayList<TotalDayData>();
-		private ArrayList<TotalDayData> deathTotalList = new ArrayList<TotalDayData>();
-		private ArrayList<TotalDayData> vacTotalList = new ArrayList<TotalDayData>();
-		private ArrayList<RateDayData> caseRateList = new ArrayList<RateDayData>();
-		private ArrayList<RateDayData> deathRateList = new ArrayList<RateDayData>();
-		private ArrayList<RateDayData> vacRateList = new ArrayList<RateDayData>();
-		
-		LocationData(String isoCode, String continent, String location, long population) {
-			this.locationIsoCode = isoCode;
-			this.locationContinent = continent;
-			this.locationName = location;
-			this.locationPopulation = population;
-		}
-		
-		public String getLocationName() {
-			return this.locationName;
-		}
-		
-		public long getPopulation() {
-			return this.locationPopulation;
-		}
-		
-		private void addDayData(DataTitle dataTitle, DayData newDayData) {
-			if(newDayData instanceof TotalDayData) {
-				switch(dataTitle) {
-					case CASE:
-						this.caseTotalList.add((TotalDayData) newDayData);
-						break;
-					case DEATH:
-						this.deathTotalList.add((TotalDayData) newDayData);
-						break;
-					case VAC:
-						this.vacTotalList.add((TotalDayData) newDayData);
-						break;
-				}
-			}
-			else {
-				switch(dataTitle) {
-					case CASE:
-						this.caseRateList.add((RateDayData) newDayData);
-						break;
-					case DEATH:
-						this.deathRateList.add((RateDayData) newDayData);
-						break;
-					case VAC:
-						this.vacRateList.add((RateDayData) newDayData);
-						break;
-				}
-			}
-		}
-		
-		private ArrayList<TotalDayData> getTotalDayList(DataTitle dataTitle){
-			switch(dataTitle) {
-				case CASE:
-					return this.caseTotalList;
-				case DEATH:
-					return this.deathTotalList;
-				case VAC:
-					return this.vacTotalList;
-			}
-			return null;
-		}
-		
-		private ArrayList<RateDayData> getRateDayList(DataTitle dataTitle){
-			switch(dataTitle) {
-				case CASE:
-					return this.caseRateList;
-				case DEATH:
-					return this.deathRateList;
-				case VAC:
-					return this.vacRateList;
-			}
-			return null;
-		}
-		
-		private long getTotalDayData(LocalDate targetDate, DataTitle dataTitle) {
-			ArrayList<TotalDayData> targetTitle = null;
-			switch(dataTitle) {
-				case CASE:
-					targetTitle = this.caseTotalList;
-					break;
-				case DEATH:
-					targetTitle = this.deathTotalList;
-					break;
-				case VAC:
-					targetTitle = this.vacTotalList;
-					break;
-			}
-			for(TotalDayData day : targetTitle) {
-				if(day.getDate().equals(targetDate)) {
-					return day.getData();
-				}
-			}
-			return -1; // not found
-		}
-		
-		private double getRateDayData(LocalDate targetDate, DataTitle dataTitle) {
-			ArrayList<RateDayData> targetTitle = null;
-			switch(dataTitle) {
-				case CASE:
-					targetTitle = this.caseRateList;
-					break;
-				case DEATH:
-					targetTitle = this.deathRateList;
-					break;
-				case VAC:
-					targetTitle = this.vacRateList;
-					break;
-			}
-			for(RateDayData day : targetTitle) {
-				if(day.getDate().equals(targetDate)) {
-					return day.getData();
-				}
-			}
-			return -1; // not found
-		}
-		
-		private void clearLocationData() {
-			this.caseTotalList.clear();
-			this.caseRateList.clear();
-			this.deathTotalList.clear();
-			this.deathRateList.clear();
-			this.vacTotalList.clear();
-			this.vacRateList.clear();
-		}
-		
-		private void printLocationData() {
-			for(int i = 0; i < 10; ++i) {
-				System.out.println(this.caseTotalList.get(i).getData() + "\t" + this.caseRateList.get(i).getData() + "\t" + this.deathTotalList.get(i).getData() + "\t" + this.deathRateList.get(i).getData() + this.vacTotalList.get(i).getData() + "\t" + this.vacRateList.get(i).getData());
-			}
-		}
-	}
-	
-	
 	//Database 
 	private ArrayList<Pair<String, String>> locationNames = new ArrayList<Pair<String, String>>(); //<isocode, locationName>
 	private HashMap<String, LocationData> hashStorage = new HashMap<String, LocationData>(); //isoCode as key
 	private boolean datasetPresent = false;
-	public enum DataTitle {CASE, DEATH, VAC}
-	public enum LocationAttribute {POPULATION, POPULATION_DENSITY, AGE_MEDIAN, AGE_65}
 	final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("M/d/yyyy");
 	
 	public boolean hasDataset() {
@@ -249,7 +42,10 @@ public class Database {
 			@SuppressWarnings("unchecked")
 			Map.Entry<String, LocationData> pair = (Map.Entry<String, LocationData>)it.next();
 			LocationData loc = pair.getValue();
-			Collections.sort(loc.vacRateList);
+			for(DataTitle title : DataTitle.values()) {
+				Collections.sort(loc.getTotalDayList(title));
+				Collections.sort(loc.getRateDayList(title));
+			}
 		}
 	}
 	
@@ -311,7 +107,7 @@ public class Database {
 		if(!s.equals("")) { 
 			long total = Long.parseLong(s);
 			loc.addDayData(DataTitle.VAC, new TotalDayData(date, total));
-			double rate = ((((double)total)/((double)loc.locationPopulation)) * 100);
+			double rate = ((((double)total)/((double)loc.getPopulation())) * 100);
 			loc.addDayData(DataTitle.VAC, new RateDayData(date, rate));
 		}
 	}
@@ -360,7 +156,7 @@ public class Database {
 		
 		ArrayList<Pair<LocalDate, Number>> result = new ArrayList<Pair<LocalDate, Number>>();
 		LocationData loc = this.hashStorage.get(isoCode);
-		ArrayList<RateDayData> rateList = (title == DataTitle.CASE ? loc.caseRateList : (title == DataTitle.DEATH ? loc.deathRateList : loc.vacRateList)); 
+		ArrayList<RateDayData> rateList = loc.getRateDayList(title); 
 		for(RateDayData day : rateList) {
 			if(!day.getDate().isBefore(startDate) && !day.getDate().isAfter(endDate)) {
 				result.add(new Pair<LocalDate, Number>(day.getDate(), day.getData()));

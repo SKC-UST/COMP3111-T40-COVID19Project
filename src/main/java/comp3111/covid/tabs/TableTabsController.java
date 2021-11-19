@@ -17,11 +17,6 @@ import javafx.scene.control.Label;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-import org.controlsfx.control.CheckListView;
-
-import comp3111.covid.datastorage.Database;
-import comp3111.covid.datastorage.Database.DataTitle;
-
 public class TableTabsController extends TabController {
 	@FXML private DatePicker datePicker;
 	@FXML private Button confirmButton;

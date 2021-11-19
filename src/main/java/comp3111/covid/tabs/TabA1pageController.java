@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 import comp3111.covid.datastorage.Database;
-import comp3111.covid.datastorage.Database.DataTitle;
+import comp3111.covid.datastorage.*;
 import comp3111.covid.tabs.TableTabsController.TableData;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

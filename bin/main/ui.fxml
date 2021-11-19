@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TextField?>
@@ -12,9 +10,9 @@
 
 <VBox prefHeight="650.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="comp3111.covid.Controller">
   <children>
-    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="680.0" prefWidth="719.0">
+    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="680.0" prefWidth="1000.0">
       <children>
-            <TabPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="650.0" prefWidth="1000.0" tabClosingPolicy="UNAVAILABLE">
+            <TabPane fx:id="tabPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="650.0" prefWidth="1000.0" tabClosingPolicy="UNAVAILABLE">
               <tabs>
                 <Tab fx:id="tabTaskZero" text="Task Zero">
                   <content>
@@ -33,27 +31,27 @@
                         </AnchorPane>
                   </content>
                 </Tab>
-				<Tab fx:id="tabReport1" text="Table A">
+				<Tab fx:id="tabReport1" disable="true" text="Table A">
 					<fx:include fx:id="tabA1page" source="tabs/tabA1.fxml" />
 				</Tab>
-				<Tab fx:id="tabReport2" text="Table B">
+				<Tab fx:id="tabReport2" disable="true" text="Table B">
 					<fx:include fx:id="tabB1page" source="tabs/tabB1.fxml" />
 				</Tab>
-				<Tab fx:id="tabReport3" text="Table C">
+				<Tab fx:id="tabReport3" disable="true" text="Table C">
 					<fx:include fx:id="tabC1page" source="tabs/tabC1.fxml" />
 				</Tab>
-                  <Tab fx:id="tabApp1" text="Chart A">
-                     <fx:include fx:id="tabA2page" source="tabs/tabA2.fxml"/>
-                  </Tab>
-                  <Tab fx:id="tabApp2" text="Chart B">
-                     <fx:include fx:id="tabB2page" source="tabs/tabB2.fxml"/>
-                  </Tab>
-                  <Tab fx:id="tabApp3" text="Chart C">
-                  	<fx:include fx:id="tabC2page" source="tabs/tabC2.fxml" />
-                  </Tab>
-                  <Tab fx:id="tabC3" text="Report C">
-                  	<fx:include fx:id="tabC3page" source="tabs/tabC3.fxml" />
-                  </Tab>
+                 <Tab fx:id="tabApp1" disable="true" text="Chart A">
+                  <fx:include fx:id="tabA2page" source="tabs/tabA2.fxml" />
+                 </Tab>
+                 <Tab fx:id="tabApp2" disable="true" text="Chart B">
+                  <fx:include fx:id="tabB2page" source="tabs/tabB2.fxml" />
+                 </Tab>
+                 <Tab fx:id="tabApp3" disable="true" text="Chart C">
+                  <fx:include fx:id="tabC2page" source="tabs/tabC2.fxml" />
+                 </Tab>
+                 <Tab fx:id="tabC3" disable="true" text="Report C">
+                  <fx:include fx:id="tabC3page" source="tabs/tabC3.fxml" />
+                 </Tab>
               </tabs>
             </TabPane>
       </children>

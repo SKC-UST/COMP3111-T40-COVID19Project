@@ -5,8 +5,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 import comp3111.covid.Context;
-import comp3111.covid.datastorage.Database;
-import comp3111.covid.datastorage.Database.DataTitle;
+import comp3111.covid.datastorage.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -19,8 +18,11 @@ import javafx.scene.chart.XYChart.Data;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
 import javafx.stage.Stage;
 import javafx.util.Pair;
+import javafx.util.StringConverter;
+
 import org.apache.commons.math3.stat.regression.SimpleRegression;
 
 public class TabC3pageController {
@@ -32,11 +34,53 @@ public class TabC3pageController {
     @FXML private NumberAxis yAxis;
 	@FXML private LineChart<Number, Number> regressionChart;
 	@FXML private Button testButton;
-	@FXML private ComboBox<String> comboBox;
+	@FXML private ComboBox<Pair<String, LocationProperty>> xAxisCbx;
+	@FXML private Slider dateSlider;
+	@FXML private Label dateLbl;
+	final private String[] LOC_PROP_TEXT = {"Population", "Population Density", "Median Age", "Number of People Aged 65 or above", "Number of People Aged 70 or above", "GDP per Capita", "Diabetes Prevalence"};
+	private LocationProperty selectedProperty = null;
+	private LocalDate selectedDate = null;
 	
 	public void initialize() {
-		ObservableList<String> oList = FXCollections.observableArrayList("ABCV", "B", "C");
-		this.comboBox.setItems(oList);
+		ObservableList<Pair<String, LocationProperty>> pairs = this.generateLocPropPairs();
+		xAxisCbx.setItems(pairs);
+		
+		xAxisCbx.setConverter(new StringConverter<Pair<String, LocationProperty>>(){
+			@Override
+			public String toString(Pair<String, LocationProperty> object) {
+				return object.getKey();
+			}
+			
+			@Override
+			public Pair<String, LocationProperty> fromString(String string){
+				return xAxisCbx.getItems().stream().filter(p -> p.getKey().equals(string)).findFirst().orElse(null);
+			}
+		});
+		
+		xAxisCbx.valueProperty().addListener((obs, oldval, newval) -> {
+			if(newval != null) {
+				System.out.println("Selected: " + newval.getValue());
+				this.selectedProperty = newval.getValue();
+			}
+		});
+		
+		this.dateSlider.valueProperty().addListener((obs, oldval, newval)->{
+			final double roundedValue = Math.floor(newval.doubleValue());
+			dateSlider.valueProperty().set(roundedValue);
+			System.out.println(roundedValue);
+		});
+	}
+	
+	//Helper for initialize()
+	private ObservableList<Pair<String, LocationProperty>> generateLocPropPairs(){
+		ObservableList<Pair<String, LocationProperty>> result = FXCollections.observableArrayList();
+		int i = 0;
+		for(LocationProperty prop : LocationProperty.values()) {
+			Pair<String, LocationProperty> newPair = new Pair<String, LocationProperty>(LOC_PROP_TEXT[i], prop);
+			result.add(newPair);
+			++i;
+		}
+		return result;
 	}
 	
 	@FXML
@@ -54,6 +98,7 @@ public class TabC3pageController {
 		
 	}
 	
+	//Helper for generateChart()
 	private double getLastX(ArrayList<Pair<Number, Number>> sourceData) {
 		double maxX = 0;
 		for(Pair<Number, Number> pair : sourceData) {
@@ -78,8 +123,6 @@ public class TabC3pageController {
 		regression.getData().add(new Data<Number, Number>(0, regressionInt));
 		regression.getData().add(new Data<Number, Number>(lastX, lastY));
 		
-		this.regressionChart.setAnimated(false);
-		this.regressionChart.setCreateSymbols(true);
 		this.regressionChart.getData().addAll(scatter, regression);
 		
 		this.regressionChart.getScene().getStylesheets().add(getClass().getResource("/stylesheet/root.css").toExternalForm());

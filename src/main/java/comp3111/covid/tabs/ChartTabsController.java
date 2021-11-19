@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import org.controlsfx.control.CheckListView;
 
 import comp3111.covid.dataAnalysis.DateConverter;
-import comp3111.covid.datastorage.Database.DataTitle;
+import comp3111.covid.datastorage.*;
 
 public class ChartTabsController extends TabController{
 
