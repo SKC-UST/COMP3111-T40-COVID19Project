@@ -121,23 +121,20 @@ public class Database {
 		s = record.get("total_deaths_per_million");
 		if(!s.equals("")) {loc.addDayData(DataTitle.DEATH, new RateDayData(date, Double.parseDouble(s)));};
 		s = record.get("people_fully_vaccinated");
-		if(!s.equals("")) { 
-			long total = Long.parseLong(s);
-			loc.addDayData(DataTitle.VAC, new TotalDayData(date, total));
-			double rate = ((((double)total)/((double)loc.getPopulation())) * 100);
-			loc.addDayData(DataTitle.VAC, new RateDayData(date, rate));
-		}
+		if(!s.equals("")) { loc.addDayData(DataTitle.VAC, new TotalDayData(date, Long.parseLong(s)));}
+		s = record.get("people_fully_vaccinated_per_hundred");
+		if(!s.equals("")) { loc.addDayData(DataTitle.VAC, new RateDayData(date, Double.parseDouble(s)));}
 	}
 	
 	// search single data - for Table
 	// return -1 if not found
-	public long searchTotalData(String isoCode, LocalDate targetDate, DataTitle title) throws Exception {
+	public long searchTotalData(String isoCode, LocalDate targetDate, DataTitle title) {
 		long result = this.hashStorage.get(isoCode).getTotalDayData(targetDate, title);
 		return result;
 	}
 	
 	//return -1 if not found
-	public double searchRateData(String isoCode, LocalDate targetDate, DataTitle title) throws Exception {
+	public double searchRateData(String isoCode, LocalDate targetDate, DataTitle title) {
 		double result = this.hashStorage.get(isoCode).getRateDayData(targetDate, title);
 		return result;
 	}

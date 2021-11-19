@@ -1,6 +1,5 @@
 package comp3111.covid.tabs;
 
-import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -16,9 +15,7 @@ import javafx.scene.control.Label;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-import comp3111.covid.datastorage.DataTitle;
 import comp3111.covid.datastorage.Database;
-import comp3111.covid.tabs.TableTabsController.TableData;
 
 public class TableTabsController extends TabController {
 	@FXML private DatePicker datePicker;
@@ -29,7 +26,7 @@ public class TableTabsController extends TabController {
 	@FXML protected TableView<TableData> dataTable;
 	@FXML protected Label tableTitlelbl;
 	
-	private LocalDate selectedDate = null;
+	protected LocalDate selectedDate = null;
 	
 	public class TableData {
 		private final SimpleStringProperty countryName;
@@ -60,19 +57,13 @@ public class TableTabsController extends TabController {
 		this.selectedDate = this.datePicker.getValue();
     }
 	
-	//to be overriden
 	protected ArrayList<TableData> generateDataList(ArrayList<String> isoCodes, LocalDate targetDate) throws Exception{
 		ArrayList<TableData> result = new ArrayList<TableData>();
 		Database db = this.getDatabase();
 		for(String isoCode : isoCodes) {
-			long totalData = db.searchTotalData(isoCode, targetDate, DataTitle.VAC); // search all vac data
-			double rateData = db.searchRateData(isoCode, targetDate, DataTitle.VAC); // search all vac rate data
-			if(totalData < 0 || rateData < 0) {
-				//handle error
-				System.out.println("Error: " + isoCode + " " + targetDate + " " + (totalData < 0 ? "total" : "rate"));
-				return null;
-			}
-			result.add(new TableData(db.getLocationName(isoCode), totalData, rateData, true));
+			long totalData = this.getTotalDataFromDB(isoCode, targetDate);
+			double rateData = this.getRateDataFromDB(isoCode, targetDate);
+			result.add(this.getTableData(db.getLocationName(isoCode), totalData, rateData));
 		}
 		return result;
 	}
@@ -83,8 +74,29 @@ public class TableTabsController extends TabController {
 		this.countryCol.setCellValueFactory(new PropertyValueFactory<TableView<TableData>, String>("countryName"));
 		this.totalCol.setCellValueFactory(new PropertyValueFactory<TableView<TableData>, String>("totalData"));
 		this.rateCol.setCellValueFactory(new PropertyValueFactory<TableView<TableData>, String>("rateData"));
+		this.setTableTitle();
 		
 		this.dataTable.setItems(oList);
+	}
+	
+	//TODO: Override
+	protected long getTotalDataFromDB(String isoCode, LocalDate targetDate) {
+		return this.getDatabase().searchTotalData(isoCode, targetDate, null);
+	}
+	
+	//TODO: Override
+	protected double getRateDataFromDB(String isoCode, LocalDate targetDate) {
+		return this.getDatabase().searchRateData(isoCode, targetDate, null);
+	}
+	
+	//TODO: Override
+	protected void setTableTitle() {
+		this.tableTitlelbl.setText("Table Title");
+	}
+	
+	//TODO: Override
+	protected TableData getTableData(String iso, long totalData, double rateData) {
+		return null;
 	}
 	
 	@Override
