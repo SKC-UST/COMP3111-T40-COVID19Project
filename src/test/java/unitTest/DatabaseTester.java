@@ -11,8 +11,7 @@ import java.util.Date;
 import org.junit.Before;
 import org.junit.Test;
 
-import comp3111.covid.datastorage.Database;
-import comp3111.covid.datastorage.Database.DataTitle;
+import comp3111.covid.datastorage.*;
 
 public class DatabaseTester {
 	Database database;

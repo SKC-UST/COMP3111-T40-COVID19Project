@@ -16,13 +16,16 @@
          <CheckListView fx:id="locationsCheckboxList" layoutX="14.0" layoutY="43.0" prefHeight="547.0" prefWidth="190.0" />
          <Label layoutX="21.0" layoutY="14.0" text="Select target Countries" />
          <Button fx:id="confirmButton" layoutX="550.0" layoutY="9.0" mnemonicParsing="false" onAction="#handleConfirmSelection" text="Confirm Selection" />
-         <DatePicker fx:id="datePicker" layoutX="272.0" layoutY="10.0" onAction="#selectTargetDate" promptText="Select Date" />
+         <DatePicker fx:id="datePicker" editable="false" layoutX="272.0" layoutY="10.0" onAction="#selectTargetDate" promptText="Select Date" />
          <TableView fx:id="dataTable" layoutX="214.0" layoutY="83.0" prefHeight="510.0" prefWidth="502.0">
            <columns>
              <TableColumn fx:id="countryCol" prefWidth="86.77143859863281" text="Countries" />
              <TableColumn fx:id="totalCol" prefWidth="245.35354614257812" text="Fully Vaccinated" />
                <TableColumn fx:id="rateCol" prefWidth="167.55850516094029" text="Vaccination Rate" />
            </columns>
+            <columnResizePolicy>
+               <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+            </columnResizePolicy>
          </TableView>
          <Label fx:id="tableTitlelbl" layoutX="214.0" layoutY="62.0" text="Table Title" textAlignment="CENTER">
             <font>

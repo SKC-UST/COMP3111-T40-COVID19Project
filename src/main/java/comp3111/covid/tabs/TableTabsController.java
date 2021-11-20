@@ -57,7 +57,7 @@ public class TableTabsController extends TabController {
 		this.selectedDate = this.datePicker.getValue();
     }
 	
-	protected ArrayList<TableData> generateDataList(ArrayList<String> isoCodes, LocalDate targetDate) throws Exception{
+	protected ArrayList<TableData> generateDataList(ArrayList<String> isoCodes, LocalDate targetDate) {
 		ArrayList<TableData> result = new ArrayList<TableData>();
 		Database db = this.getDatabase();
 		for(String isoCode : isoCodes) {
@@ -103,17 +103,15 @@ public class TableTabsController extends TabController {
 	final void handleConfirmSelection(ActionEvent event) {
 		ArrayList<String> selectedIso = this.getSelectedIso();
 		if(selectedIso.isEmpty()) {
-			//handle error
-		}
-		if(this.selectedDate == null) {
+			this.handleError("Please Choose at Least One Country!", "Country Input Error");
 			return;
 		}
-		try {
-			ArrayList<TableData> dataList = this.generateDataList(selectedIso, selectedDate);
-			this.generateTable(dataList, this.selectedDate);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		System.out.println(this.selectedDate);
+		if(this.selectedDate == null) {
+			this.handleError("Please Choose a Date!", "Date Input Error");
+			return;
 		}
+		ArrayList<TableData> dataList = this.generateDataList(selectedIso, selectedDate);
+		this.generateTable(dataList, this.selectedDate);
 	}
 }
