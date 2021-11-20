@@ -18,6 +18,11 @@ import java.util.ArrayList;
 
 import comp3111.covid.datastorage.Database;
 
+/**
+ * place holder
+ * @author ytc314
+ *
+ */
 public class TableTabsController extends TabController {
 	@FXML private DatePicker datePicker;
 	@FXML private Button confirmButton;

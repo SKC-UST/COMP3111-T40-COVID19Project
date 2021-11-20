@@ -18,6 +18,11 @@ import javax.swing.JOptionPane;
 import comp3111.covid.Context;
 import comp3111.covid.dataAnalysis.DateConverter;
 
+/**
+ * place holder
+ * @author ytc314
+ *
+ */
 public class ChartTabsController extends TabController{
 
     @FXML protected Button confirmButton;
