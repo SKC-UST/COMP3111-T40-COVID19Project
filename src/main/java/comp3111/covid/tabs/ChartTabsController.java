@@ -13,6 +13,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
+
 import comp3111.covid.Context;
 import comp3111.covid.dataAnalysis.DateConverter;
 
@@ -79,7 +81,7 @@ public class ChartTabsController extends TabController{
     	
     	
     	this.dataChart.getData().clear();
-    	ArrayList<XYChart.Series<Number, Number>> data = generateChartData();
+    	ArrayList<XYChart.Series<Number, Number>> data = generateChartData();    	
     	for(XYChart.Series<Number, Number> series : data) {
     		this.dataChart.getData().add(series);
     	}
@@ -100,7 +102,14 @@ public class ChartTabsController extends TabController{
     	ArrayList<XYChart.Series<Number, Number>> result = new ArrayList<XYChart.Series<Number, Number>>();
     	
     	for(String iso : this.getSelectedIso()) {
-    		ArrayList<Pair<LocalDate, Number>> source = this.getDateDataPair(iso, this.startDate, this.endDate);    		
+    		ArrayList<Pair<LocalDate, Number>> source = this.getDateDataPair(iso, this.startDate, this.endDate);
+    		
+    		if(source.isEmpty()) {
+        		JOptionPane.showMessageDialog(null, "No data found for " + getDatabase().getLocationName(iso) + " between " + startDate + " and " + endDate + 
+        				"\nTry another date or country", "No data found for " + getDatabase().getLocationName(iso), JOptionPane.WARNING_MESSAGE);
+        		return null;
+        	}
+    		
     		XYChart.Series<Number, Number> series = new XYChart.Series<>();
     		//
     		for(Pair<LocalDate, Number> data : source) {
