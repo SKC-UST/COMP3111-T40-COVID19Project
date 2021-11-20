@@ -16,7 +16,7 @@
          <CheckListView fx:id="locationsCheckboxList" layoutX="14.0" layoutY="43.0" prefHeight="413.0" prefWidth="190.0" />
          <Label layoutX="21.0" layoutY="14.0" text="Select target Countries" />
          <Button fx:id="confirmButton" layoutX="398.0" layoutY="9.0" mnemonicParsing="false" onAction="#handleConfirmSelection" text="Confirm Selection" />
-         <DatePicker fx:id="datePicker" layoutX="197.0" layoutY="11.0" onAction="#selectTargetDate" promptText="Select Date" />
+         <DatePicker fx:id="datePicker" editable="false" layoutX="197.0" layoutY="11.0" onAction="#selectTargetDate" promptText="Select Date" />
          <TableView fx:id="dataTable" layoutX="214.0" layoutY="83.0" prefHeight="510.0" prefWidth="502.0">
            <columns>
              <TableColumn fx:id="countryCol" prefWidth="86.77143859863281" text="Countries" />
