@@ -1,7 +1,5 @@
 package comp3111.covid.tabs;
 
-
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.chart.*;
@@ -10,7 +8,9 @@ import javafx.scene.control.DatePicker;
 import javafx.util.Pair;
 import javafx.util.StringConverter;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import comp3111.covid.Context;
@@ -31,7 +31,7 @@ public class ChartTabsController extends TabController{
     private DateConverter dc = Context.getInstance().getDateConverter();
     
     public void initialize() {
-    	
+    	super.initialize();
     	xAxis.setTickLabelFormatter(new StringConverter<Number>() {
     		@Override
     		public String toString(Number dateNum) {
@@ -46,7 +46,37 @@ public class ChartTabsController extends TabController{
     }
     
     @FXML
+    //Generate the acutal chart
     void handleConfirmSelection(ActionEvent event) {
+    	ArrayList<String> selectedIso = this.getSelectedIso();
+    	if(selectedIso.isEmpty()) {
+			this.handleError("Please Choose at Least One Country!", "Country Input Error");
+			return;
+		}
+		if(this.startDate == null) {
+			this.handleError("Please Choose a Start Date!", "Date Input Error");
+			return;
+		}
+		if(this.endDate == null) {
+			this.handleError("Please Choose an End Date", "Date Input Error");
+			return;
+		}
+		if(this.startDate.isAfter(endDate)) {
+			this.handleError("The start date cannot be after the end date!", "Date Input Error");
+			return;
+		}
+		if(this.startDate.equals(endDate)) {
+			this.handleError("The date range must span across at least two days!", "Date Input Error");
+			return;
+		}
+		if(this.startDate.isBefore(getDatabase().getEarliest()) || this.endDate.isAfter(getDatabase().getLatest())) {
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd LLL yyy"); 
+			String startStr = getDatabase().getEarliest().format(formatter);
+			String endStr = getDatabase().getLatest().format(formatter);
+			this.handleError("The data in this data set starts from " + startStr + " and ends on " + endStr, "Date Out of Range");
+			return;
+		}
+    	
     	
     	this.dataChart.getData().clear();
     	ArrayList<XYChart.Series<Number, Number>> data = generateChartData();

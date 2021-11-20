@@ -80,7 +80,7 @@ public class TabController {
     void handleConfirmSelection(ActionEvent event) {    	
     }
     
-    protected void handleError(String title, String msg) {
+    protected void handleError(String msg, String title) {
     	JOptionPane.showMessageDialog(null, msg, title, JOptionPane.ERROR_MESSAGE);
     }
 }
