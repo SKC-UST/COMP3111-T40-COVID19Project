@@ -128,7 +128,7 @@ public class TabC3pageController {
 		this.dateSlider.minProperty().set(dateConverter.dateToLong(minDate));
 	}
 	
-	//Helper for initialize()
+	//Helper for initializing the combo box
 	private ObservableList<Pair<String, LocationProperty>> generateLocPropPairs(){
 		ObservableList<Pair<String, LocationProperty>> result = FXCollections.observableArrayList();
 		int i = 0;
@@ -144,8 +144,9 @@ public class TabC3pageController {
 	@SuppressWarnings("unchecked")
 	private void generateChart() {
 		this.regressionChart.getData().clear();
-		//ArrayList<Pair<Number, Number>> data = database.searchDataPair(selectedDate, selectedProperty);
+		
 		ArrayList<Pair<Number, Number>> data = database.searchDataPair(this.selectedDate, this.selectedProperty);
+		//Handle no data found
 		if(data.isEmpty()) {
 			this.regressionChart.setTitle("");
 			this.noDataLabel1.setText(noDataText1);
@@ -160,28 +161,13 @@ public class TabC3pageController {
 		
 		this.regressionChart.setTitle("Rgerssion based on data on " + this.selectedDate);
 		
-		Pair<Double, Double> regressionResult = this.generateRegression(data);
-		Double regressionSlope = regressionResult.getKey();
-		Double regressionIntercept = regressionResult.getValue();
-		
 		//turn actual data into series
-		XYChart.Series<Number, Number> scatter = new XYChart.Series<>();
-		XYChart.Series<Number, Number> regression = new XYChart.Series<>();
-		scatter.setName("actual data points");
-		regression.setName("Regression Line");
-		for(Pair<Number, Number> pair : data) {
-			scatter.getData().add(new Data<Number, Number>(pair.getKey(), pair.getValue()));
-		}
-		//turn regression into series
-		double lastX = getLastX(data);
-		double lastY = regressionSlope * lastX + regressionIntercept;
-		regression.getData().add(new Data<Number, Number>(0, regressionIntercept));
-		regression.getData().add(new Data<Number, Number>(lastX, lastY));
+		XYChart.Series<Number, Number> scatter = this.generateScatterSeries(data);
+		XYChart.Series<Number, Number> regression = this.generateRegressionSeries(data);
 		
 		//display the chart
 		this.regressionChart.getData().addAll(scatter, regression);
 		this.regressionChart.getScene().getStylesheets().add(getClass().getResource("/stylesheet/root.css").toExternalForm());
-		
 	}
 	
 	//Helper for generateChart()
@@ -208,6 +194,30 @@ public class TabC3pageController {
 		System.out.println("R-squared: " + regression.getRSquare());
 		*/
 		return new Pair<Double, Double>(regression.getSlope(), regression.getIntercept());
+	}
+	
+	private XYChart.Series<Number, Number> generateRegressionSeries(ArrayList<Pair<Number, Number>> rawData) {
+		Pair<Double, Double> regressionResult = this.generateRegression(rawData);
+		double slope = regressionResult.getKey();
+		double intercept = regressionResult.getValue();
+		
+		XYChart.Series<Number, Number> regressionSeries = new XYChart.Series<>();
+		regressionSeries.setName("Regression Line");
+		double lastX = getLastX(rawData);
+		double lastY = slope * lastX + intercept;
+		regressionSeries.getData().add(new Data<Number, Number>(0, intercept));
+		regressionSeries.getData().add(new Data<Number, Number>(lastX, lastY));
+		
+		return regressionSeries;
+	}
+	
+	private XYChart.Series<Number, Number> generateScatterSeries(ArrayList<Pair<Number, Number>> rawData){
+		XYChart.Series<Number, Number> scatter = new XYChart.Series<>();
+		scatter.setName("actual data points");
+		for(Pair<Number, Number> pair : rawData) {
+			scatter.getData().add(new Data<Number, Number>(pair.getKey(), pair.getValue()));
+		}
+		return scatter;
 	}
 	
 }
