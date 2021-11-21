@@ -39,7 +39,7 @@ public class TableTabsController extends TabController {
 		private final SimpleStringProperty totalData;
 		private final SimpleStringProperty rateData;
 
-		TableData (String location, long total, double rate, boolean needPercentage) {
+		public TableData (String location, long total, double rate, boolean needPercentage) {
 			this.countryName = new SimpleStringProperty(location);
 			this.totalData = new SimpleStringProperty(total >= 0 ? String.valueOf(total) : "No Data");
 			this.rateData = new SimpleStringProperty(rate >= 0 ? rate + (needPercentage ? "%" : "") : "No Data");
@@ -87,18 +87,16 @@ public class TableTabsController extends TabController {
 	
 	//TODO: Override
 	protected long getTotalDataFromDB(String isoCode, LocalDate targetDate) {
-		return this.getDatabase().searchTotalData(isoCode, targetDate, null);
+		return 0;
 	}
 	
 	//TODO: Override
 	protected double getRateDataFromDB(String isoCode, LocalDate targetDate) {
-		return this.getDatabase().searchRateData(isoCode, targetDate, null);
+		return 0;
 	}
 	
 	//TODO: Override
-	protected void setTableTitle() {
-		this.tableTitlelbl.setText("Table Title");
-	}
+	protected void setTableTitle() {}
 	
 	//TODO: Override
 	protected TableData getTableData(String iso, long totalData, double rateData) {

@@ -36,10 +36,6 @@ public class TabController {
     	return this.database;
     }
     
-    protected Context getContext() {
-    	return this.context;
-    }
-    
     public void initialize() {
     	System.out.println("init");
     	//for showing only the location name
