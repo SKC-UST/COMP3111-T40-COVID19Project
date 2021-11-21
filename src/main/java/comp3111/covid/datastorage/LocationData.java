@@ -86,7 +86,7 @@ public class LocationData {
 	 * @param gdp			{@link LocationData#locationGDPpc}
 	 * @param diabetes		{@link LocationData#locationDiabetes}
 	 */
-	LocationData(String isoCode, String continent, String location, long population, double density, double medianAge, double age65, double age70, double gdp, double diabetes) {
+	public LocationData(String isoCode, String continent, String location, long population, double density, double medianAge, double age65, double age70, double gdp, double diabetes) {
 		this.locationIsoCode = isoCode;
 		this.locationContinent = continent;
 		this.locationName = location;
@@ -105,14 +105,6 @@ public class LocationData {
 	 */
 	public String getLocationName() {
 		return this.locationName;
-	}
-	
-	/**
-	 * {@link LocationData#locationPopulation}
-	 * @return the population of the location
-	 */
-	public long getPopulation() {
-		return this.locationPopulation;
 	}
 	
 	/**
@@ -252,7 +244,7 @@ public class LocationData {
 	 * @see 			LocationProperty
 	 * @return			the specified property
 	 */
-	Number getLocationProperty(LocationProperty property) {
+	public Number getLocationProperty(LocationProperty property) {
 		switch(property) {
 			case POPULATION:
 				return this.locationPopulation;
