@@ -11,10 +11,10 @@ import java.util.Date;
 import org.junit.Before;
 import org.junit.Test;
 
-import comp3111.covid.datastorage.Database;
-import comp3111.covid.datastorage.Database.DataTitle;
+import comp3111.covid.datastorage.*;
 
 public class DatabaseTester {
+	/*
 	Database database;
 	File csvFile;
 	LocalDate targetDate, startDate, endDate;
@@ -43,14 +43,6 @@ public class DatabaseTester {
 			e.printStackTrace();
 		}
 	}
-	
-	@Test
-	public void testRangeData() {
-		ArrayList<Long> testArr = database.searchTotalData(location, startDate, endDate, DataTitle.CASE);
-		for(Long elem : testArr) {
-			System.out.print(elem);
-		}
-		assertArrayEquals(this.sampleOutput, testArr.toArray());
-	}
+	*/
 }
 ;

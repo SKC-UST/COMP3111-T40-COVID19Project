@@ -23,6 +23,9 @@
              <TableColumn fx:id="totalCol" prefWidth="250" text="Fully Vaccinated" />
                <TableColumn fx:id="rateCol" prefWidth="150" text="Vaccination Rate" />
            </columns>
+            <columnResizePolicy>
+               <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+            </columnResizePolicy>
          </TableView>
          <Label fx:id="tableTitlelbl" layoutX="214.0" layoutY="37.5" text="Please choose a country and a date">
             <font>

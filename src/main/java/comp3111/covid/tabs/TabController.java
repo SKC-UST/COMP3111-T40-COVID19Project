@@ -1,5 +1,10 @@
 package comp3111.covid.tabs;
 
+/**
+ * place holder
+ * @author ytc314
+ *
+ */
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -11,6 +16,8 @@ import javafx.util.Pair;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import javax.swing.JOptionPane;
+
 import org.controlsfx.control.CheckListView;
 
 import comp3111.covid.Context;
@@ -18,10 +25,8 @@ import comp3111.covid.datastorage.Database;
 
 
 public class TabController {
-	private Context context = Context.getInstance();
-	private Database database = context.getDatabase();
-	private ObservableList<Pair<String, String>> checkedPair;
-	private HashMap<String, Boolean> checkedLocations = new HashMap<String, Boolean>();
+	private Database database = Context.getInstance().getDatabase();
+	protected ObservableList<Pair<String, String>> checkedPair = FXCollections.observableArrayList();
 
     @FXML
     private CheckListView<Pair<String, String>> locationsCheckboxList;
@@ -30,25 +35,8 @@ public class TabController {
     	return this.database;
     }
     
-    protected Context getContext() {
-    	return this.context;
-    }
-    
-    public void updateCheckboxList() {
-    	
-    	// Initializations
-    	this.checkedLocations.clear();
-    	ArrayList<Pair<String, String>> locationsList = this.database.getLocationNames();
-    	for(Pair<String, String> pair : locationsList) {
-    		this.checkedLocations.put(pair.getKey(), false);
-    	}
-    	ObservableList<Pair<String, String>> oblist = FXCollections.observableArrayList();
-    	for(Pair<String, String> pair : locationsList) {
-    		oblist.add(pair);
-    	}
-    	
-    	//set checkboxview items
-    	this.locationsCheckboxList.setItems(oblist);
+    public void initialize() {
+    	System.out.println("init");
     	//for showing only the location name
     	this.locationsCheckboxList.setCellFactory(lv -> new CheckBoxListCell<Pair<String, String>>(locationsCheckboxList::getItemBooleanProperty){
     		@Override
@@ -57,10 +45,26 @@ public class TabController {
     			setText(pair == null ? "" : pair.getValue());
     		}
     	});
+    }
+    
+    public void updateCheckboxList() {
+    	
+    	// Initializations
+    	this.checkedLocations.clear();
+    	ArrayList<Pair<String, String>> locationsList = this.database.getLocationNames();
+    	ObservableList<Pair<String, String>> oblist = FXCollections.observableArrayList();
+    	for(Pair<String, String> pair : locationsList) {
+    		oblist.add(pair);
+    	}
+    	
+    	//set checkboxview items
+    	this.locationsCheckboxList.setItems(oblist);
     	
     	this.locationsCheckboxList.getCheckModel().getCheckedItems().addListener(new ListChangeListener<Pair<String, String>>(){
     		public void onChanged(ListChangeListener.Change<? extends Pair<String, String>> c) {
+    			System.out.println(locationsCheckboxList.getCheckModel().getCheckedItems());
     			checkedPair = locationsCheckboxList.getCheckModel().getCheckedItems();
+    			System.out.println(checkedPair);
     		}
     	});
     }
@@ -73,11 +77,12 @@ public class TabController {
     	return results;
     }
     
+    //Overriden
     @FXML
     void handleConfirmSelection(ActionEvent event) {    	
-    	ArrayList<String> checkedList = this.getSelectedIso();
-    	for(String loc : checkedList) {
-    		System.out.println(loc);
-    	}
+    }
+    
+    protected void handleError(String msg, String title) {
+    	JOptionPane.showMessageDialog(null, msg, title, JOptionPane.ERROR_MESSAGE);
     }
 }

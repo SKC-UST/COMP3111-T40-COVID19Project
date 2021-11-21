@@ -23,11 +23,15 @@ import javafx.util.StringConverter;
 
 import org.apache.commons.math3.stat.regression.SimpleRegression;
 
+/**
+ * place holder
+ * @author ytc314
+ *
+ */
 public class TabC3pageController {
-	
-	private Context context = Context.getInstance();
-	private Database database = context.getDatabase();
-	private DateConverter dateConverter = context.getDateConverter();
+
+	protected Database database = Context.getInstance().getDatabase();
+	protected DateConverter dateConverter = Context.getInstance().getDateConverter();
 	
 	@FXML private NumberAxis xAxis;
     @FXML private NumberAxis yAxis;
@@ -37,11 +41,11 @@ public class TabC3pageController {
 	@FXML private Label noDataLabel1;
 	@FXML private Label noDataLabel2;
 	
-	final private String[] LOC_PROP_TEXT = {"Population", "Population Density", "Median Age", "Number of People Aged 65 or above", "Number of People Aged 70 or above", "GDP per Capita", "Diabetes Prevalence"};
+	final protected String[] LOC_PROP_TEXT = {"Population", "Population Density", "Median Age", "Number of People Aged 65 or above", "Number of People Aged 70 or above", "GDP per Capita", "Diabetes Prevalence"};
 	final private String noDataText1 = "No Data Avaialble for the given time and x-axis";
 	final private String noDataText2 = "Change the slider to find data in another day!";
-	private LocationProperty selectedProperty = null;
-	private LocalDate selectedDate = null;
+	protected LocationProperty selectedProperty = null;
+	protected LocalDate selectedDate = null;
 	
 	// run after importing FX elements, before import dataset
 	public void initialize() {
@@ -84,7 +88,6 @@ public class TabC3pageController {
 		// so that the graph updates itself when the combobox chosen value is changed
 		xAxisCbx.valueProperty().addListener((obs, oldval, newval) -> {
 			if(newval != null) {
-				System.out.println("Selected: " + newval.getValue());
 				this.selectedProperty = newval.getValue();
 				xAxis.setLabel(LOC_PROP_TEXT[selectedProperty.value()]);
 				if(this.selectedDate != null)
@@ -123,8 +126,8 @@ public class TabC3pageController {
 		this.dateSlider.minProperty().set(dateConverter.dateToLong(minDate));
 	}
 	
-	//Helper for initialize()
-	private ObservableList<Pair<String, LocationProperty>> generateLocPropPairs(){
+	//Helper for initializing the combo box
+	protected ObservableList<Pair<String, LocationProperty>> generateLocPropPairs(){
 		ObservableList<Pair<String, LocationProperty>> result = FXCollections.observableArrayList();
 		int i = 0;
 		for(LocationProperty prop : LocationProperty.values()) {
@@ -139,8 +142,9 @@ public class TabC3pageController {
 	@SuppressWarnings("unchecked")
 	private void generateChart() {
 		this.regressionChart.getData().clear();
-		//ArrayList<Pair<Number, Number>> data = database.searchDataPair(selectedDate, selectedProperty);
+		
 		ArrayList<Pair<Number, Number>> data = database.searchDataPair(this.selectedDate, this.selectedProperty);
+		//Handle no data found
 		if(data.isEmpty()) {
 			this.regressionChart.setTitle("");
 			this.noDataLabel1.setText(noDataText1);
@@ -155,28 +159,13 @@ public class TabC3pageController {
 		
 		this.regressionChart.setTitle("Rgerssion based on data on " + this.selectedDate);
 		
-		Pair<Double, Double> regressionResult = this.generateRegression(data);
-		Double regressionSlope = regressionResult.getKey();
-		Double regressionIntercept = regressionResult.getValue();
-		
 		//turn actual data into series
-		XYChart.Series<Number, Number> scatter = new XYChart.Series<>();
-		XYChart.Series<Number, Number> regression = new XYChart.Series<>();
-		scatter.setName("actual data points");
-		regression.setName("Regression Line");
-		for(Pair<Number, Number> pair : data) {
-			scatter.getData().add(new Data<Number, Number>(pair.getKey(), pair.getValue()));
-		}
-		//turn regression into series
-		double lastX = getLastX(data);
-		double lastY = regressionSlope * lastX + regressionIntercept;
-		regression.getData().add(new Data<Number, Number>(0, regressionIntercept));
-		regression.getData().add(new Data<Number, Number>(lastX, lastY));
+		XYChart.Series<Number, Number> scatter = this.generateScatterSeries(data);
+		XYChart.Series<Number, Number> regression = this.generateRegressionSeries(data);
 		
 		//display the chart
 		this.regressionChart.getData().addAll(scatter, regression);
 		this.regressionChart.getScene().getStylesheets().add(getClass().getResource("/stylesheet/root.css").toExternalForm());
-		
 	}
 	
 	//Helper for generateChart()
@@ -203,6 +192,35 @@ public class TabC3pageController {
 		System.out.println("R-squared: " + regression.getRSquare());
 		*/
 		return new Pair<Double, Double>(regression.getSlope(), regression.getIntercept());
+	}
+	
+	protected XYChart.Series<Number, Number> generateRegressionSeries(ArrayList<Pair<Number, Number>> rawData) {
+		Pair<Double, Double> regressionResult = this.generateRegression(rawData);
+		double slope = regressionResult.getKey();
+		double intercept = regressionResult.getValue();
+		
+		XYChart.Series<Number, Number> regressionSeries = new XYChart.Series<>();
+		regressionSeries.setName("Regression Line");
+		double lastX = getLastX(rawData);
+		double lastY = slope * lastX + intercept;
+		regressionSeries.getData().add(new Data<Number, Number>(0, intercept));
+		regressionSeries.getData().add(new Data<Number, Number>(lastX, lastY));
+		//System.out.println("First: " + 0 + "," + intercept);
+		//System.out.println("Last: " + lastX + "," + lastY);
+		return regressionSeries;
+	}
+	
+	protected XYChart.Series<Number, Number> generateScatterSeries(ArrayList<Pair<Number, Number>> rawData){
+		XYChart.Series<Number, Number> scatter = new XYChart.Series<>();
+		scatter.setName("actual data points");
+		for(Pair<Number, Number> pair : rawData) {
+			scatter.getData().add(new Data<Number, Number>(pair.getKey(), pair.getValue()));
+		}
+		System.out.println(scatter.getData().get(0).getXValue());
+		System.out.println(scatter.getData().get(0).getYValue());
+		System.out.println(scatter.getData().get(scatter.getData().size() - 1).getXValue());
+		System.out.println(scatter.getData().get(scatter.getData().size() - 1).getYValue());
+		return scatter;
 	}
 	
 }

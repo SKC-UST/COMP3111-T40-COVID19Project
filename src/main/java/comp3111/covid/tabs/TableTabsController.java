@@ -19,6 +19,11 @@ import java.util.ArrayList;
 
 import comp3111.covid.datastorage.Database;
 
+/**
+ * place holder
+ * @author ytc314
+ *
+ */
 public class TableTabsController extends TabController {
 	@FXML private DatePicker datePicker;
 	@FXML private Button confirmButton;
@@ -35,7 +40,7 @@ public class TableTabsController extends TabController {
 		private final SimpleStringProperty totalData;
 		private final SimpleStringProperty rateData;
 
-		TableData (String location, long total, double rate, boolean needPercentage) {
+		public TableData (String location, long total, double rate, boolean needPercentage) {
 			this.countryName = new SimpleStringProperty(location);
 			this.totalData = new SimpleStringProperty(total >= 0 ? String.valueOf(total) : "No Data");
 			this.rateData = new SimpleStringProperty(rate >= 0 ? rate + (needPercentage ? "%" : "") : "No Data");
@@ -59,7 +64,7 @@ public class TableTabsController extends TabController {
 		this.selectedDate = this.datePicker.getValue();
     }
 	
-	protected ArrayList<TableData> generateDataList(ArrayList<String> isoCodes, LocalDate targetDate) throws Exception{
+	protected ArrayList<TableData> generateDataList(ArrayList<String> isoCodes, LocalDate targetDate) {
 		ArrayList<TableData> result = new ArrayList<TableData>();
 		Database db = this.getDatabase();
 		for(String isoCode : isoCodes) {
@@ -83,18 +88,16 @@ public class TableTabsController extends TabController {
 	
 	//TODO: Override
 	protected long getTotalDataFromDB(String isoCode, LocalDate targetDate) {
-		return this.getDatabase().searchTotalData(isoCode, targetDate, null);
+		return 0;
 	}
 	
 	//TODO: Override
 	protected double getRateDataFromDB(String isoCode, LocalDate targetDate) {
-		return this.getDatabase().searchRateData(isoCode, targetDate, null);
+		return 0;
 	}
 	
 	//TODO: Override
-	protected void setTableTitle() {
-		this.tableTitlelbl.setText("Table Title");
-	}
+	protected void setTableTitle() {}
 	
 	//TODO: Override
 	protected TableData getTableData(String iso, long totalData, double rateData) {
@@ -105,9 +108,11 @@ public class TableTabsController extends TabController {
 	final void handleConfirmSelection(ActionEvent event) {
 		ArrayList<String> selectedIso = this.getSelectedIso();
 		if(selectedIso.isEmpty()) {
-			//handle error
+			this.handleError("Please Choose at Least One Country!", "Country Input Error");
+			return;
 		}
 		if(this.selectedDate == null) {
+			this.handleError("Please Choose a Date!", "Date Input Error");
 			return;
 		}
 		try {
@@ -122,5 +127,7 @@ public class TableTabsController extends TabController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		ArrayList<TableData> dataList = this.generateDataList(selectedIso, selectedDate);
+		this.generateTable(dataList, this.selectedDate);
 	}
 }

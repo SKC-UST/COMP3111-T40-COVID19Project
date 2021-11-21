@@ -5,7 +5,11 @@ import java.util.ArrayList;
 
 import comp3111.covid.datastorage.*;
 import javafx.util.Pair;
-
+/**
+ * place holder
+ * @author ytc314
+ *
+ */
 public class TabA2pageController extends ChartTabsController{
 	
 	@Override

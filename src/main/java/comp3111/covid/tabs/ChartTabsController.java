@@ -8,14 +8,22 @@ import javafx.scene.control.DatePicker;
 import javafx.util.Pair;
 import javafx.util.StringConverter;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
+
 import comp3111.covid.Context;
 import comp3111.covid.dataAnalysis.DateConverter;
 
+/**
+ * place holder
+ * @author ytc314
+ *
+ */
 public class ChartTabsController extends TabController{
 
     @FXML protected Button confirmButton;
@@ -31,7 +39,7 @@ public class ChartTabsController extends TabController{
     private DateConverter dc = Context.getInstance().getDateConverter();
     
     public void initialize() {
-    	
+    	super.initialize();
     	xAxis.setTickLabelFormatter(new StringConverter<Number>() {
     		@Override
     		public String toString(Number dateNum) {
@@ -46,10 +54,40 @@ public class ChartTabsController extends TabController{
     }
     
     @FXML
+    //Generate the acutal chart
     void handleConfirmSelection(ActionEvent event) {
+    	ArrayList<String> selectedIso = this.getSelectedIso();
+    	if(selectedIso.isEmpty()) {
+			this.handleError("Please Choose at Least One Country!", "Country Input Error");
+			return;
+		}
+		if(this.startDate == null) {
+			this.handleError("Please Choose a Start Date!", "Date Input Error");
+			return;
+		}
+		if(this.endDate == null) {
+			this.handleError("Please Choose an End Date", "Date Input Error");
+			return;
+		}
+		if(this.startDate.isAfter(endDate)) {
+			this.handleError("The start date cannot be after the end date!", "Date Input Error");
+			return;
+		}
+		if(this.startDate.equals(endDate)) {
+			this.handleError("The date range must span across at least two days!", "Date Input Error");
+			return;
+		}
+		if(this.startDate.isBefore(getDatabase().getEarliest()) || this.endDate.isAfter(getDatabase().getLatest())) {
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd LLL yyy"); 
+			String startStr = getDatabase().getEarliest().format(formatter);
+			String endStr = getDatabase().getLatest().format(formatter);
+			this.handleError("The data in this data set starts from " + startStr + " and ends on " + endStr, "Date Out of Range");
+			return;
+		}
+    	
     	
     	this.dataChart.getData().clear();
-    	ArrayList<XYChart.Series<Number, Number>> data = generateChartData();
+    	ArrayList<XYChart.Series<Number, Number>> data = generateChartData();    	
     	for(XYChart.Series<Number, Number> series : data) {
     		this.dataChart.getData().add(series);
     	}
@@ -70,7 +108,14 @@ public class ChartTabsController extends TabController{
     	ArrayList<XYChart.Series<Number, Number>> result = new ArrayList<XYChart.Series<Number, Number>>();
     	
     	for(String iso : this.getSelectedIso()) {
-    		ArrayList<Pair<LocalDate, Number>> source = this.getDateDataPair(iso, this.startDate, this.endDate);    		
+    		ArrayList<Pair<LocalDate, Number>> source = this.getDateDataPair(iso, this.startDate, this.endDate);
+    		
+    		if(source.isEmpty()) {
+        		JOptionPane.showMessageDialog(null, "No data found for " + getDatabase().getLocationName(iso) + " between " + startDate + " and " + endDate + 
+        				"\nTry another date or country", "No data found for " + getDatabase().getLocationName(iso), JOptionPane.WARNING_MESSAGE);
+        		return null;
+        	}
+    		
     		XYChart.Series<Number, Number> series = new XYChart.Series<>();
     		//
     		for(Pair<LocalDate, Number> data : source) {
@@ -89,6 +134,6 @@ public class ChartTabsController extends TabController{
     
     //to be overriden
     protected ArrayList<Pair<LocalDate, Number>> getDateDataPair(String iso, LocalDate startDate, LocalDate endDate) { 
-    	return this.getDatabase().searchChartData(iso, startDate, endDate, null);
+    	return null;
     }
 }

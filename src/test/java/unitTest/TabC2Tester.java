@@ -1,0 +1,46 @@
+package unitTest;
+
+import comp3111.covid.tabs.TabC2pageController;
+import javafx.scene.chart.XYChart;
+import javafx.util.Pair;
+
+import org.junit.Assert;
+import org.junit.Before;
+
+import java.io.File;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
+
+import org.junit.After;
+import org.junit.Test;
+
+public class TabC2Tester extends TabC2pageController {
+	
+	@Before
+	public void setUp() {
+		this.getDatabase().importCSV(new File("./src/main/resources/dataset/COVID_Dataset_v1.0.csv"));
+		this.startDate = LocalDate.of(2021, 7, 1);
+		this.endDate = LocalDate.of(2021, 7, 10);
+		this.checkedPair.addAll(new Pair<String, String>("HKG", "Hong Kong"));
+	}
+	
+	@Test
+	public void testGenerateChartData() {
+		ArrayList<XYChart.Series<Number, Number>> seriesList = this.generateChartData();
+		Assert.assertEquals(19.94, seriesList.get(0).getData().get(0).getYValue().doubleValue(), 0.01);
+	}
+	
+	@Test
+	public void failGenerateChartData() {
+		this.startDate = LocalDate.of(2020, 7, 1);
+		this.endDate = LocalDate.of(2020, 7, 10);
+		ArrayList<XYChart.Series<Number, Number>> seriesList = this.generateChartData();
+		Assert.assertNull(seriesList);
+	}
+	
+	@After
+	public void cleanUp() {
+		this.getDatabase().clearDatabase();
+	}
+}

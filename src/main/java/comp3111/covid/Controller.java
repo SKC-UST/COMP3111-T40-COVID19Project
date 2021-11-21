@@ -54,17 +54,38 @@ public class Controller {
     private Context context = Context.getInstance();
     private Database database = context.getDatabase();
     
-    //launch the CSV file chooser
-    private File chooseCSVFile() {
-    	JFileChooser csvChooser = new JFileChooser("./src/main/resources/dataset");
+    
+    /**
+     * This method launches a JFileChooser with the restriction of only choosing csv files.
+     * The returns null if "cancel is pressed". 
+     * Otherwise, it generates a file and will pass it to importCSVtoDatabase
+     * @return a File object pointing to the chosen csv file
+     * @see importCSVtoDatabase()
+     */
+    
+    protected File chooseCSVFile() {
+    	JFileChooser csvChooser = new JFileChooser(".");
     	FileNameExtensionFilter csvFilter = new FileNameExtensionFilter("CSV files", "csv");
     	csvChooser.setFileFilter(csvFilter);
     	int chooserReturnVal = csvChooser.showOpenDialog(null);
     	if(chooserReturnVal == JFileChooser.APPROVE_OPTION) {
+    		File csvFile = csvChooser.getSelectedFile();
+    		System.out.println(csvFile.getAbsolutePath());
     		return csvChooser.getSelectedFile();
     	}
     	return null;
     }
+    
+    /**
+     * Triggered when the "Choose Dataset" button is pressed.
+     * This method gets a csv file as a dataset from a the method chooseCSVFile().
+     * Then, it passes the csv file to the database for the database to process.
+     * The result is that the database would contain the data from the csv file.
+     * Upon successful import, the method updates the UI elements and logic of all the tabs' controllers,
+     * and unlocks the tabs for the user to interact with.
+     * @param event JavaFX ActionEvent
+     * @see Database
+     */
     
     @FXML
     //triggered by button
