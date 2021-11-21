@@ -16,6 +16,11 @@ public class TabC2pageController extends ChartTabsController {
 		
 		super.initialize();
 		
+		yAxis.setAutoRanging(false);
+		yAxis.setLowerBound(0);
+	    yAxis.setUpperBound(100);
+	    yAxis.setTickUnit(10);
+		
 		yAxis.setTickLabelFormatter(new StringConverter<Number>() {
 			@Override
 			public String toString(Number rate) {
