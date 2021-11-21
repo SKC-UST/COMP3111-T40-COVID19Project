@@ -59,12 +59,14 @@ public class Controller {
      * @see importCSVtoDatabase()
      */
     
-    private File chooseCSVFile() {
-    	JFileChooser csvChooser = new JFileChooser("./src/main/resources/dataset");
+    protected File chooseCSVFile() {
+    	JFileChooser csvChooser = new JFileChooser(".");
     	FileNameExtensionFilter csvFilter = new FileNameExtensionFilter("CSV files", "csv");
     	csvChooser.setFileFilter(csvFilter);
     	int chooserReturnVal = csvChooser.showOpenDialog(null);
     	if(chooserReturnVal == JFileChooser.APPROVE_OPTION) {
+    		File csvFile = csvChooser.getSelectedFile();
+    		System.out.println(csvFile.getAbsolutePath());
     		return csvChooser.getSelectedFile();
     	}
     	return null;
@@ -84,13 +86,12 @@ public class Controller {
     @FXML
     //triggered by button
     void importCSVtoDatabase(ActionEvent event) {
-    	//File csvFile = chooseCSVFile(); // Official function
-    	File csvFile = new File("./src/main/resources/dataset/COVID_Dataset_v1.0.csv");
+    	File csvFile = chooseCSVFile(); // Official function
+    	//File csvFile = new File("./src/main/resources/dataset/COVID_Dataset_v1.0.csv");
 
     	if(csvFile != null) {
     		this.database.importCSV(csvFile);
         	System.out.println("successfully imported");
-        	this.database.printDatabaseContent();
         	
         	this.tabA1pageController.updateCheckboxList();
         	this.tabA2pageController.updateCheckboxList();

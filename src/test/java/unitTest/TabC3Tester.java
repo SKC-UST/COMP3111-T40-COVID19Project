@@ -14,6 +14,7 @@ import java.io.File;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
+import org.junit.After;
 import org.junit.Assert;
 
 public class TabC3Tester extends TabC3pageController{
@@ -53,5 +54,10 @@ public class TabC3Tester extends TabC3pageController{
 		Assert.assertEquals(13.03, testSeries.getData().get(0).getYValue().doubleValue(), 0.01);
 		Assert.assertEquals(5.930869E7, testSeries.getData().get(testSeries.getData().size() - 1).getXValue().doubleValue(), 0.01);
 		Assert.assertEquals(3.01, testSeries.getData().get(testSeries.getData().size() - 1).getYValue().doubleValue(), 0.01);
+	}
+	
+	@After
+	public void cleanUp() {
+		this.database.clearDatabase();
 	}
 }

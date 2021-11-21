@@ -261,12 +261,4 @@ public class Database {
 		}
 		hashStorage.clear();
 	}
-	
-	/**
-	 * This method prints all contents of the database to the console.
-	 */
-	public void printDatabaseContent() {
-		System.out.println("Earliest: " + this.earliest);
-		System.out.println("Latest: " + this.latest);
-	}
 }

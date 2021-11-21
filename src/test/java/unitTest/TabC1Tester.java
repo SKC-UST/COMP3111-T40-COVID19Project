@@ -60,6 +60,15 @@ public class TabC1Tester extends TabC1pageController{
 		}
 	}
 	
+	@Test
+	public void testTableDataConstructor() {
+		TableData testData = new TableData("", -1, -1, false);
+		Assert.assertEquals("No Data", testData.getTotalData());
+		Assert.assertEquals("No Data", testData.getRateData());
+		testData = new TableData("", -1, -1, true);
+		Assert.assertEquals("No Data", testData.getRateData());
+	}
+	
 	@After
 	public void cleanUp() {
 		this.getDatabase().clearDatabase();

@@ -38,4 +38,9 @@ public class TabC2Tester extends TabC2pageController {
 		ArrayList<XYChart.Series<Number, Number>> seriesList = this.generateChartData();
 		Assert.assertNull(seriesList);
 	}
+	
+	@After
+	public void cleanUp() {
+		this.getDatabase().clearDatabase();
+	}
 }
