@@ -36,8 +36,6 @@ public class TabController {
     
     public void updateCheckboxList() {
     	
-    	System.out.println("update");
-    	
     	// Initializations
     	this.checkedLocations.clear();
     	ArrayList<Pair<String, String>> locationsList = this.database.getLocationNames();
