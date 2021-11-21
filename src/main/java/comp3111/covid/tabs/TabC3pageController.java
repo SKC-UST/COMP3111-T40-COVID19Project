@@ -29,10 +29,9 @@ import org.apache.commons.math3.stat.regression.SimpleRegression;
  *
  */
 public class TabC3pageController {
-	
-	private Context context = Context.getInstance();
-	private Database database = context.getDatabase();
-	private DateConverter dateConverter = context.getDateConverter();
+
+	protected Database database = Context.getInstance().getDatabase();
+	protected DateConverter dateConverter = Context.getInstance().getDateConverter();
 	
 	@FXML private NumberAxis xAxis;
     @FXML private NumberAxis yAxis;
@@ -42,11 +41,11 @@ public class TabC3pageController {
 	@FXML private Label noDataLabel1;
 	@FXML private Label noDataLabel2;
 	
-	final private String[] LOC_PROP_TEXT = {"Population", "Population Density", "Median Age", "Number of People Aged 65 or above", "Number of People Aged 70 or above", "GDP per Capita", "Diabetes Prevalence"};
+	final protected String[] LOC_PROP_TEXT = {"Population", "Population Density", "Median Age", "Number of People Aged 65 or above", "Number of People Aged 70 or above", "GDP per Capita", "Diabetes Prevalence"};
 	final private String noDataText1 = "No Data Avaialble for the given time and x-axis";
 	final private String noDataText2 = "Change the slider to find data in another day!";
-	private LocationProperty selectedProperty = null;
-	private LocalDate selectedDate = null;
+	protected LocationProperty selectedProperty = null;
+	protected LocalDate selectedDate = null;
 	
 	// run after importing FX elements, before import dataset
 	public void initialize() {
@@ -89,7 +88,6 @@ public class TabC3pageController {
 		// so that the graph updates itself when the combobox chosen value is changed
 		xAxisCbx.valueProperty().addListener((obs, oldval, newval) -> {
 			if(newval != null) {
-				System.out.println("Selected: " + newval.getValue());
 				this.selectedProperty = newval.getValue();
 				xAxis.setLabel(LOC_PROP_TEXT[selectedProperty.value()]);
 				if(this.selectedDate != null)
@@ -129,7 +127,7 @@ public class TabC3pageController {
 	}
 	
 	//Helper for initializing the combo box
-	private ObservableList<Pair<String, LocationProperty>> generateLocPropPairs(){
+	protected ObservableList<Pair<String, LocationProperty>> generateLocPropPairs(){
 		ObservableList<Pair<String, LocationProperty>> result = FXCollections.observableArrayList();
 		int i = 0;
 		for(LocationProperty prop : LocationProperty.values()) {
@@ -196,7 +194,7 @@ public class TabC3pageController {
 		return new Pair<Double, Double>(regression.getSlope(), regression.getIntercept());
 	}
 	
-	private XYChart.Series<Number, Number> generateRegressionSeries(ArrayList<Pair<Number, Number>> rawData) {
+	protected XYChart.Series<Number, Number> generateRegressionSeries(ArrayList<Pair<Number, Number>> rawData) {
 		Pair<Double, Double> regressionResult = this.generateRegression(rawData);
 		double slope = regressionResult.getKey();
 		double intercept = regressionResult.getValue();
@@ -207,16 +205,21 @@ public class TabC3pageController {
 		double lastY = slope * lastX + intercept;
 		regressionSeries.getData().add(new Data<Number, Number>(0, intercept));
 		regressionSeries.getData().add(new Data<Number, Number>(lastX, lastY));
-		
+		//System.out.println("First: " + 0 + "," + intercept);
+		//System.out.println("Last: " + lastX + "," + lastY);
 		return regressionSeries;
 	}
 	
-	private XYChart.Series<Number, Number> generateScatterSeries(ArrayList<Pair<Number, Number>> rawData){
+	protected XYChart.Series<Number, Number> generateScatterSeries(ArrayList<Pair<Number, Number>> rawData){
 		XYChart.Series<Number, Number> scatter = new XYChart.Series<>();
 		scatter.setName("actual data points");
 		for(Pair<Number, Number> pair : rawData) {
 			scatter.getData().add(new Data<Number, Number>(pair.getKey(), pair.getValue()));
 		}
+		System.out.println(scatter.getData().get(0).getXValue());
+		System.out.println(scatter.getData().get(0).getYValue());
+		System.out.println(scatter.getData().get(scatter.getData().size() - 1).getXValue());
+		System.out.println(scatter.getData().get(scatter.getData().size() - 1).getYValue());
 		return scatter;
 	}
 	
