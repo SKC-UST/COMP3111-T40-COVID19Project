@@ -129,6 +129,6 @@ public class ChartTabsController extends TabController{
     
     //to be overriden
     protected ArrayList<Pair<LocalDate, Number>> getDateDataPair(String iso, LocalDate startDate, LocalDate endDate) { 
-    	return this.getDatabase().searchChartData(iso, startDate, endDate, null);
+    	return null;
     }
 }

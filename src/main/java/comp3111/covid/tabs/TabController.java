@@ -25,8 +25,7 @@ import comp3111.covid.datastorage.Database;
 
 
 public class TabController {
-	private Context context = Context.getInstance();
-	private Database database = context.getDatabase();
+	private Database database = Context.getInstance().getDatabase();
 	protected ObservableList<Pair<String, String>> checkedPair = FXCollections.observableArrayList();
 
     @FXML
