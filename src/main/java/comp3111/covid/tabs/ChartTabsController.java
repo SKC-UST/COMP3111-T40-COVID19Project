@@ -10,6 +10,7 @@ import javafx.util.StringConverter;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
@@ -124,6 +125,10 @@ public class ChartTabsController extends TabController{
     		series.setName(this.getDatabase().getLocationName(iso));
     		result.add(series);
     	}
+    	LocalDateTime currentTime = LocalDateTime.now();
+		String formattedTime = DateTimeFormatter.ofPattern("HH:mm:ss").format(currentTime);
+		String importMessage = "[ " + formattedTime + " ] " + "Successfully generated chart\n";
+		System.out.println(importMessage);
     	return result;
     }
     

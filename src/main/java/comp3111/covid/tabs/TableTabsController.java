@@ -13,6 +13,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.Label;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
@@ -114,12 +115,17 @@ public class TableTabsController extends TabController {
 			this.handleError("Please Choose a Date!", "Date Input Error");
 			return;
 		}
-		if(this.selectedDate.isBefore(getDatabase().getEarliest()) || this.selectedDate.isAfter(getDatabase().getLatest())) {
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd LLL yyy"); 
-			String startStr = getDatabase().getEarliest().format(formatter);
-			String endStr = getDatabase().getLatest().format(formatter);
-			this.handleError("The data in this data set starts from " + startStr + " and ends on " + endStr, "Date Out of Range");
-			return;
+		try {
+			ArrayList<TableData> dataList = this.generateDataList(selectedIso, selectedDate);
+			this.generateTable(dataList, this.selectedDate);
+			LocalDateTime currentTime = LocalDateTime.now();
+			String formattedTime = DateTimeFormatter.ofPattern("HH:mm:ss").format(currentTime);
+			String importMessage = "[ " + formattedTime + " ] " + "Successfully generated table\n";
+			System.out.println(importMessage);
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		ArrayList<TableData> dataList = this.generateDataList(selectedIso, selectedDate);
 		this.generateTable(dataList, this.selectedDate);
