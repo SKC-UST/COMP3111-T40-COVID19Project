@@ -1,7 +1,5 @@
 package comp3111.covid.tabs;
 
-
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.chart.*;
@@ -11,6 +9,8 @@ import javafx.util.Pair;
 import javafx.util.StringConverter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import comp3111.covid.Context;
@@ -80,6 +80,10 @@ public class ChartTabsController extends TabController{
     		series.setName(this.getDatabase().getLocationName(iso));
     		result.add(series);
     	}
+    	LocalDateTime currentTime = LocalDateTime.now();
+		String formattedTime = DateTimeFormatter.ofPattern("HH:mm:ss").format(currentTime);
+		String importMessage = "[ " + formattedTime + " ] " + "Successfully generated chart\n";
+		System.out.println(importMessage);
     	return result;
     }
     
