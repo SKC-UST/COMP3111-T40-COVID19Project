@@ -50,7 +50,7 @@ public class TabController {
     public void updateCheckboxList() {
     	
     	// Initializations
-    	this.checkedLocations.clear();
+    	this.checkedPair.clear();
     	ArrayList<Pair<String, String>> locationsList = this.database.getLocationNames();
     	ObservableList<Pair<String, String>> oblist = FXCollections.observableArrayList();
     	for(Pair<String, String> pair : locationsList) {

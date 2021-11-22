@@ -2,44 +2,50 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
 
-<VBox prefHeight="650.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="comp3111.covid.Controller">
+<VBox prefHeight="600" prefWidth="800" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="comp3111.covid.Controller">
   <children>
-    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="680.0" prefWidth="1000.0">
+    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="800.0" prefWidth="800">
       <children>
-            <TabPane fx:id="tabPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="650.0" prefWidth="1000.0" tabClosingPolicy="UNAVAILABLE">
+            <TabPane fx:id="tabPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="650.0" prefWidth="800" tabClosingPolicy="UNAVAILABLE">
               <tabs>
-                <Tab fx:id="tabTaskZero" text="Task Zero">
+                <Tab fx:id="tabTaskZero" text="Import database" style="-fx-background-color: SILVER">
                   <content>
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="221.0" prefWidth="719.0">
                            <children>
-                              <Button fx:id="fileChoosingButton" layoutX="256.0" layoutY="219.0" mnemonicParsing="false" onAction="#importCSVtoDatabase" text="Choose a Datasource" />
+                              <Button fx:id="fileChoosingButton" layoutX="325" layoutY="250" mnemonicParsing="false" onAction="#importCSVtoDatabase" text="Choose a dataset" />
                            </children>
                         </AnchorPane>
                   </content>
                 </Tab>
-				<Tab fx:id="tabReport1" disable="true" text="Table A">
+				<Tab fx:id="tabReport1" disable="true" text="Table A" style="-fx-background-color: AZURE">
 					<fx:include fx:id="tabA1page" source="tabs/tabA1.fxml" />
 				</Tab>
-				<Tab fx:id="tabReport2" disable="true" text="Table B">
+				<Tab fx:id="tabReport2" disable="true" text="Table B" style="-fx-background-color: AZURE">
 					<fx:include fx:id="tabB1page" source="tabs/tabB1.fxml" />
 				</Tab>
-				<Tab fx:id="tabReport3" disable="true" text="Table C">
+				<Tab fx:id="tabReport3" disable="true" text="Table C" style="-fx-background-color: AZURE">
 					<fx:include fx:id="tabC1page" source="tabs/tabC1.fxml" />
-				</Tab>
-                 <Tab fx:id="tabApp1" disable="true" text="Chart A">
+				</Tab>	
+                 <Tab fx:id="tabApp1" disable="true" text="Chart A" style="-fx-background-color: HONEYDEW">
                   <fx:include fx:id="tabA2page" source="tabs/tabA2.fxml" />
                  </Tab>
-                 <Tab fx:id="tabApp2" disable="true" text="Chart B">
+                 <Tab fx:id="tabApp2" disable="true" text="Chart B" style="-fx-background-color: HONEYDEW">
                   <fx:include fx:id="tabB2page" source="tabs/tabB2.fxml" />
                  </Tab>
-                 <Tab fx:id="tabApp3" disable="true" text="Chart C">
+                 <Tab fx:id="tabApp3" disable="true" text="Chart C" style="-fx-background-color: HONEYDEW">
                   <fx:include fx:id="tabC2page" source="tabs/tabC2.fxml" />
                  </Tab>
-                 <Tab fx:id="tabC3" disable="true" text="Report C">
+                 <Tab fx:id="tabC3" disable="true" text="Report C" style="-fx-background-color: LAVENDERBLUSH">
                   <fx:include fx:id="tabC3page" source="tabs/tabC3.fxml" />
                  </Tab>
               </tabs>

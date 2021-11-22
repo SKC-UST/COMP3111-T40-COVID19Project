@@ -42,7 +42,7 @@ public class TableTabsController extends TabController {
 
 		public TableData (String location, long total, double rate, boolean needPercentage) {
 			this.countryName = new SimpleStringProperty(location);
-			this.totalData = new SimpleStringProperty(total >= 0 ? String.valueOf(total) : "No Data");
+			this.totalData = new SimpleStringProperty(total >= 0 ? String.format("%,d", total) : "No Data");
 			this.rateData = new SimpleStringProperty(rate >= 0 ? rate + (needPercentage ? "%" : "") : "No Data");
 		}
 		
