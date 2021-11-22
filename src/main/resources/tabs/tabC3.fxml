@@ -15,7 +15,7 @@
    <children>
       <AnchorPane prefHeight="668.0" prefWidth="720.0">
          <children>
-            <LineChart fx:id="regressionChart" animated="false" layoutX="266.0" prefHeight="551.0" prefWidth="735.0">
+            <LineChart fx:id="regressionChart" animated="false" layoutX="266.0" prefHeight="551.0" prefWidth="700.0">
               <xAxis>
                 <NumberAxis side="BOTTOM" fx:id="xAxis" />
               </xAxis>
@@ -33,7 +33,7 @@
             <Label fx:id="noDataLabel2" layoutX="390.0" layoutY="300.0" text="Change the slider value to se the changes of value as time goes on" />
             <TableView fixedCellSize="1.0" layoutX="13.0" layoutY="194.0" prefHeight="391.0" prefWidth="247.0">
               <columns>
-                <TableColumn prefWidth="184.51379203796387" text="Rgerssion" />
+                <TableColumn prefWidth="184.51379203796387" text="Regression" />
                 <TableColumn prefWidth="61.837158203125" text="Value" />
               </columns>
                <columnResizePolicy>
