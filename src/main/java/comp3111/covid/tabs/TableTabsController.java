@@ -35,6 +35,15 @@ public class TableTabsController extends TabController {
 	
 	protected LocalDate selectedDate = null;
 	
+	@Override
+	public void initialize() {
+		super.initialize();
+		
+		this.countryCol.setCellValueFactory(new PropertyValueFactory<TableView<TableData>, String>("countryName"));
+		this.totalCol.setCellValueFactory(new PropertyValueFactory<TableView<TableData>, String>("totalData"));
+		this.rateCol.setCellValueFactory(new PropertyValueFactory<TableView<TableData>, String>("rateData"));
+	}
+	
 	public class TableData {
 		private final SimpleStringProperty countryName;
 		private final SimpleStringProperty totalData;
@@ -77,10 +86,6 @@ public class TableTabsController extends TabController {
 	
 	protected void generateTable(ArrayList<TableData> data, LocalDate date) {
 		ObservableList<TableData> oList = FXCollections.observableArrayList(data);
-		
-		this.countryCol.setCellValueFactory(new PropertyValueFactory<TableView<TableData>, String>("countryName"));
-		this.totalCol.setCellValueFactory(new PropertyValueFactory<TableView<TableData>, String>("totalData"));
-		this.rateCol.setCellValueFactory(new PropertyValueFactory<TableView<TableData>, String>("rateData"));
 		this.setTableTitle();
 		
 		this.dataTable.setItems(oList);

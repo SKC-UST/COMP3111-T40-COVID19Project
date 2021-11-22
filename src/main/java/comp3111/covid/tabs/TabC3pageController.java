@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import comp3111.covid.Context;
 import comp3111.covid.dataAnalysis.DateConverter;
 import comp3111.covid.datastorage.*;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -18,8 +20,11 @@ import javafx.scene.chart.XYChart.Data;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.util.Pair;
 import javafx.util.StringConverter;
+import javafx.scene.control.cell.PropertyValueFactory;
 
 import org.apache.commons.math3.stat.regression.SimpleRegression;
 
@@ -40,6 +45,9 @@ public class TabC3pageController {
 	@FXML private Slider dateSlider;
 	@FXML private Label noDataLabel1;
 	@FXML private Label noDataLabel2;
+	@FXML private TableColumn<TableView<RegressionTableData>, String> regPropCol;
+	@FXML private TableColumn<TableView<RegressionTableData>, Double> regValCol;
+	@FXML private TableView<RegressionTableData> regTable;
 	
 	final protected String[] LOC_PROP_TEXT = {"Population", "Population Density", "Median Age", "Number of People Aged 65 or above", "Number of People Aged 70 or above", "GDP per Capita", "Diabetes Prevalence"};
 	final private String noDataText1 = "No Data Avaialble for the given time and x-axis";
@@ -49,8 +57,22 @@ public class TabC3pageController {
 	
 	// run after importing FX elements, before import dataset
 	public void initialize() {
+		// Initialize the comboBox to contain pairs of name of LocationProperty and LocationProperty Enums
 		ObservableList<Pair<String, LocationProperty>> pairs = this.generateLocPropPairs();
 		xAxisCbx.setItems(pairs);
+		
+		// make combobox contains Pair objects but display the name of property
+		xAxisCbx.setConverter(new StringConverter<Pair<String, LocationProperty>>(){
+			@Override
+			public String toString(Pair<String, LocationProperty> object) {
+				return object.getKey();
+			}
+					
+			@Override
+			public Pair<String, LocationProperty> fromString(String string){
+				return xAxisCbx.getItems().stream().filter(p -> p.getKey().equals(string)).findFirst().orElse(null);
+			}
+		});
 		
 		// So that y-axis displays percentage 
 		yAxis.setTickLabelFormatter(new StringConverter<Number>() {
@@ -72,29 +94,17 @@ public class TabC3pageController {
 			}
 		});
 		
-		// make combobox contains Pair objects but display the name of property
-		xAxisCbx.setConverter(new StringConverter<Pair<String, LocationProperty>>(){
-			@Override
-			public String toString(Pair<String, LocationProperty> object) {
-				return object.getKey();
-			}
-			
-			@Override
-			public Pair<String, LocationProperty> fromString(String string){
-				return xAxisCbx.getItems().stream().filter(p -> p.getKey().equals(string)).findFirst().orElse(null);
-			}
-		});
-		
 		// so that the graph updates itself when the combobox chosen value is changed
 		xAxisCbx.valueProperty().addListener((obs, oldval, newval) -> {
 			if(newval != null) {
 				this.selectedProperty = newval.getValue();
 				xAxis.setLabel(LOC_PROP_TEXT[selectedProperty.value()]);
 				if(this.selectedDate != null)
-					this.generateChart();
+					this.generateView();
 			}
 		});
 		
+		// so that the slider displays label of dates
 		this.dateSlider.setLabelFormatter(new StringConverter<>() {
 			@Override
 			public String toString(Double object) {
@@ -111,11 +121,13 @@ public class TabC3pageController {
 			final double roundedValue = Math.floor(newval.doubleValue());
 			dateSlider.valueProperty().set(roundedValue);
 			this.selectedDate = dateConverter.longToDate((long)roundedValue);
-			System.out.println(selectedDate);
 			if(this.selectedProperty != null) {
-				this.generateChart();
+				this.generateView();
 			}
 		});
+		
+		this.regPropCol.setCellValueFactory(new PropertyValueFactory<TableView<RegressionTableData>, String>("regName"));
+		this.regValCol.setCellValueFactory(new PropertyValueFactory<TableView<RegressionTableData>, Double>("regValue"));
 	}
 	
 	public void initAfterImport() {
@@ -138,12 +150,20 @@ public class TabC3pageController {
 		return result;
 	}
 	
+	// Main function for generating the chart and the table
+	private void generateView() {
+		ArrayList<Pair<Number, Number>> rawData = database.searchDataPair(this.selectedDate, this.selectedProperty);
+		RegressionResult regressionResult = this.generateRegression(rawData);
+		this.generateChart(rawData, regressionResult);
+		this.generateTable(regressionResult);
+		
+	}
+	
 	//Main function for generating the chart
 	@SuppressWarnings("unchecked")
-	private void generateChart() {
+	private void generateChart(ArrayList<Pair<Number, Number>> data, RegressionResult regressionResult) {
 		this.regressionChart.getData().clear();
-		
-		ArrayList<Pair<Number, Number>> data = database.searchDataPair(this.selectedDate, this.selectedProperty);
+	
 		//Handle no data found
 		if(data.isEmpty()) {
 			this.regressionChart.setTitle("");
@@ -161,7 +181,7 @@ public class TabC3pageController {
 		
 		//turn actual data into series
 		XYChart.Series<Number, Number> scatter = this.generateScatterSeries(data);
-		XYChart.Series<Number, Number> regression = this.generateRegressionSeries(data);
+		XYChart.Series<Number, Number> regression = this.generateRegressionSeries(data, regressionResult);
 		
 		//display the chart
 		this.regressionChart.getData().addAll(scatter, regression);
@@ -179,25 +199,17 @@ public class TabC3pageController {
 	}
 	
 	
-	private Pair<Double, Double> generateRegression(ArrayList<Pair<Number, Number>> rawData) {
+	private RegressionResult generateRegression(ArrayList<Pair<Number, Number>> rawData) {
 		SimpleRegression regression = new SimpleRegression(true);
 		for(Pair<Number, Number> datum : rawData) {
 			regression.addData(datum.getKey().doubleValue(), datum.getValue().doubleValue());
 		}
-		/*
-		System.out.println("Intercept: " + regression.getIntercept());
-		System.out.println("Slope: " + regression.getSlope());
-		System.out.println("Statistical Significance of slope: " + regression.getSignificance());
-		System.out.println("R: " + regression.getR());
-		System.out.println("R-squared: " + regression.getRSquare());
-		*/
-		return new Pair<Double, Double>(regression.getSlope(), regression.getIntercept());
+		return new RegressionResult(regression.getIntercept(), regression.getSlope(), regression.getSignificance(), regression.getR(), regression.getRSquare());
 	}
 	
-	protected XYChart.Series<Number, Number> generateRegressionSeries(ArrayList<Pair<Number, Number>> rawData) {
-		Pair<Double, Double> regressionResult = this.generateRegression(rawData);
-		double slope = regressionResult.getKey();
-		double intercept = regressionResult.getValue();
+	protected XYChart.Series<Number, Number> generateRegressionSeries(ArrayList<Pair<Number, Number>> rawData, RegressionResult regressionResult) {
+		double slope = regressionResult.getSlope();
+		double intercept = regressionResult.getIntercept();
 		
 		XYChart.Series<Number, Number> regressionSeries = new XYChart.Series<>();
 		regressionSeries.setName("Regression Line");
@@ -216,11 +228,73 @@ public class TabC3pageController {
 		for(Pair<Number, Number> pair : rawData) {
 			scatter.getData().add(new Data<Number, Number>(pair.getKey(), pair.getValue()));
 		}
-		System.out.println(scatter.getData().get(0).getXValue());
-		System.out.println(scatter.getData().get(0).getYValue());
-		System.out.println(scatter.getData().get(scatter.getData().size() - 1).getXValue());
-		System.out.println(scatter.getData().get(scatter.getData().size() - 1).getYValue());
 		return scatter;
+	}
+	
+	// ---------------- for table ----------------------
+	public class RegressionTableData {
+		private final SimpleStringProperty regName;
+		private final SimpleDoubleProperty regValue;
+		
+		RegressionTableData(String propertyName, double propertyValue){
+			this.regName = new SimpleStringProperty(propertyName);
+			this.regValue = new SimpleDoubleProperty(Math.round(propertyValue * 1000d) / 1000d);
+		}
+		
+		public String getRegName() {
+			return this.regName.get();
+		}
+		
+		public double getRegValue() {
+			return this.regValue.get();
+		}
+	}
+	
+	public class RegressionResult {
+		private double intercept;
+		private double slope;
+		private double significance;
+		private double rValue;
+		private double rSquared;
+		
+		RegressionResult(double intercept, double slp, double sig, double r, double rs){
+			this.intercept = intercept;
+			this.slope = slp;
+			this.significance = sig;
+			this.rValue = r;
+			this.rSquared = rs;
+		}
+		
+		double getIntercept() {
+			return this.intercept;
+		}
+		
+		double getSlope() {
+			return this.slope;
+		}
+		
+		double getSignificance() {
+			return this.significance;
+		}
+		
+		double getR() {
+			return this.rValue;
+		}
+		
+		double getRsquared() {
+			return this.rSquared;
+		}
+	}
+	
+	private void generateTable(RegressionResult regressionResult) {
+		ObservableList<RegressionTableData> oList = FXCollections.observableArrayList();
+		oList.add(new RegressionTableData("Intercept", regressionResult.getIntercept()));
+		oList.add(new RegressionTableData("Slope", regressionResult.getSlope()));
+		oList.add(new RegressionTableData("Level of Significance of Slope", regressionResult.getSignificance()));
+		oList.add(new RegressionTableData("Pearson's Correlation Coefficient (R)", regressionResult.getR()));
+		oList.add(new RegressionTableData("Coefficient of Determination (R-squred)", regressionResult.getRsquared()));
+		// to make the columns get the right data from RegressionTableData
+		this.regTable.setItems(oList);
 	}
 	
 }
