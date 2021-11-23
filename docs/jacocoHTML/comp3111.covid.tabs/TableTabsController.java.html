@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TableTabsController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">deCOVID</a> &gt; <a href="index.source.html" class="el_package">comp3111.covid.tabs</a> &gt; <span class="el_source">TableTabsController.java</span></div><h1>TableTabsController.java</h1><pre class="source lang-java linenums">package comp3111.covid.tabs;
+
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.Label;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+
+import comp3111.covid.datastorage.Database;
+
+/**
+ * This is an abstract class representing the controllers of all the tabs that displays tables.
+ * This class is inherited by TabA1pageController, TabB1pageController, and TabC1pageController
+ */
+<span class="fc" id="L26">public abstract class TableTabsController extends TabController {</span>
+	@FXML private DatePicker datePicker;
+	@FXML private Button confirmButton;
+	@FXML private TableColumn&lt;TableView&lt;TableData&gt;,String&gt; countryCol;
+	@FXML private TableColumn&lt;TableView&lt;TableData&gt;,String&gt; totalCol;
+	@FXML private TableColumn&lt;TableView&lt;TableData&gt;,String&gt; rateCol;
+	@FXML private TableView&lt;TableData&gt; dataTable;
+	@FXML protected Label tableTitlelbl;
+	/**
+	 * The target date chosen by the user.
+	 * Updated whenever the user changes the value in the datepicker.
+	 */
+<span class="fc" id="L38">	protected LocalDate selectedDate = null;</span>
+	
+	/**
+	 * {@inheritDoc}
+	 * In TableTabsController, this method is also responsible for setting {@link javafx.scene.control.cell.PropertyValueFactory} in each {@link javafx.scene.control.TableColumn} in the table.
+	 */
+	@Override
+	public void initialize() {
+<span class="nc" id="L46">		super.initialize();</span>
+		
+<span class="nc" id="L48">		this.countryCol.setCellValueFactory(new PropertyValueFactory&lt;TableView&lt;TableData&gt;, String&gt;(&quot;countryName&quot;));</span>
+<span class="nc" id="L49">		this.totalCol.setCellValueFactory(new PropertyValueFactory&lt;TableView&lt;TableData&gt;, String&gt;(&quot;totalData&quot;));</span>
+<span class="nc" id="L50">		this.rateCol.setCellValueFactory(new PropertyValueFactory&lt;TableView&lt;TableData&gt;, String&gt;(&quot;rateData&quot;));</span>
+<span class="nc" id="L51">	}</span>
+	/**
+     * This method handles user input errors.
+     * It handles 3 types of errors:
+     * 1. No Country is chosen.
+     * 2. No date is selected.
+     * 3. The the target date is out of the range of the chosen dataset.
+     * A pop-up window with the corresponding message will remind the user of the error.
+     * @return a negative integer error code if an error occurs, 0 if no error.
+     */
+	protected int handleTableError() {
+<span class="fc bfc" id="L62" title="All 2 branches covered.">		if(this.getSelectedIso().isEmpty()) {</span>
+<span class="fc" id="L63">			this.handleError(&quot;Please Choose at Least One Country!&quot;, &quot;Country Input Error&quot;);</span>
+<span class="fc" id="L64">			return -1;</span>
+		}
+<span class="fc bfc" id="L66" title="All 2 branches covered.">		if(this.selectedDate == null) {</span>
+<span class="fc" id="L67">			this.handleError(&quot;Please Choose a Date!&quot;, &quot;Date Input Error&quot;);</span>
+<span class="fc" id="L68">			return -2;</span>
+		}
+<span class="pc bpc" id="L70" title="1 of 4 branches missed.">		if(this.selectedDate.isBefore(getDatabase().getEarliest()) || this.selectedDate.isAfter(getDatabase().getLatest())) {</span>
+<span class="fc" id="L71">			DateTimeFormatter formatter = DateTimeFormatter.ofPattern(&quot;dd LLL yyy&quot;); </span>
+<span class="fc" id="L72">			String startStr = getDatabase().getEarliest().format(formatter);</span>
+<span class="fc" id="L73">			String endStr = getDatabase().getLatest().format(formatter);</span>
+<span class="fc" id="L74">			this.handleError(&quot;The data in this data set starts from &quot; + startStr + &quot; and ends on &quot; + endStr, &quot;Date Out of Range&quot;);</span>
+<span class="fc" id="L75">			return -3;</span>
+		}
+<span class="nc" id="L77">		return 0;</span>
+	}
+	/**
+	 * A class holding data to be put into the table.
+	 */
+	public class TableData {
+		private final SimpleStringProperty countryName;
+		private final SimpleStringProperty totalData;
+		private final SimpleStringProperty rateData;
+
+<span class="fc" id="L87">		public TableData (String location, long total, double rate, boolean needPercentage) {</span>
+<span class="fc" id="L88">			this.countryName = new SimpleStringProperty(location);</span>
+<span class="fc bfc" id="L89" title="All 2 branches covered.">			this.totalData = new SimpleStringProperty(total &gt;= 0 ? String.format(&quot;%,d&quot;, total) : &quot;No Data&quot;);</span>
+<span class="pc bpc" id="L90" title="1 of 4 branches missed.">			this.rateData = new SimpleStringProperty(rate &gt;= 0 ? rate + (needPercentage ? &quot;%&quot; : &quot;&quot;) : &quot;No Data&quot;);</span>
+<span class="fc" id="L91">		}</span>
+		/**
+		 * Getter for the value of the first column.
+		 * @return the name of the country represented in the row.
+		 */
+		public String getCountryName() {
+<span class="fc" id="L97">			return this.countryName.get();</span>
+		}
+		/**
+		 * Getter for the value of the second column.
+		 * @return the String representing the value.
+		 */
+		public String getTotalData() {
+<span class="fc" id="L104">			return this.totalData.get();</span>
+		}
+		/**
+		 * Getter for the value of the third column.
+		 * @return the String representing the value.
+		 */
+		public String getRateData() {
+<span class="fc" id="L111">			return this.rateData.get();</span>
+		}
+	}
+	
+	@FXML
+	/**
+     * This method changes the value of {@link TableTabsController#selectedDate} to a new chosen date when a new value is chosen by the date picker.
+     * @param event	JavaFX action event
+     */
+    void selectTargetDate(ActionEvent event) {
+<span class="nc" id="L121">		this.selectedDate = this.datePicker.getValue();</span>
+<span class="nc" id="L122">    }</span>
+	/**
+	 * This method generate an list of data to be put into the table, with the given user inputs of countries and date.
+	 * @param isoCodes		A list of iso codes of the countries that the user has chosen.
+	 * @param targetDate	The date chosen by the user.
+	 * @return				An {@link java.util.ArrayList} of {@link TableData} of the given countries and date.
+	 */
+	protected ArrayList&lt;TableData&gt; generateDataList(ArrayList&lt;String&gt; isoCodes, LocalDate targetDate) {
+<span class="fc" id="L130">		ArrayList&lt;TableData&gt; result = new ArrayList&lt;TableData&gt;();</span>
+<span class="fc" id="L131">		Database db = this.getDatabase();</span>
+<span class="fc bfc" id="L132" title="All 2 branches covered.">		for(String isoCode : isoCodes) {</span>
+<span class="fc" id="L133">			long totalData = this.getTotalDataFromDB(isoCode, targetDate);</span>
+<span class="fc" id="L134">			double rateData = this.getRateDataFromDB(isoCode, targetDate);</span>
+<span class="fc" id="L135">			result.add(this.getTableData(db.getLocationName(isoCode), totalData, rateData));</span>
+<span class="fc" id="L136">		}</span>
+<span class="fc" id="L137">		return result;</span>
+	}
+	/**
+	 * This method puts data on the table.
+	 * @param data	the list of data to be displayed.
+	 * @param date	the chosen date, used for the title.
+	 */
+	protected void generateTable(ArrayList&lt;TableData&gt; data, LocalDate date) {
+<span class="nc" id="L145">		ObservableList&lt;TableData&gt; oList = FXCollections.observableArrayList(data);</span>
+<span class="nc" id="L146">		this.setTableTitle();</span>
+		
+<span class="nc" id="L148">		this.dataTable.setItems(oList);</span>
+<span class="nc" id="L149">	}</span>
+	
+	/**
+	 * This method fetches a value of data of the given location and date from the database.
+	 * Return value is restricted to be that of cumulative number of cases, deaths, and people fully vaccinated.
+	 * @param isoCode		iso code of the chosen location.
+	 * @param targetDate	date of the user's choice.
+	 * @return				a value of data of the given location and date.
+	 */
+	protected abstract long getTotalDataFromDB(String isoCode, LocalDate targetDate);
+	
+	/**
+	 * This method fetches a value of data of the given location and date from the database.
+	 * Return value is restricted to be that of cumulative number of cases per 1M people, deaths per 1M people, and rate of vaccination.
+	 * @param isoCode		iso code of the chosen location
+	 * @param targetDate	date of the user's choice
+	 * @return				a value of the given parameters.
+	 */
+	protected abstract double getRateDataFromDB(String isoCode, LocalDate targetDate);
+	
+	/**
+	 * This method sets the title of the table according to the type of the tab.
+	 */
+	protected abstract void setTableTitle();
+	
+	/**
+	 * This method constructs a {@link TableData} object with the given parameters.
+	 * Depending of the type of the tab, a percentage sign % may be added to the back of rate data during the construction.
+	 * @param iso		Iso code of the desired location.
+	 * @param totalData	Value for the second column.
+	 * @param rateData	Value for the third column.
+	 * @return			A {@link TableData} object consisting of the above values.
+	 */
+	protected abstract TableData getTableData(String iso, long totalData, double rateData);
+	
+	/**
+	 * {@inheritDoc}
+	 * In this instance, this method generates a list of {@link TableData} given the user's input with {@link TableTabsController#generateDataList(ArrayList, LocalDate)},
+	 * and put them onto the table using {@link TableTabsController#generateTable(ArrayList, LocalDate)}.
+	 */
+	@Override
+	final void handleConfirmSelection(ActionEvent event) {
+<span class="nc" id="L191">		int errorCode = this.handleTableError();</span>
+<span class="nc bnc" id="L192" title="All 2 branches missed.">		if(errorCode != 0)</span>
+<span class="nc" id="L193">			return;</span>
+<span class="nc" id="L194">		ArrayList&lt;String&gt; selectedIso = this.getSelectedIso();</span>
+<span class="nc" id="L195">		ArrayList&lt;TableData&gt; dataList = this.generateDataList(selectedIso, selectedDate);</span>
+<span class="nc" id="L196">		this.generateTable(dataList, this.selectedDate);</span>
+<span class="nc" id="L197">		LocalDateTime currentTime = LocalDateTime.now();</span>
+<span class="nc" id="L198">		String formattedTime = DateTimeFormatter.ofPattern(&quot;HH:mm:ss&quot;).format(currentTime);</span>
+<span class="nc" id="L199">		String importMessage = &quot;[ &quot; + formattedTime + &quot; ] &quot; + &quot;Successfully generated table\n&quot;;</span>
+<span class="nc" id="L200">		System.out.println(importMessage);</span>
+
+<span class="nc" id="L202">		this.generateTable(dataList, this.selectedDate);</span>
+<span class="nc" id="L203">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

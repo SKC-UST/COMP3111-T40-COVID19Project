@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LocationData.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">deCOVID</a> &gt; <a href="index.source.html" class="el_package">comp3111.covid.datastorage</a> &gt; <span class="el_source">LocationData.java</span></div><h1>LocationData.java</h1><pre class="source lang-java linenums">package comp3111.covid.datastorage;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+
+/**
+ * A class representing a country in the database
+ * It stores lists of DayData.
+ */
+public class LocationData {
+	/**
+	 * The iso code of the country
+	 */
+	private String locationIsoCode;
+	/**
+	 * The continent that the country belongs to
+	 */
+	private String locationContinent;
+	/**
+	 * The name of the country.
+	 */
+	private String locationName;
+	/**
+	 * The country's population.
+	 */
+	private long locationPopulation;
+	/**
+	 * The conutry's population density.
+	 */
+	private double locationDensity;
+	/**
+	 * The conutry's median age.
+	 */
+	private double locationMedianAge;
+	/**
+	 * The conutry's percentage of people at the age of 65 or older than 65 years old.
+	 */
+	private double location65Age;
+	/**
+	 * The conutry's percentage of people at the age of 70 or older than 70 years old.
+	 */
+	private double location70Age;
+	/**
+	 * The conutry's GDP per capita.
+	 */
+	private double locationGDPpc;
+	/**
+	 * The conutry's diabetes prevalence.
+	 */
+	private double locationDiabetes;
+	/**
+	 * A list storing the number of total COVID-19 cases of each day.
+	 */
+<span class="fc" id="L54">	private ArrayList&lt;TotalDayData&gt; caseTotalList = new ArrayList&lt;TotalDayData&gt;();</span>
+	/**
+	 * A list storing the number of total COVID-19 deaths of each day.
+	 */
+<span class="fc" id="L58">	private ArrayList&lt;TotalDayData&gt; deathTotalList = new ArrayList&lt;TotalDayData&gt;();</span>
+	/**
+	 * A list storing the number of people fully vaccinated of each day.
+	 */
+<span class="fc" id="L62">	private ArrayList&lt;TotalDayData&gt; vacTotalList = new ArrayList&lt;TotalDayData&gt;();</span>
+	/**
+	 * A list storing the number of total number of COVID-19 cases per million pepole of each day.
+	 */
+<span class="fc" id="L66">	private ArrayList&lt;RateDayData&gt; caseRateList = new ArrayList&lt;RateDayData&gt;();</span>
+	/**
+	 * A list storing the number of total number of COVID-19 deaths per million pepole of each day.
+	 */
+<span class="fc" id="L70">	private ArrayList&lt;RateDayData&gt; deathRateList = new ArrayList&lt;RateDayData&gt;();</span>
+	/**
+	 * A list storing the cumulative vaccination rate of each day.
+	 */
+<span class="fc" id="L74">	private ArrayList&lt;RateDayData&gt; vacRateList = new ArrayList&lt;RateDayData&gt;();</span>
+	
+	/**
+	 * The constructor for LocationData
+	 * @param isoCode 		{@link LocationData#locationIsoCode}
+	 * @param continent 	{@link LocationData#locationContinent}
+	 * @param location 		{@link LocationData#locationName}
+	 * @param population	{@link LocationData#locationPopulation}
+	 * @param density		{@link LocationData#locationDensity}
+	 * @param medianAge		{@link LocationData#locationMedianAge}
+	 * @param age65			{@link LocationData#location65Age}
+	 * @param age70			{@link LocationData#location70Age}
+	 * @param gdp			{@link LocationData#locationGDPpc}
+	 * @param diabetes		{@link LocationData#locationDiabetes}
+	 */
+<span class="fc" id="L89">	public LocationData(String isoCode, String continent, String location, long population, double density, double medianAge, double age65, double age70, double gdp, double diabetes) {</span>
+<span class="fc" id="L90">		this.locationIsoCode = isoCode;</span>
+<span class="fc" id="L91">		this.locationContinent = continent;</span>
+<span class="fc" id="L92">		this.locationName = location;</span>
+<span class="fc" id="L93">		this.locationPopulation = population;</span>
+<span class="fc" id="L94">		this.locationDensity = density;</span>
+<span class="fc" id="L95">		this.locationMedianAge = medianAge;</span>
+<span class="fc" id="L96">		this.location65Age = age65;</span>
+<span class="fc" id="L97">		this.location70Age = age70;</span>
+<span class="fc" id="L98">		this.locationGDPpc = gdp;</span>
+<span class="fc" id="L99">		this.locationDiabetes = diabetes;</span>
+<span class="fc" id="L100">	}</span>
+	
+	/**
+	 * {@link LocationData#locationName}
+	 * @return the name of the location
+	 */
+	public String getLocationName() {
+<span class="fc" id="L107">		return this.locationName;</span>
+	}
+	
+	/**
+	 * Add a day data to the list of specified dataTitle
+	 * @param dataTitle		the title of datum
+	 * @see DataTitle
+	 * @param newDayData	the DayData to be added
+	 * @see DayData
+	 */
+	void addDayData(DataTitle dataTitle, DayData newDayData) {
+<span class="fc bfc" id="L118" title="All 2 branches covered.">		if(newDayData instanceof TotalDayData) {</span>
+<span class="pc bpc" id="L119" title="1 of 4 branches missed.">			switch(dataTitle) {</span>
+				case CASE:
+<span class="fc" id="L121">					this.caseTotalList.add((TotalDayData) newDayData);</span>
+<span class="fc" id="L122">					break;</span>
+				case DEATH:
+<span class="fc" id="L124">					this.deathTotalList.add((TotalDayData) newDayData);</span>
+<span class="fc" id="L125">					break;</span>
+				case VAC:
+<span class="fc" id="L127">					this.vacTotalList.add((TotalDayData) newDayData);</span>
+<span class="fc" id="L128">					break;</span>
+			}
+		}
+		else {
+<span class="pc bpc" id="L132" title="1 of 4 branches missed.">			switch(dataTitle) {</span>
+				case CASE:
+<span class="fc" id="L134">					this.caseRateList.add((RateDayData) newDayData);</span>
+<span class="fc" id="L135">					break;</span>
+				case DEATH:
+<span class="fc" id="L137">					this.deathRateList.add((RateDayData) newDayData);</span>
+<span class="fc" id="L138">					break;</span>
+				case VAC:
+<span class="fc" id="L140">					this.vacRateList.add((RateDayData) newDayData);</span>
+					break;
+			}
+		}
+<span class="fc" id="L144">	}</span>
+	
+	/**
+	 * Get a list of day data of specified dataTitle
+	 * but restricted to cases of COVID per 1M people, deaths per 1M people, or vaccination rate
+	 * @param dataTitle		the title of datum to get
+	 * @see DataTitle
+	 */
+	ArrayList&lt;TotalDayData&gt; getTotalDayList(DataTitle dataTitle){
+<span class="pc bpc" id="L153" title="1 of 4 branches missed.">		switch(dataTitle) {</span>
+			case CASE:
+<span class="fc" id="L155">				return this.caseTotalList;</span>
+			case DEATH:
+<span class="fc" id="L157">				return this.deathTotalList;</span>
+			case VAC:
+<span class="fc" id="L159">				return this.vacTotalList;</span>
+		}
+<span class="nc" id="L161">		return null;</span>
+	}
+	
+	/**
+	 * Get a list of day data of the specified dataTitle
+	 * but restricted to cumulative cases of COVID, cumulative deaths, or cumulative number of people fully vaccinated.
+	 * @param dataTitle		the title of datum to get
+	 * @see DataTitle
+	 */
+	ArrayList&lt;RateDayData&gt; getRateDayList(DataTitle dataTitle){
+<span class="pc bpc" id="L171" title="1 of 4 branches missed.">		switch(dataTitle) {</span>
+			case CASE:
+<span class="fc" id="L173">				return this.caseRateList;</span>
+			case DEATH:
+<span class="fc" id="L175">				return this.deathRateList;</span>
+			case VAC:
+<span class="fc" id="L177">				return this.vacRateList;</span>
+		}
+<span class="nc" id="L179">		return null;</span>
+	}
+	
+	/**
+	 * Get the value of specified dataTitle on the specified day
+	 * but restricted to cumulative cases of COVID, cumulative deaths, or cumulative number of people fully vaccinated.
+	 * For example, getting the exact number of people died of COVID-19 up till the specified date
+	 * @param targetDate	the date of the datum to get
+	 * @param dataTitle		the title of datum to get
+	 * @see DataTitle
+	 * @return				the specified data value. -1 if not found.
+	 */
+	long getTotalDayData(LocalDate targetDate, DataTitle dataTitle) {
+<span class="fc" id="L192">		ArrayList&lt;TotalDayData&gt; targetTitle = null;</span>
+<span class="pc bpc" id="L193" title="1 of 4 branches missed.">		switch(dataTitle) {</span>
+			case CASE:
+<span class="fc" id="L195">				targetTitle = this.caseTotalList;</span>
+<span class="fc" id="L196">				break;</span>
+			case DEATH:
+<span class="fc" id="L198">				targetTitle = this.deathTotalList;</span>
+<span class="fc" id="L199">				break;</span>
+			case VAC:
+<span class="fc" id="L201">				targetTitle = this.vacTotalList;</span>
+				break;
+		}
+<span class="fc bfc" id="L204" title="All 2 branches covered.">		for(TotalDayData day : targetTitle) {</span>
+<span class="fc bfc" id="L205" title="All 2 branches covered.">			if(day.getDate().equals(targetDate)) {</span>
+<span class="fc" id="L206">				return day.getData();</span>
+			}
+<span class="fc" id="L208">		}</span>
+<span class="fc" id="L209">		return -1; // not found</span>
+	}
+	
+	/**
+	 * Get the value of specified dataTitle on the specified day
+	 * but restricted to cumulative cases of COVID per 1M people, cumulative deaths per 1M people, or cumulative vaccination rate.
+	 * For example, getting the exact number of people died of COVID-19 per 1 million people up till the specified date
+	 * @param targetDate	the date of the datum to get
+	 * @param dataTitle		the title of datum to get
+	 * @see DataTitle
+	 * @return				the specified data value. -1 if not found.
+	 */
+	double getRateDayData(LocalDate targetDate, DataTitle dataTitle) {
+<span class="fc" id="L222">		ArrayList&lt;RateDayData&gt; targetTitle = null;</span>
+<span class="pc bpc" id="L223" title="1 of 4 branches missed.">		switch(dataTitle) {</span>
+			case CASE:
+<span class="fc" id="L225">				targetTitle = this.caseRateList;</span>
+<span class="fc" id="L226">				break;</span>
+			case DEATH:
+<span class="fc" id="L228">				targetTitle = this.deathRateList;</span>
+<span class="fc" id="L229">				break;</span>
+			case VAC:
+<span class="fc" id="L231">				targetTitle = this.vacRateList;</span>
+				break;
+		}
+<span class="fc bfc" id="L234" title="All 2 branches covered.">		for(RateDayData day : targetTitle) {</span>
+<span class="fc bfc" id="L235" title="All 2 branches covered.">			if(day.getDate().equals(targetDate)) {</span>
+<span class="fc" id="L236">				return day.getData();</span>
+			}
+<span class="fc" id="L238">		}</span>
+<span class="fc" id="L239">		return -1; // not found</span>
+	}
+	/**
+	 * Get the specified property of this location.
+	 * @param property	the property to get
+	 * @see 			LocationProperty
+	 * @return			the specified property
+	 */
+	public Number getLocationProperty(LocationProperty property) {
+<span class="pc bpc" id="L248" title="1 of 8 branches missed.">		switch(property) {</span>
+			case POPULATION:
+<span class="fc" id="L250">				return this.locationPopulation;</span>
+			case POPULATION_DENSITY:
+<span class="fc" id="L252">				return this.locationDensity;</span>
+			case AGE_MEDIAN:
+<span class="fc" id="L254">				return this.locationMedianAge;</span>
+			case AGE_65:
+<span class="fc" id="L256">				return this.location65Age;</span>
+			case AGE_70:
+<span class="fc" id="L258">				return this.location70Age;</span>
+			case GDP:
+<span class="fc" id="L260">				return this.locationGDPpc;</span>
+			case DIABETES:
+<span class="fc" id="L262">				return this.locationDiabetes;</span>
+		}
+<span class="nc" id="L264">		return null;</span>
+	}
+	/**
+	 * clear every list of this instance of LocationData
+	 */
+	void clearLocationData() {
+<span class="fc" id="L270">		this.caseTotalList.clear();</span>
+<span class="fc" id="L271">		this.caseRateList.clear();</span>
+<span class="fc" id="L272">		this.deathTotalList.clear();</span>
+<span class="fc" id="L273">		this.deathRateList.clear();</span>
+<span class="fc" id="L274">		this.vacTotalList.clear();</span>
+<span class="fc" id="L275">		this.vacRateList.clear();</span>
+<span class="fc" id="L276">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
