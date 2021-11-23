@@ -4,6 +4,7 @@
 <?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -13,34 +14,43 @@
 
 <VBox prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="comp3111.covid.tabs.TabC3pageController">
    <children>
-      <AnchorPane prefHeight="668.0" prefWidth="720.0">
-         <children>
-            <LineChart fx:id="regressionChart" animated="false" layoutX="266.0" prefHeight="551.0" prefWidth="700.0">
-              <xAxis>
-                <NumberAxis side="BOTTOM" fx:id="xAxis" />
-              </xAxis>
-              <yAxis>
-                <NumberAxis fx:id="yAxis" autoRanging="false" label="Vaccination Rate" side="LEFT" />
-              </yAxis>
-            </LineChart>
-            <ComboBox layoutX="62.0" layoutY="97.0" prefWidth="150.0" promptText="x-axis" fx:id="xAxisCbx" />
-            <Slider fx:id="dateSlider" blockIncrement="1.0" layoutX="336.0" layoutY="560.0" minorTickCount="0" prefHeight="18.0" prefWidth="651.0" showTickLabels="true" showTickMarks="true" />
-            <Label fx:id="noDataLabel1" layoutX="390.0" layoutY="262.0" text="To Begin, Select an X-axis">
-               <font>
-                  <Font name="Hack Bold" size="21.0" />
-               </font>
-            </Label>
-            <Label fx:id="noDataLabel2" layoutX="390.0" layoutY="300.0" text="Change the slider value to se the changes of value as time goes on" />
-            <TableView fx:id="regTable" layoutX="14.0" layoutY="208.0" prefHeight="377.0" prefWidth="251.0">
-              <columns>
-                <TableColumn fx:id="regPropCol" prefWidth="178.52965831756592" text="Regression Properties" />
-                <TableColumn fx:id="regValCol" prefWidth="71.810791015625" text="Values" />
-              </columns>
-               <columnResizePolicy>
-                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-               </columnResizePolicy>
-            </TableView>
-         </children>
-      </AnchorPane>
+      <ScrollPane prefWidth="1000.0">
+         <content>
+            <AnchorPane prefHeight="849.0" prefWidth="1004.0">
+               <children>
+                  <LineChart fx:id="regressionChart" animated="false" layoutX="18.0" layoutY="50.0" prefHeight="600.0" prefWidth="950.0">
+                    <xAxis>
+                      <NumberAxis side="BOTTOM" fx:id="xAxis" />
+                    </xAxis>
+                    <yAxis>
+                      <NumberAxis fx:id="yAxis" autoRanging="false" label="Vaccination Rate" side="LEFT" />
+                    </yAxis>
+                  </LineChart>
+                  <ComboBox layoutX="251.0" layoutY="13.0" prefHeight="25.0" prefWidth="213.0" promptText="x-axis" fx:id="xAxisCbx" />
+                  <Slider fx:id="dateSlider" blockIncrement="1.0" layoutX="27.0" layoutY="641.0" minorTickCount="0" prefHeight="18.0" prefWidth="950.0" showTickLabels="true" showTickMarks="true" />
+                  <Label fx:id="noDataLabel1" layoutX="251.0" layoutY="256.0" text="To Begin, Select an X-axis">
+                     <font>
+                        <Font name="Hack Bold" size="21.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="noDataLabel2" layoutX="251.0" layoutY="294.0" text="Change the slider value to se the changes of value as time goes on" />
+                  <TableView fx:id="regTable" layoutX="27.0" layoutY="685.0" prefHeight="150.0" prefWidth="950.0">
+                    <columns>
+                      <TableColumn fx:id="regPropCol" prefWidth="178.52965831756592" text="Regression Properties" />
+                      <TableColumn fx:id="regValCol" prefWidth="71.810791015625" text="Values" />
+                    </columns>
+                     <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                     </columnResizePolicy>
+                  </TableView>
+                  <Label layoutX="86.0" layoutY="17.0" text="Choose your x-axis:">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+               </children>
+            </AnchorPane>
+         </content>
+      </ScrollPane>
    </children>
 </VBox>

@@ -238,7 +238,7 @@ public class TabC3pageController {
 		
 		RegressionTableData(String propertyName, double propertyValue){
 			this.regName = new SimpleStringProperty(propertyName);
-			this.regValue = new SimpleDoubleProperty(Math.round(propertyValue * 1000d) / 1000d);
+			this.regValue = new SimpleDoubleProperty(Math.round(propertyValue * 100000d) / 100000d);
 		}
 		
 		public String getRegName() {

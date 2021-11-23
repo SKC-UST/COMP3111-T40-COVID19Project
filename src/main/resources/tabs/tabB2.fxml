@@ -18,7 +18,7 @@
          <DatePicker fx:id="startDatePicker" layoutX="197.0" layoutY="11.0" onAction="#selectStartDate" prefHeight="25.0" prefWidth="166.0" promptText="Starting Date" />
          <Label layoutX="377.0" layoutY="15.0" text="to" />
          <DatePicker fx:id="endDatePicker" layoutX="407.0" layoutY="11.0" onAction="#selectEndDate" prefHeight="25.0" prefWidth="151.0" promptText="Ending Date" />
-         <LineChart fx:id="dataChart" createSymbols="false" layoutX="280.0" layoutY="75.0" prefHeight="500.0" prefWidth="650.0" title="Cumulative Confirmed COVID-19 Deaths (per 1M)">
+         <LineChart fx:id="dataChart" createSymbols="false" layoutX="250.0" layoutY="70.0" prefHeight="520.0" prefWidth="725.0" title="Cumulative Confirmed COVID-19 Deaths (per 1M)">
            <xAxis>
              <NumberAxis animated="false" forceZeroInRange="false" side="BOTTOM" fx:id="xAxis" />
            </xAxis>
