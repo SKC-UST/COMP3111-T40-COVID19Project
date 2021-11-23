@@ -39,6 +39,43 @@ public class TabC2Tester extends TabC2pageController {
 		Assert.assertNull(seriesList);
 	}
 	
+	@Test
+	public void testHandleChartError() {
+		//check data out of range 1
+		this.endDate = LocalDate.of(2021, 7, 21);
+		this.startDate = LocalDate.of(2021, 7, 10);
+		Assert.assertEquals(-6, this.handleChartErorr());
+		
+		//check data out of range 2
+		this.endDate = LocalDate.of(2021, 7, 20);
+		this.startDate = LocalDate.of(2019, 12, 31);
+		Assert.assertEquals(-6, this.handleChartErorr());
+		
+		//check start end date equal
+		this.endDate = LocalDate.of(2021, 7, 1);
+		this.startDate = LocalDate.of(2021, 7, 1);
+		Assert.assertEquals(-5, this.handleChartErorr());
+		
+		//check startDate > endDate
+		this.endDate = LocalDate.of(2021, 6, 10);
+		Assert.assertEquals(-4, this.handleChartErorr());
+		
+		//check no endDate
+		this.endDate = null;
+		Assert.assertEquals(-3, this.handleChartErorr());
+		
+		//check no startDate
+		this.endDate= LocalDate.of(2021, 7, 1);
+		this.startDate = null;
+		Assert.assertEquals(-2, this.handleChartErorr());
+		
+		//check no country
+		this.startDate = LocalDate.of(2021, 7, 1);
+		this.endDate = LocalDate.of(2021, 7, 10);
+		this.checkedPair.clear();
+		Assert.assertEquals(-1, this.handleChartErorr());
+	}
+	
 	@After
 	public void cleanUp() {
 		this.getDatabase().clearDatabase();

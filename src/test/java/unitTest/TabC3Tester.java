@@ -39,7 +39,7 @@ public class TabC3Tester extends TabC3pageController{
 		//population: x: 0, 29.2298 | y: 1.380004385E9,-0.2972
 		//density: x: 0, 27.905 | y: 20546.77, 33.1774
 		ArrayList<Pair<Number, Number>> rawData = this.database.searchDataPair(selectedDate, LocationProperty.POPULATION);
-		XYChart.Series<Number, Number> testSeries = this.generateRegressionSeries(rawData);
+		XYChart.Series<Number, Number> testSeries = this.generateRegressionSeries(rawData, this.generateRegression(rawData));
 		Assert.assertEquals(0, testSeries.getData().get(0).getXValue().doubleValue(), 0.01);
 		Assert.assertEquals(29.23, testSeries.getData().get(0).getYValue().doubleValue(), 0.01);
 		Assert.assertEquals(1.380004385E9, testSeries.getData().get(1).getXValue().doubleValue(), 0.01);

@@ -199,7 +199,7 @@ public class TabC3pageController {
 	}
 	
 	
-	private RegressionResult generateRegression(ArrayList<Pair<Number, Number>> rawData) {
+	protected RegressionResult generateRegression(ArrayList<Pair<Number, Number>> rawData) {
 		SimpleRegression regression = new SimpleRegression(true);
 		for(Pair<Number, Number> datum : rawData) {
 			regression.addData(datum.getKey().doubleValue(), datum.getValue().doubleValue());

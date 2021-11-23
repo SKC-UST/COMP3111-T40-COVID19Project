@@ -14,7 +14,6 @@ import javafx.scene.control.cell.CheckBoxListCell;
 import javafx.util.Pair;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import javax.swing.JOptionPane;
 
@@ -28,7 +27,6 @@ import comp3111.covid.datastorage.Database;
 public class TabController {
 	private Database database = Context.getInstance().getDatabase();
 	protected ObservableList<Pair<String, String>> checkedPair = FXCollections.observableArrayList();
-	private HashMap<String, Boolean> checkedLocations = new HashMap<String, Boolean>();
 	
     @FXML
     private CheckListView<Pair<String, String>> locationsCheckboxList;

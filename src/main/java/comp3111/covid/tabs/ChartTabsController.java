@@ -8,7 +8,6 @@ import javafx.scene.control.DatePicker;
 import javafx.util.Pair;
 import javafx.util.StringConverter;
 
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -53,38 +52,43 @@ public class ChartTabsController extends TabController{
     	});
     }
     
-    @FXML
-    //Generate the acutal chart
-    void handleConfirmSelection(ActionEvent event) {
-    	ArrayList<String> selectedIso = this.getSelectedIso();
-    	if(selectedIso.isEmpty()) {
+    protected int handleChartErorr() {
+    	if(this.getSelectedIso().isEmpty()) {
 			this.handleError("Please Choose at Least One Country!", "Country Input Error");
-			return;
+			return -1;
 		}
 		if(this.startDate == null) {
 			this.handleError("Please Choose a Start Date!", "Date Input Error");
-			return;
+			return -2;
 		}
 		if(this.endDate == null) {
 			this.handleError("Please Choose an End Date", "Date Input Error");
-			return;
+			return -3;
 		}
 		if(this.startDate.isAfter(endDate)) {
 			this.handleError("The start date cannot be after the end date!", "Date Input Error");
-			return;
+			return -4;
 		}
 		if(this.startDate.equals(endDate)) {
 			this.handleError("The date range must span across at least two days!", "Date Input Error");
-			return;
+			return -5;
 		}
 		if(this.startDate.isBefore(getDatabase().getEarliest()) || this.endDate.isAfter(getDatabase().getLatest())) {
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd LLL yyy"); 
 			String startStr = getDatabase().getEarliest().format(formatter);
 			String endStr = getDatabase().getLatest().format(formatter);
 			this.handleError("The data in this data set starts from " + startStr + " and ends on " + endStr, "Date Out of Range");
-			return;
+			return -6;
 		}
-    	
+		return 0;
+    }
+    
+    @FXML
+    //Generate the acutal chart
+    void handleConfirmSelection(ActionEvent event) {
+    	int errorCode = this.handleChartErorr();
+    	if(errorCode != 0)
+    		return;	//error occurs
     	
     	this.dataChart.getData().clear();
     	ArrayList<XYChart.Series<Number, Number>> data = generateChartData();    	
