@@ -8,7 +8,7 @@ import java.time.LocalDate;
  * A Converter that allow conversion between LocalDate objects, long value and String objects
  * mainly for the conversion between the return value of UI elements (such as slider) to an object for internal use.
  * This class is under the singleton restriction under the Context class.
- * @see Context
+ * @see comp3111.covid.Context
  */
 public class DateConverter {
 	/**
@@ -22,7 +22,7 @@ public class DateConverter {
 	 * The difference is represented in the number of days
 	 * 
 	 * @param 	date the date to transform into long value
-	 * @return	days elapsed since {@value DateConverter#START_DATE} to specified date 
+	 * @return	days elapsed since {@link DateConverter#START_DATE} to specified date 
 	 */
 	public long dateToLong(LocalDate date) {
 		return java.time.temporal.ChronoUnit.DAYS.between(START_DATE, date);
@@ -31,7 +31,7 @@ public class DateConverter {
 	/**
 	 * This method returns resultant date of adding number of days in the parameter to the anchor point {@link DateConverter#START_DATE}
 	 * @param dateValue	the number of days to add to {@link DateConverter#START_DATE}
-	 * @return			the the date of the specified number of days added to {@value DateConverter#START_DATE}
+	 * @return			the the date of the specified number of days added to {@link DateConverter#START_DATE}
 	 */
 	public LocalDate longToDate(long dateValue) {
 		return START_DATE.plusDays(dateValue);

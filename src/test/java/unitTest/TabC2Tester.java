@@ -22,7 +22,7 @@ public class TabC2Tester extends TabC2pageController {
 		this.getDatabase().importCSV(new File("./src/main/resources/dataset/COVID_Dataset_v1.0.csv"));
 		this.startDate = LocalDate.of(2021, 7, 1);
 		this.endDate = LocalDate.of(2021, 7, 10);
-		this.checkedPair.addAll(new Pair<String, String>("HKG", "Hong Kong"));
+		this.checkedPair.add(new Pair<String, String>("HKG", "Hong Kong"));
 	}
 	
 	@Test
@@ -74,6 +74,12 @@ public class TabC2Tester extends TabC2pageController {
 		this.endDate = LocalDate.of(2021, 7, 10);
 		this.checkedPair.clear();
 		Assert.assertEquals(-1, this.handleChartError());
+		
+		//no error
+		this.startDate = LocalDate.of(2021, 7, 1);
+		this.endDate = LocalDate.of(2021, 7, 10);
+		this.checkedPair.add(new Pair<String, String>("HKG", "Hong Kong"));
+		Assert.assertEquals(0, this.handleChartError());
 	}
 	
 	@After
