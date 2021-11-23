@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LocationProperty.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">deCOVID</a> &gt; <a href="index.source.html" class="el_package">comp3111.covid.datastorage</a> &gt; <span class="el_source">LocationProperty.java</span></div><h1>LocationProperty.java</h1><pre class="source lang-java linenums">package comp3111.covid.datastorage;
+
+import java.util.Arrays;
+import java.util.Optional;
+
+/**
+ * An Enum representing properties of a LocationData object. 
+ * used for ease of searching data in the database. 
+ * @see LocationData
+ */
+<span class="fc" id="L11">public enum LocationProperty {</span>
+	/**
+	 * the location's population
+	 */
+<span class="fc" id="L15">	POPULATION(0),		</span>
+	/** 
+	 * the location's population density
+	 */
+<span class="fc" id="L19">	POPULATION_DENSITY(1),</span>
+	/**
+	 * The location's median age.
+	 */
+<span class="fc" id="L23">	AGE_MEDIAN(2),	</span>
+	/**
+	 * The location's percentage of people aged 65 or older.
+	 */
+<span class="fc" id="L27">	AGE_65(3),</span>
+	/**
+	 * The location's percentage of people aged 70 or older.
+	 */
+<span class="fc" id="L31">	AGE_70(4),	</span>
+	/**
+	 * The location's GDP per capita.
+	 */
+<span class="fc" id="L35">	GDP(5),</span>
+	/**
+	 * The location's diabetes prevalence.
+	 */
+<span class="fc" id="L39">	DIABETES(6);</span>
+	
+	/**
+	 * The integer value associated to the enum.
+	 */
+	private final int value;
+	
+	/**
+	 * Constructor of the enum.
+	 * @param value - {@link LocationProperty#value}
+	 */
+<span class="fc" id="L50">	LocationProperty(int value){</span>
+<span class="fc" id="L51">		this.value = value;</span>
+<span class="fc" id="L52">	}</span>
+	
+	/**
+	 * Given the integer value of the LocationProperty, returns the corresponding LocationProperty.
+	 * @param value - the associated integer value of a location property.
+	 * @return the corresponding LocationProperty enum.
+	 */
+	public static Optional&lt;LocationProperty&gt; valueOf(int value){
+<span class="nc bnc" id="L60" title="All 2 branches missed.">		return Arrays.stream(values()).filter(LocationProperty -&gt; LocationProperty.value == value).findFirst();</span>
+	}
+	
+	/**
+	 * @return {@link LocationProperty#value}
+	 */
+	public int value() {
+<span class="fc" id="L67">		return this.value;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
