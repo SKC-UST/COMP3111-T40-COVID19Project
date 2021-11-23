@@ -8,7 +8,7 @@ import java.time.LocalDate;
  * A Converter that allow conversion between LocalDate objects, long value and String objects
  * mainly for the conversion between the return value of UI elements (such as slider) to an object for internal use.
  * This class is under the singleton restriction under the Context class.
- * @see Context
+ * @see comp3111.covid.Context.
  */
 public class DateConverter {
 	/**

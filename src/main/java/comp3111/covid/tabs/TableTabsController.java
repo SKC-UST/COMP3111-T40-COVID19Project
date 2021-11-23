@@ -37,11 +37,11 @@ public abstract class TableTabsController extends TabController {
 	 */
 	protected LocalDate selectedDate = null;
 	
-	@Override
 	/**
 	 * {@inheritDoc}
-	 * TableTabsController, this method is also responsible for setting {@link javafx.scene.control.cell.PropertyValueFactory} in each {@link javafx.scene.control.TableColumn} in the table.
+	 * In TableTabsController, this method is also responsible for setting {@link javafx.scene.control.cell.PropertyValueFactory} in each {@link javafx.scene.control.TableColumn} in the table.
 	 */
+	@Override
 	public void initialize() {
 		super.initialize();
 		
@@ -172,12 +172,12 @@ public abstract class TableTabsController extends TabController {
 	 */
 	protected abstract TableData getTableData(String iso, long totalData, double rateData);
 	
-	@Override
 	/**
 	 * {@inheritDoc}
 	 * In this instance, this method generates a list of {@link TableData} given the user's input with {@link TableTabsController#generateDataList(ArrayList, LocalDate)},
 	 * and put them onto the table using {@link TableTabsController#generateTable(ArrayList, LocalDate)}.
 	 */
+	@Override
 	final void handleConfirmSelection(ActionEvent event) {
 		int errorCode = this.handleTableError();
 		if(errorCode != 0)
