@@ -12,13 +12,13 @@
 <VBox prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="comp3111.covid.tabs.TabC2pageController">
    <AnchorPane prefHeight="600.0" prefWidth="725.0">
       <children>
-         <CheckListView fx:id="locationsCheckboxList" layoutX="14.0" layoutY="43.0" prefHeight="550.0" prefWidth="190.0" />
+         <CheckListView fx:id="locationsCheckboxList" layoutX="14.0" layoutY="43.0" prefHeight="550.0" prefWidth="225" />
          <Label layoutX="21.0" layoutY="14.0" text="Select target Countries" />
          <Button fx:id="confirmButton" layoutX="600.0" layoutY="10.0" mnemonicParsing="false" onAction="#handleConfirmSelection" text="Generate Chart" />
-         <DatePicker fx:id="startDatePicker" layoutX="197.0" layoutY="11.0" onAction="#selectStartDate" prefHeight="25.0" prefWidth="166.0" promptText="Starting Date" />
+         <DatePicker fx:id="startDatePicker" editable="false" layoutX="197.0" layoutY="11.0" onAction="#selectStartDate" prefHeight="25.0" prefWidth="166.0" promptText="Starting Date" />
          <Label layoutX="377.0" layoutY="15.0" text="to" />
-         <DatePicker fx:id="endDatePicker" layoutX="407.0" layoutY="11.0" onAction="#selectEndDate" prefHeight="25.0" prefWidth="151.0" promptText="Ending Date" />
-         <LineChart fx:id="dataChart" createSymbols="false" layoutX="218.0" layoutY="43.0" prefHeight="500" prefWidth="550.0" title="Cumulative Rate of Vaccination against COVID-19">
+         <DatePicker fx:id="endDatePicker" editable="false" layoutX="407.0" layoutY="11.0" onAction="#selectEndDate" prefHeight="25.0" prefWidth="151.0" promptText="Ending Date" />
+         <LineChart fx:id="dataChart" createSymbols="false" layoutX="250.0" layoutY="70.0" prefHeight="520.0" prefWidth="725.0" title="Cumulative Rate of Vaccination against COVID-19">
            <xAxis>
              <NumberAxis animated="false" forceZeroInRange="false" side="BOTTOM" fx:id="xAxis" />
            </xAxis>

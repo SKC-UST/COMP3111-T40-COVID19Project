@@ -9,17 +9,17 @@ import comp3111.covid.datastorage.*;
 import javafx.util.Pair;
 import javafx.util.StringConverter;
 
+/**
+ * place holder
+ * @author ytc314
+ *
+ */
 public class TabC2pageController extends ChartTabsController {
 	
 	@Override
 	public void initialize() {
 		
 		super.initialize();
-		
-		yAxis.setAutoRanging(false);
-		yAxis.setLowerBound(0);
-	    yAxis.setUpperBound(100);
-	    yAxis.setTickUnit(10);
 		
 		yAxis.setTickLabelFormatter(new StringConverter<Number>() {
 			@Override

@@ -3,7 +3,11 @@ package comp3111.covid.tabs;
 import java.time.LocalDate;
 
 import comp3111.covid.datastorage.DataTitle;
-
+/**
+ * place holder
+ * @author ytc314
+ *
+ */
 public class TabC1pageController extends TableTabsController{
 	
 	@Override

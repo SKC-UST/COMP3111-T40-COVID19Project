@@ -12,17 +12,17 @@
 <?import javafx.scene.text.*?>
 <?import javafx.scene.image.*?>
 
-<VBox prefHeight="600" prefWidth="800" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="comp3111.covid.Controller">
+<VBox prefHeight="600" prefWidth="1000" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="comp3111.covid.Controller">
   <children>
-    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="800.0" prefWidth="800">
+    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="800.0" prefWidth="1000">
       <children>
-            <TabPane fx:id="tabPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="650.0" prefWidth="800" tabClosingPolicy="UNAVAILABLE">
+            <TabPane fx:id="tabPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="650.0" prefWidth="1000" tabClosingPolicy="UNAVAILABLE">
               <tabs>
                 <Tab fx:id="tabTaskZero" text="Import database" style="-fx-background-color: SILVER">
                   <content>
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="221.0" prefWidth="719.0">
                            <children>
-                              <Button fx:id="fileChoosingButton" layoutX="325" layoutY="250" mnemonicParsing="false" onAction="#importCSVtoDatabase" text="Choose a dataset" />
+                              <Button fx:id="fileChoosingButton" layoutX="400" layoutY="275" mnemonicParsing="false" onAction="#importCSVtoDatabase" text="Choose a dataset" />
                            </children>
                         </AnchorPane>
                   </content>

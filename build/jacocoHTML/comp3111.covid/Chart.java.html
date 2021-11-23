@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Chart.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">deCOVID</a> &gt; <a href="index.source.html" class="el_package">comp3111.covid</a> &gt; <span class="el_source">Chart.java</span></div><h1>Chart.java</h1><pre class="source lang-java linenums">package comp3111.covid;
+
+import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
+import javafx.stage.Stage;
+ 
+ 
+import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
+import javafx.stage.Stage;
+ 
+// source: https://docs.oracle.com/javafx/2/charts/line-chart.htm#CIHGBCFI
+<span class="nc" id="L20">public class Chart extends Application {</span>
+ 
+    @Override public void start(Stage stage) { // probably need parameter of date, country and type (a/b/c) if able
+<span class="nc" id="L23">        stage.setTitle(&quot;Line Chart Sample&quot;); // window title</span>
+<span class="nc" id="L24">        final CategoryAxis xAxis = new CategoryAxis(); // new xaxis</span>
+<span class="nc" id="L25">        final NumberAxis yAxis = new NumberAxis(); // new yaxis</span>
+<span class="nc" id="L26">         xAxis.setLabel(&quot;Month&quot;);</span>
+<span class="nc" id="L27">        final LineChart&lt;String,Number&gt; lineChart = </span>
+                new LineChart&lt;String,Number&gt;(xAxis,yAxis); // seems making a new line chart, x is string, y is int here
+       
+<span class="nc" id="L30">        lineChart.setTitle(&quot;Stock Monitoring, 2010&quot;); // linechart title (depend on task)</span>
+                          
+<span class="nc" id="L32">        XYChart.Series series1 = new XYChart.Series(); // new series of data (aka new country), may use for loop to add new series</span>
+<span class="nc" id="L33">        series1.setName(&quot;Portfolio 1&quot;); // name of instance of data (aka country)</span>
+        // may use for loop to add new data for a instance
+<span class="nc" id="L35">        series1.getData().add(new XYChart.Data(&quot;Jan&quot;, 23)); // lots of instances</span>
+<span class="nc" id="L36">        series1.getData().add(new XYChart.Data(&quot;Feb&quot;, 14));</span>
+<span class="nc" id="L37">        series1.getData().add(new XYChart.Data(&quot;Mar&quot;, 15));</span>
+<span class="nc" id="L38">        series1.getData().add(new XYChart.Data(&quot;Apr&quot;, 24));</span>
+<span class="nc" id="L39">        series1.getData().add(new XYChart.Data(&quot;May&quot;, 34));</span>
+<span class="nc" id="L40">        series1.getData().add(new XYChart.Data(&quot;Jun&quot;, 36));</span>
+<span class="nc" id="L41">        series1.getData().add(new XYChart.Data(&quot;Jul&quot;, 22));</span>
+<span class="nc" id="L42">        series1.getData().add(new XYChart.Data(&quot;Aug&quot;, 45));</span>
+<span class="nc" id="L43">        series1.getData().add(new XYChart.Data(&quot;Sep&quot;, 43));</span>
+<span class="nc" id="L44">        series1.getData().add(new XYChart.Data(&quot;Oct&quot;, 17));</span>
+<span class="nc" id="L45">        series1.getData().add(new XYChart.Data(&quot;Nov&quot;, 29));</span>
+<span class="nc" id="L46">        series1.getData().add(new XYChart.Data(&quot;Dec&quot;, 25));</span>
+        
+<span class="nc" id="L48">        XYChart.Series series2 = new XYChart.Series(); // another country</span>
+<span class="nc" id="L49">        series2.setName(&quot;Portfolio 2&quot;); // country name</span>
+<span class="nc" id="L50">        series2.getData().add(new XYChart.Data(&quot;Jan&quot;, 33)); // country data</span>
+<span class="nc" id="L51">        series2.getData().add(new XYChart.Data(&quot;Feb&quot;, 34));</span>
+<span class="nc" id="L52">        series2.getData().add(new XYChart.Data(&quot;Mar&quot;, 25));</span>
+<span class="nc" id="L53">        series2.getData().add(new XYChart.Data(&quot;Apr&quot;, 44));</span>
+<span class="nc" id="L54">        series2.getData().add(new XYChart.Data(&quot;May&quot;, 39));</span>
+<span class="nc" id="L55">        series2.getData().add(new XYChart.Data(&quot;Jun&quot;, 16));</span>
+<span class="nc" id="L56">        series2.getData().add(new XYChart.Data(&quot;Jul&quot;, 55));</span>
+<span class="nc" id="L57">        series2.getData().add(new XYChart.Data(&quot;Aug&quot;, 54));</span>
+<span class="nc" id="L58">        series2.getData().add(new XYChart.Data(&quot;Sep&quot;, 48));</span>
+<span class="nc" id="L59">        series2.getData().add(new XYChart.Data(&quot;Oct&quot;, 27));</span>
+<span class="nc" id="L60">        series2.getData().add(new XYChart.Data(&quot;Nov&quot;, 37));</span>
+<span class="nc" id="L61">        series2.getData().add(new XYChart.Data(&quot;Dec&quot;, 29));</span>
+        
+<span class="nc" id="L63">        XYChart.Series series3 = new XYChart.Series();</span>
+<span class="nc" id="L64">        series3.setName(&quot;Portfolio 3&quot;);</span>
+<span class="nc" id="L65">        series3.getData().add(new XYChart.Data(&quot;Jan&quot;, 44));</span>
+<span class="nc" id="L66">        series3.getData().add(new XYChart.Data(&quot;Feb&quot;, 35));</span>
+<span class="nc" id="L67">        series3.getData().add(new XYChart.Data(&quot;Mar&quot;, 36));</span>
+<span class="nc" id="L68">        series3.getData().add(new XYChart.Data(&quot;Apr&quot;, 33));</span>
+<span class="nc" id="L69">        series3.getData().add(new XYChart.Data(&quot;May&quot;, 31));</span>
+<span class="nc" id="L70">        series3.getData().add(new XYChart.Data(&quot;Jun&quot;, 26));</span>
+<span class="nc" id="L71">        series3.getData().add(new XYChart.Data(&quot;Jul&quot;, 22));</span>
+<span class="nc" id="L72">        series3.getData().add(new XYChart.Data(&quot;Aug&quot;, 25));</span>
+<span class="nc" id="L73">        series3.getData().add(new XYChart.Data(&quot;Sep&quot;, 43));</span>
+<span class="nc" id="L74">        series3.getData().add(new XYChart.Data(&quot;Oct&quot;, 44));</span>
+<span class="nc" id="L75">        series3.getData().add(new XYChart.Data(&quot;Nov&quot;, 45));</span>
+<span class="nc" id="L76">        series3.getData().add(new XYChart.Data(&quot;Dec&quot;, 44));</span>
+        
+<span class="nc" id="L78">        Scene scene  = new Scene(lineChart,800,600);  // new scene with window size and chart?</span>
+<span class="nc" id="L79">        lineChart.getData().addAll(series1, series2, series3); // insert all data</span>
+       
+<span class="nc" id="L81">        stage.setScene(scene); // set window with chart</span>
+<span class="nc" id="L82">        stage.show(); // show chart</span>
+<span class="nc" id="L83">    }</span>
+}// todo, find a way to insert data, series with for loop and also insert completed series to chart with loop
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

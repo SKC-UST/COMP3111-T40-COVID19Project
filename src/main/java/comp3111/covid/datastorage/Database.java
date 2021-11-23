@@ -17,22 +17,60 @@ import javafx.util.Pair;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * A class representing the internal database of the system.
+ * It contains all the data obtained from the original dataset.
+ * Each location read is stored in a HashMap, and each location is represented by a LocationData object.
+ * {@link LocationData}
+ */
 public class Database {
 	
-	//Database 
-	private ArrayList<Pair<String, String>> locationNames = new ArrayList<Pair<String, String>>(); //<isocode, locationName>
-	private HashMap<String, LocationData> hashStorage = new HashMap<String, LocationData>(); //isoCode as key
-	private LocalDate earliest = LocalDate.now(), latest = LocalDate.of(2000, 1, 1); //earliest = date that the first data is found, latest = last data found in dataset -- initialized in such a way to facilitate searching
+	/**
+	 * A list of pairs containing the iso_code and name of each location read from the dataset. 
+	 * each pair is represented by <isocode, locationName>
+	 */
+	private ArrayList<Pair<String, String>> locationNames = new ArrayList<Pair<String, String>>(); 
+	/**
+	 * A HashMap storing all LocationData objects created from the dataset.
+	 * the Key is the iso_code, and value is the LocationData object.
+	 */
+	private HashMap<String, LocationData> hashStorage = new HashMap<String, LocationData>();
+	/**
+	 * The earliest date in the dataset that a data exist.
+	 * i.e. the dataset does not contain any data before this date.
+	 */
+	private LocalDate earliest = LocalDate.now();
+	/**
+	 * The latest date in the dataset that a data exist.
+	 * i.e. the dataset does not contain any data after this date.
+	 */
+	private LocalDate latest = LocalDate.of(2000, 1, 1); 
+	/**
+	 * A date formatter for transforming the date read from the dataset into a LocalDate value.
+	 */
 	final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("M/d/yyyy");
 	
+	/**
+	 * Getter for earliest
+	 * @return {@link Database#earliest}
+	 */
 	public LocalDate getEarliest() {
 		return this.earliest;
 	}
 	
+	/**
+	 * Getter for latest
+	 * @return {@link Database#latest}
+	 */
 	public LocalDate getLatest() {
 		return this.latest;
 	}
 	
+	/**
+	 * This method gets the name of the location with the given iso-code. 
+	 * @param isoCode	the iso-code of the location.
+	 * @return			the name of the location.
+	 */
 	public String getLocationName(String isoCode) {
 		LocationData loc = this.hashStorage.get(isoCode);
 		if(loc == null)
@@ -40,6 +78,11 @@ public class Database {
 		return loc.getLocationName();
 	}
 	
+	/**
+	 * This method sorts every list of DayData in every LocationData object in the database by date.
+	 * @see DayData
+	 * @see LocationData
+	 */
 	private void sortLocations() {
 		Iterator<Entry<String, LocationData>> it = hashStorage.entrySet().iterator();
 		while (it.hasNext()) {
@@ -52,27 +95,18 @@ public class Database {
 		}
 	}
 	
+	/**
+	 * This method returns a list of iso-code - location name pairs of every location in this database.
+	 * @return {@link Database#locationNames}
+	 */
 	public ArrayList<Pair<String, String>> getLocationNames(){
 		return this.locationNames;
 	}
 	
-	public ArrayList<Pair<Number, Number>> getRateLocationPair(LocalDate date){
-		ArrayList<Pair<Number, Number>> result = new ArrayList<Pair<Number, Number>>();
-		Iterator<Entry<String, LocationData>> it = hashStorage.entrySet().iterator();
-		while (it.hasNext()) {
-			Map.Entry<String, LocationData> pair = (Map.Entry<String, LocationData>)it.next();
-			LocationData loc = pair.getValue();
-			double rate = loc.getRateDayData(date, DataTitle.VAC);
-			if(rate < 0) {
-				continue;
-			}
-			Pair<Number, Number> newPair = new Pair<Number, Number>(loc.getPopulation(), loc.getRateDayData(date, DataTitle.VAC));
-			result.add(newPair);
-		}
-		return result;
-	}
-	
-	
+	/**
+	 * A method that takes the given dataset file chosen by the user, and read all its data into the database.
+	 * @param dataset a .csv dataset file.
+	 */
 	public void importCSV(File dataset) {
 		FileResource fr = new FileResource(dataset);
 		CSVParser parser = fr.getCSVParser(true);
@@ -84,6 +118,14 @@ public class Database {
 		this.sortLocations();
 	}
 	
+	/**
+	 * A helper method for {@link Database#importCSV(File)}.
+	 * This method takes a row of data and create a DayData object for each data read.
+	 * The DayData is then placed into the corresponding list of a LocationData.
+	 * A new LocationData is created and placed into {@link Database#hashStorage} if the location is new.
+	 * @param record	a CSVRecord that represents a row of data from the csv file.
+	 * @see LocationData, DayData
+	 */
 	private void rowToData(CSVRecord record) {
 		String isoCode = record.get("iso_code");
 		LocalDate date = LocalDate.parse(record.get("date"), this.DATE_FORMAT);
@@ -126,19 +168,47 @@ public class Database {
 		if(!s.equals("")) { loc.addDayData(DataTitle.VAC, new RateDayData(date, Double.parseDouble(s)));}
 	}
 	
-	// search single data - for Table
-	// return -1 if not found
+	/**
+	 * A method that searches a data value given the location, date and title of data.
+	 * The the type of data returned is only restricted to Cumulative COVID cases, Cumulative Covid deaths, and cumulative number of people fully vaccinated.
+	 * Returns -1 if no data found.
+	 * @param isoCode		iso-code of the desired location
+	 * @param targetDate	the desired date
+	 * @param title			the desired DataTitle 
+	 * @see DataTitle
+	 * @return	the value of data of given location, date and title. Returns -1 if no data found.
+	 */
 	public long searchTotalData(String isoCode, LocalDate targetDate, DataTitle title) {
 		long result = this.hashStorage.get(isoCode).getTotalDayData(targetDate, title);
 		return result;
 	}
 	
-	//return -1 if not found
+	/**
+	 * A method that searches a data value given the location, date and title of data.
+	 * The the type of data returned is only restricted to COVID cases per 1M people, Cumulative Covid deaths per 1M people, and cumulative vaccination rate.
+	 * Returns -1 if no data found.
+	 * @param isoCode		iso-code of the desired location
+	 * @param targetDate	the desired date
+	 * @param title			the desired DataTitle 
+	 * @see DataTitle
+	 * @return	the value of data of given location, date and title. Returns -1 if no data found.
+	 */
 	public double searchRateData(String isoCode, LocalDate targetDate, DataTitle title) {
 		double result = this.hashStorage.get(isoCode).getRateDayData(targetDate, title);
 		return result;
 	}
 	
+	/**
+	 * This method returns a list of data point represented by a pair of date and number.
+	 * The points corresponds are those within the given range of dates, of the given location, and of the given DataTitle.
+	 * The date range is inclusive of the <code>startDate</code> and the <code>endDate</code>.
+	 * @see DataTitle
+	 * @param isoCode	iso-code of the desired location.
+	 * @param startDate	the starting date of the desired date range.
+	 * @param endDate	the last date of the desired date range.
+	 * @param title		the desired DataTitle.
+	 * @return			a list of pairs with the date as x-value and the data value as y-value.
+	 */
 	public ArrayList<Pair<LocalDate, Number>> searchChartData(String isoCode, LocalDate startDate, LocalDate endDate, DataTitle title){
 		ArrayList<Pair<LocalDate, Number>> result = new ArrayList<Pair<LocalDate, Number>>();
 		LocationData loc = this.hashStorage.get(isoCode);
@@ -151,7 +221,15 @@ public class Database {
 		return result;
 	}
 	
-	// for Tab C3 only
+	/**
+	 * This method returns a list of data points represented by a pair.
+	 * The x-value of this pair is dictated by the parameter <code>lp</code> a {@link LocationProperty} value.
+	 * The y-value of this pair is always a vaccination rate value.
+	 * The returned list always contains data of all locations stored in the database.
+	 * @param targetDate	the date of interest for the list of data.
+	 * @param lp			the desired location property.
+	 * @return				a list of data points of all locations of the desired date and location property.
+	 */
 	public ArrayList<Pair<Number, Number>> searchDataPair(LocalDate targetDate, LocationProperty lp){
 		ArrayList<Pair<Number, Number>> result = new ArrayList<Pair<Number, Number>>();
 		
@@ -172,6 +250,9 @@ public class Database {
 		return result;
 	}
 	
+	/**
+	 * This method clears the all the content of the database.
+	 */
 	public void clearDatabase () {
 		Iterator<Entry<String, LocationData>> it = hashStorage.entrySet().iterator();
 		while (it.hasNext()) {
@@ -179,10 +260,5 @@ public class Database {
 			pair.getValue().clearLocationData();
 		}
 		hashStorage.clear();
-	}
-	
-	public void printDatabaseContent() {
-		System.out.println("Earliest: " + this.earliest);
-		System.out.println("Latest: " + this.latest);
 	}
 }
