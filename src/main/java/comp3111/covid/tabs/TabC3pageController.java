@@ -5,6 +5,8 @@ import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
+import javax.annotation.processing.Generated;
+
 import comp3111.covid.Context;
 import comp3111.covid.dataAnalysis.DateConverter;
 import comp3111.covid.datastorage.*;
@@ -41,7 +43,7 @@ public class TabC3pageController {
 	@FXML private NumberAxis xAxis;
     @FXML private NumberAxis yAxis;
 	@FXML private LineChart<Number, Number> regressionChart;
-	@FXML private ComboBox<Pair<String, LocationProperty>> xAxisCbx;
+	@FXML protected ComboBox<Pair<String, LocationProperty>> xAxisCbx;
 	@FXML private Slider dateSlider;
 	@FXML private Label noDataLabel1;
 	@FXML private Label noDataLabel2;
@@ -60,15 +62,14 @@ public class TabC3pageController {
 		// Initialize the comboBox to contain pairs of name of LocationProperty and LocationProperty Enums
 		ObservableList<Pair<String, LocationProperty>> pairs = this.generateLocPropPairs();
 		xAxisCbx.setItems(pairs);
+		this.selectedDate = this.database.getEarliest();
 		
 		// make combobox contains Pair objects but display the name of property
 		xAxisCbx.setConverter(new StringConverter<Pair<String, LocationProperty>>(){
-			@Override
+			@Override @Generated("")
 			public String toString(Pair<String, LocationProperty> object) {
 				return object.getKey();
 			}
-					
-			@Override
 			public Pair<String, LocationProperty> fromString(String string){
 				return xAxisCbx.getItems().stream().filter(p -> p.getKey().equals(string)).findFirst().orElse(null);
 			}
@@ -76,41 +77,29 @@ public class TabC3pageController {
 		
 		// So that y-axis displays percentage 
 		yAxis.setTickLabelFormatter(new StringConverter<Number>() {
-			@Override
 			public String toString(Number rate) {
 				return (rate + "%");
 			}
 			
-			@Override
 			public Number fromString(String string) {
-				NumberFormat percentage = NumberFormat.getPercentInstance();
-				try {
-					return percentage.parse(string);
-				} catch (ParseException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-					return 0;
-				}
+				return null;
 			}
 		});
 		
 		// so that the graph updates itself when the combobox chosen value is changed
 		xAxisCbx.valueProperty().addListener((obs, oldval, newval) -> {
-			if(newval != null) {
-				this.selectedProperty = newval.getValue();
-				xAxis.setLabel(LOC_PROP_TEXT[selectedProperty.value()]);
-				if(this.selectedDate != null)
-					this.generateView();
-			}
+			this.selectedProperty = newval.getValue();
+			xAxis.setLabel(LOC_PROP_TEXT[selectedProperty.value()]);
+			this.generateView();
 		});
 		
 		// so that the slider displays label of dates
 		this.dateSlider.setLabelFormatter(new StringConverter<>() {
-			@Override
+			@Override @Generated("")
 			public String toString(Double object) {
 				return dateConverter.longToString(object.longValue());
 			}
-			@Override
+			@Override @Generated("")
 			public Double fromString(String string) {
 				return (double)dateConverter.dateToLong(LocalDate.parse(string));
 			}
@@ -121,9 +110,7 @@ public class TabC3pageController {
 			final double roundedValue = Math.floor(newval.doubleValue());
 			dateSlider.valueProperty().set(roundedValue);
 			this.selectedDate = dateConverter.longToDate((long)roundedValue);
-			if(this.selectedProperty != null) {
-				this.generateView();
-			}
+			this.generateView();
 		});
 		
 		this.regPropCol.setCellValueFactory(new PropertyValueFactory<TableView<RegressionTableData>, String>("regName"));

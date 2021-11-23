@@ -5,6 +5,7 @@ import comp3111.covid.tabs.TabC3pageController;
 
 import javafx.collections.ObservableList;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.ComboBox;
 import javafx.util.Pair;
 
 import org.junit.Before;
