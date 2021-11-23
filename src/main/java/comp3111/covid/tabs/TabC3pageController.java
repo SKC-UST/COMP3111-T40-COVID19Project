@@ -1,7 +1,5 @@
 package comp3111.covid.tabs;
 
-import java.text.NumberFormat;
-import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -31,9 +29,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import org.apache.commons.math3.stat.regression.SimpleRegression;
 
 /**
- * place holder
- * @author ytc314
- *
+ * Controller for Tab C3
+ * Rate of vaccination report.
  */
 public class TabC3pageController {
 

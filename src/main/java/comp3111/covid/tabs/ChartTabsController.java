@@ -109,12 +109,12 @@ public abstract class ChartTabsController extends TabController{
 		return 0;
     }
     
-    @FXML
     /**
      * This method is handles the event that the confirmatino button is pressed
      * It is reponsible for invoking {@link ChartTabsController#handleChartError() and {@link ChartTabsController#generateChartData()}.
      * Then it puts the generatend onto the chart for display.
      */
+    @FXML
     void handleConfirmSelection(ActionEvent event) {
     	int errorCode = this.handleChartError();
     	if(errorCode != 0)

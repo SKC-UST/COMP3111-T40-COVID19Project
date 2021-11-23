@@ -60,7 +60,7 @@ public class Controller {
      * The returns null if "cancel is pressed". 
      * Otherwise, it generates a file and will pass it to importCSVtoDatabase
      * @return a File object pointing to the chosen csv file
-     * @see importCSVtoDatabase()
+     * @see Controller#importCSVtoDatabase(ActionEvent)
      */
     
     protected File chooseCSVFile() {

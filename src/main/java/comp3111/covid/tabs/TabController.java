@@ -29,6 +29,10 @@ import comp3111.covid.datastorage.Database;
 public abstract class TabController {
 	@FXML private CheckListView<Pair<String, String>> locationsCheckboxList;
 	private Database database = Context.getInstance().getDatabase();
+	/**
+	 * A {@link javafx.collections.ObservableList} storing the location checked in the CheckListView.
+	 * A location is represented a Pair of the location's iso code and name.
+	 */
 	protected ObservableList<Pair<String, String>> checkedPair = FXCollections.observableArrayList();    
     /**
      * Getter for the internal database of this program.

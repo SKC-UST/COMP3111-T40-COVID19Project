@@ -89,15 +89,24 @@ public abstract class TableTabsController extends TabController {
 			this.totalData = new SimpleStringProperty(total >= 0 ? String.format("%,d", total) : "No Data");
 			this.rateData = new SimpleStringProperty(rate >= 0 ? rate + (needPercentage ? "%" : "") : "No Data");
 		}
-		
+		/**
+		 * Getter for the value of the first column.
+		 * @return the name of the country represented in the row.
+		 */
 		public String getCountryName() {
 			return this.countryName.get();
 		}
-		
+		/**
+		 * Getter for the value of the second column.
+		 * @return the String representing the value.
+		 */
 		public String getTotalData() {
 			return this.totalData.get();
 		}
-		
+		/**
+		 * Getter for the value of the third column.
+		 * @return the String representing the value.
+		 */
 		public String getRateData() {
 			return this.rateData.get();
 		}
