@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ChartTabsController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">deCOVID</a> &gt; <a href="index.source.html" class="el_package">comp3111.covid.tabs</a> &gt; <span class="el_source">ChartTabsController.java</span></div><h1>ChartTabsController.java</h1><pre class="source lang-java linenums">package comp3111.covid.tabs;
+
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.chart.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.DatePicker;
+import javafx.util.Pair;
+import javafx.util.StringConverter;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+
+import javax.swing.JOptionPane;
+
+import comp3111.covid.Context;
+import comp3111.covid.dataAnalysis.DateConverter;
+
+/**
+* This is an abstract class representing the controllers of all the tabs that displays charts.
+* This class is inherited by TabA2pageController, TabB2pageController, and TabC2pageController
+*/
+<span class="fc" id="L25">public abstract class ChartTabsController extends TabController{</span>
+
+    @FXML private Button confirmButton;
+    @FXML private DatePicker startDatePicker;
+    @FXML private DatePicker endDatePicker;
+    @FXML private NumberAxis xAxis;
+    @FXML protected NumberAxis yAxis;
+    @FXML private LineChart&lt;Number, Number&gt; dataChart;
+    /**
+     * The chosen lower bound of the date range.
+     * Updated whenever a new startDate is chosen by the StartDatePicker.
+     */
+<span class="fc" id="L37">    protected LocalDate startDate = null;</span>
+    /**
+     * The chosen upper bound of the desired date range.
+     * Updated whenever a new endDate is chosen by the EndDatePicker.
+     */
+<span class="fc" id="L42">    protected LocalDate endDate = null;</span>
+    /**
+     * {@link comp3111.covid.dataAnlysis.DateConverter}
+     */
+<span class="fc" id="L46">    private DateConverter dc = Context.getInstance().getDateConverter();</span>
+    /**
+     * This method initializes the controller.
+     * It is called after all the FXML elements are loaded.
+     * In particular, it sets facilitates the conversion of the numerical values in the x-axis to String showing dates.
+     */
+    public void initialize() {
+<span class="nc" id="L53">    	super.initialize();</span>
+<span class="nc" id="L54">    	xAxis.setTickLabelFormatter(new StringConverter&lt;Number&gt;() {</span>
+    		@Override
+    		public String toString(Number dateNum) {
+<span class="nc" id="L57">    			return dc.longToString(dateNum.longValue());</span>
+    		}
+    		
+    		@Override
+    		public Number fromString(String string) {
+<span class="nc" id="L62">    			return dc.dateToLong(LocalDate.parse(string));</span>
+    		}
+    	});
+<span class="nc" id="L65">    }</span>
+    /**
+     * This method handles input errors.
+     * It is used to ensure the user's input are correct.
+     * It handles 6 types of errors:
+     * 1. No Country is chosen.
+     * 2. No Start date of the desired period is chosen.
+     * 3. No End date of the desired period is chosen.
+     * 4. The Start date is after the end date.
+     * 5. The start date and the end date are the same day
+     * 6. The the start date or the end date is out of the range of the chosen dataset.
+     * A pop-up window with the corresponding message will remind the user of the error.
+     * @return a negative integer error code if an error occurs, 0 if no error.
+     */
+    protected int handleChartError() {
+<span class="fc bfc" id="L80" title="All 2 branches covered.">    	if(this.getSelectedIso().isEmpty()) {</span>
+<span class="fc" id="L81">			this.handleError(&quot;Please Choose at Least One Country!&quot;, &quot;Country Input Error&quot;);</span>
+<span class="fc" id="L82">			return -1;</span>
+		}
+<span class="fc bfc" id="L84" title="All 2 branches covered.">		if(this.startDate == null) {</span>
+<span class="fc" id="L85">			this.handleError(&quot;Please Choose a Start Date!&quot;, &quot;Date Input Error&quot;);</span>
+<span class="fc" id="L86">			return -2;</span>
+		}
+<span class="fc bfc" id="L88" title="All 2 branches covered.">		if(this.endDate == null) {</span>
+<span class="fc" id="L89">			this.handleError(&quot;Please Choose an End Date&quot;, &quot;Date Input Error&quot;);</span>
+<span class="fc" id="L90">			return -3;</span>
+		}
+<span class="fc bfc" id="L92" title="All 2 branches covered.">		if(this.startDate.isAfter(endDate)) {</span>
+<span class="fc" id="L93">			this.handleError(&quot;The start date cannot be after the end date!&quot;, &quot;Date Input Error&quot;);</span>
+<span class="fc" id="L94">			return -4;</span>
+		}
+<span class="fc bfc" id="L96" title="All 2 branches covered.">		if(this.startDate.equals(endDate)) {</span>
+<span class="fc" id="L97">			this.handleError(&quot;The date range must span across at least two days!&quot;, &quot;Date Input Error&quot;);</span>
+<span class="fc" id="L98">			return -5;</span>
+		}
+<span class="fc" id="L100">		LocalDate earliestDate = getDatabase().getEarliest();</span>
+<span class="fc" id="L101">		LocalDate latestDate = getDatabase().getLatest();</span>
+<span class="pc bpc" id="L102" title="2 of 8 branches missed.">		if(!(this.startDate.isBefore(latestDate) &amp;&amp; this.startDate.isAfter(earliestDate) &amp;&amp; this.endDate.isBefore(latestDate) &amp;&amp; this.endDate.isAfter(earliestDate))) {</span>
+<span class="fc" id="L103">			DateTimeFormatter formatter = DateTimeFormatter.ofPattern(&quot;dd LLL yyy&quot;); </span>
+<span class="fc" id="L104">			String startStr = getDatabase().getEarliest().format(formatter);</span>
+<span class="fc" id="L105">			String endStr = getDatabase().getLatest().format(formatter);</span>
+<span class="fc" id="L106">			this.handleError(&quot;The data in this data set starts from &quot; + startStr + &quot; and ends on &quot; + endStr, &quot;Date Out of Range&quot;);</span>
+<span class="fc" id="L107">			return -6;</span>
+		}
+<span class="fc" id="L109">		return 0;</span>
+    }
+    
+    /**
+     * This method is handles the event that the confirmatino button is pressed
+     * It is reponsible for invoking {@link ChartTabsController#handleChartError() and {@link ChartTabsController#generateChartData()}.
+     * Then it puts the generatend onto the chart for display.
+     */
+    @FXML
+    void handleConfirmSelection(ActionEvent event) {
+<span class="nc" id="L119">    	int errorCode = this.handleChartError();</span>
+<span class="nc bnc" id="L120" title="All 2 branches missed.">    	if(errorCode != 0)</span>
+<span class="nc" id="L121">    		return;	//error occurs</span>
+    	
+<span class="nc" id="L123">    	this.dataChart.getData().clear();</span>
+<span class="nc" id="L124">    	ArrayList&lt;XYChart.Series&lt;Number, Number&gt;&gt; data = generateChartData();    	</span>
+<span class="nc bnc" id="L125" title="All 2 branches missed.">    	for(XYChart.Series&lt;Number, Number&gt; series : data) {</span>
+<span class="nc" id="L126">    		this.dataChart.getData().add(series);</span>
+<span class="nc" id="L127">    	}</span>
+<span class="nc" id="L128">    }</span>
+
+    @FXML
+    /**
+     * This method changes the value of {@link ChartTabsController#startDate} when a new value is chosen by the date picker.
+     * @param event	JavaFX action event
+     */
+    void selectStartDate(ActionEvent event) {
+<span class="nc" id="L136">    	this.startDate = this.startDatePicker.getValue();</span>
+<span class="nc" id="L137">    }</span>
+
+    @FXML
+    /**
+     * This method changes the value of {@link ChartTabsController#endDate} when a new value is chosen by the date picker.
+     * @param event	JavaFX action event
+     */
+    void selectEndDate(ActionEvent event) {
+<span class="nc" id="L145">    	this.endDate = this.endDatePicker.getValue();</span>
+<span class="nc" id="L146">    }</span>
+    /**
+     * This method generates series for the chart using the given user input and data from the dataset.
+     * @return	an ArrayList of {@link javafx.scene.chart.XYChart.Series}.
+     */
+	protected ArrayList&lt;XYChart.Series&lt;Number, Number&gt;&gt; generateChartData(){
+<span class="fc" id="L152">		DateConverter dateConverter = new DateConverter();</span>
+<span class="fc" id="L153">    	ArrayList&lt;XYChart.Series&lt;Number, Number&gt;&gt; result = new ArrayList&lt;XYChart.Series&lt;Number, Number&gt;&gt;();</span>
+    	
+<span class="fc bfc" id="L155" title="All 2 branches covered.">    	for(String iso : this.getSelectedIso()) {</span>
+<span class="fc" id="L156">    		ArrayList&lt;Pair&lt;LocalDate, Number&gt;&gt; source = this.getDateDataPair(iso, this.startDate, this.endDate);</span>
+    		
+<span class="fc bfc" id="L158" title="All 2 branches covered.">    		if(source.isEmpty()) {</span>
+<span class="fc" id="L159">        		JOptionPane.showMessageDialog(null, &quot;No data found for &quot; + getDatabase().getLocationName(iso) + &quot; between &quot; + startDate + &quot; and &quot; + endDate + </span>
+<span class="fc" id="L160">        				&quot;\nTry another date or country&quot;, &quot;No data found for &quot; + getDatabase().getLocationName(iso), JOptionPane.WARNING_MESSAGE);</span>
+<span class="fc" id="L161">        		return null;</span>
+        	}
+    		
+<span class="fc" id="L164">    		XYChart.Series&lt;Number, Number&gt; series = new XYChart.Series&lt;&gt;();</span>
+    		//
+<span class="fc bfc" id="L166" title="All 2 branches covered.">    		for(Pair&lt;LocalDate, Number&gt; data : source) {</span>
+<span class="fc" id="L167">    			series.getData().add(new XYChart.Data&lt;Number, Number&gt;(dateConverter.dateToLong(data.getKey()), data.getValue()));</span>
+<span class="fc" id="L168">    		}</span>
+    		
+<span class="fc" id="L170">    		series.setName(this.getDatabase().getLocationName(iso));</span>
+<span class="fc" id="L171">    		result.add(series);</span>
+<span class="fc" id="L172">    	}</span>
+<span class="fc" id="L173">    	LocalDateTime currentTime = LocalDateTime.now();</span>
+<span class="fc" id="L174">		String formattedTime = DateTimeFormatter.ofPattern(&quot;HH:mm:ss&quot;).format(currentTime);</span>
+<span class="fc" id="L175">		String importMessage = &quot;[ &quot; + formattedTime + &quot; ] &quot; + &quot;Successfully generated chart\n&quot;;</span>
+<span class="fc" id="L176">		System.out.println(importMessage);</span>
+<span class="fc" id="L177">    	return result;</span>
+    }
+    
+	/**
+     * This is method generates a list of data with the corresponding date range and desired location.
+     * The returned data has x-value being the date of the data, and y-value being the value of the data.
+     * @param iso		iso code of the desired location.
+     * @param startDate	lower bound of the desired period.
+     * @param endDate	uppert bound of the desired period.
+     * @return			{@link java.util.ArrayList} of {@link javafx.util.Pair} representing the generated data.
+     */
+    protected abstract ArrayList&lt;Pair&lt;LocalDate, Number&gt;&gt; getDateDataPair(String iso, LocalDate startDate, LocalDate endDate);
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

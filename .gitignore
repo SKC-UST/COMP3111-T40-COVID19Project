@@ -3,9 +3,6 @@
 
 # Ignore Gradle build output directory
 build/*
-!build/reports/
-!build/jacocoHTML/
-!build/docs/javadoc
 
 # Ignore Markdown file used to build docs/index.html
 index.md
