@@ -73,7 +73,9 @@ public class ChartTabsController extends TabController{
 			this.handleError("The date range must span across at least two days!", "Date Input Error");
 			return -5;
 		}
-		if(this.startDate.isBefore(getDatabase().getEarliest()) || this.endDate.isAfter(getDatabase().getLatest())) {
+		LocalDate earliestDate = getDatabase().getEarliest();
+		LocalDate latestDate = getDatabase().getLatest();
+		if(this.startDate.isBefore(earliestDate) || this.startDate.isAfter(latestDate) || this.endDate.isBefore(earliestDate) || this.endDate.isAfter(latestDate)) {
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd LLL yyy"); 
 			String startStr = getDatabase().getEarliest().format(formatter);
 			String endStr = getDatabase().getLatest().format(formatter);

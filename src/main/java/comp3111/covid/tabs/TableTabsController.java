@@ -44,6 +44,25 @@ public class TableTabsController extends TabController {
 		this.rateCol.setCellValueFactory(new PropertyValueFactory<TableView<TableData>, String>("rateData"));
 	}
 	
+	protected int handleTableError() {
+		if(this.getSelectedIso().isEmpty()) {
+			this.handleError("Please Choose at Least One Country!", "Country Input Error");
+			return -1;
+		}
+		if(this.selectedDate == null) {
+			this.handleError("Please Choose a Date!", "Date Input Error");
+			return -2;
+		}
+		if(this.selectedDate.isBefore(getDatabase().getEarliest()) || this.selectedDate.isAfter(getDatabase().getLatest())) {
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd LLL yyy"); 
+			String startStr = getDatabase().getEarliest().format(formatter);
+			String endStr = getDatabase().getLatest().format(formatter);
+			this.handleError("The data in this data set starts from " + startStr + " and ends on " + endStr, "Date Out of Range");
+			return -3;
+		}
+		return 0;
+	}
+	
 	public class TableData {
 		private final SimpleStringProperty countryName;
 		private final SimpleStringProperty totalData;
@@ -111,28 +130,17 @@ public class TableTabsController extends TabController {
 	
 	@Override
 	final void handleConfirmSelection(ActionEvent event) {
+		int errorCode = this.handleTableError();
+		if(errorCode != 0)
+			return;
 		ArrayList<String> selectedIso = this.getSelectedIso();
-		if(selectedIso.isEmpty()) {
-			this.handleError("Please Choose at Least One Country!", "Country Input Error");
-			return;
-		}
-		if(this.selectedDate == null) {
-			this.handleError("Please Choose a Date!", "Date Input Error");
-			return;
-		}
-		try {
-			ArrayList<TableData> dataList = this.generateDataList(selectedIso, selectedDate);
-			this.generateTable(dataList, this.selectedDate);
-			LocalDateTime currentTime = LocalDateTime.now();
-			String formattedTime = DateTimeFormatter.ofPattern("HH:mm:ss").format(currentTime);
-			String importMessage = "[ " + formattedTime + " ] " + "Successfully generated table\n";
-			System.out.println(importMessage);
-			
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		ArrayList<TableData> dataList = this.generateDataList(selectedIso, selectedDate);
+		this.generateTable(dataList, this.selectedDate);
+		LocalDateTime currentTime = LocalDateTime.now();
+		String formattedTime = DateTimeFormatter.ofPattern("HH:mm:ss").format(currentTime);
+		String importMessage = "[ " + formattedTime + " ] " + "Successfully generated table\n";
+		System.out.println(importMessage);
+
 		this.generateTable(dataList, this.selectedDate);
 	}
 }
