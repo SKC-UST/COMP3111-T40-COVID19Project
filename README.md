@@ -11,7 +11,6 @@ email: nkchow | github: calmChowder3 | dev-branch: yanton-feature-C<br/>Task C1,
 ## 3. WONG, Wai Yin
 email: wywongbp | github: wwyjason | dev-branch: jason-feature-B<br/>Task B1, B2
 
-<<<<<<< HEAD
 ## Sample execution of task A1
 ![alt text](./images/tableA.png)
 
@@ -37,4 +36,3 @@ email: wywongbp | github: wwyjason | dev-branch: jason-feature-B<br/>Task B1, B2
 ## Javadoc, JUnit Test Report and Jacoco Coverage Report
 
 [link](https://skc-ust.github.io/COMP3111-T40-COVID19Project/)
->>>>>>> refs/remotes/origin/master
