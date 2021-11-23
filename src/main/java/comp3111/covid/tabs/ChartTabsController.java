@@ -99,7 +99,7 @@ public abstract class ChartTabsController extends TabController{
 		}
 		LocalDate earliestDate = getDatabase().getEarliest();
 		LocalDate latestDate = getDatabase().getLatest();
-		if(this.startDate.isBefore(earliestDate) || this.startDate.isAfter(latestDate) || this.endDate.isBefore(earliestDate) || this.endDate.isAfter(latestDate)) {
+		if(!(this.startDate.isBefore(latestDate) && this.startDate.isAfter(earliestDate) && this.endDate.isBefore(latestDate) && this.endDate.isAfter(earliestDate))) {
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd LLL yyy"); 
 			String startStr = getDatabase().getEarliest().format(formatter);
 			String endStr = getDatabase().getLatest().format(formatter);

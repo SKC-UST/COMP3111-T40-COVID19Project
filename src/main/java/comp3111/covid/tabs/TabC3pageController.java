@@ -50,14 +50,30 @@ public class TabC3pageController {
 	@FXML private TableColumn<TableView<RegressionTableData>, String> regPropCol;
 	@FXML private TableColumn<TableView<RegressionTableData>, Double> regValCol;
 	@FXML private TableView<RegressionTableData> regTable;
-	
+	/**
+	 * An array of string to be displayed on the combobox.
+	 * Each string corresponds to a {@link comp3111.covid.datastorage.LocationProperty}.
+	 */
 	final protected String[] LOC_PROP_TEXT = {"Population", "Population Density", "Median Age", "Number of People Aged 65 or above", "Number of People Aged 70 or above", "GDP per Capita", "Diabetes Prevalence"};
 	final private String noDataText1 = "No Data Avaialble for the given time and x-axis";
 	final private String noDataText2 = "Change the slider to find data in another day!";
+	/**
+	 * The chosen {@link comp3111.covid.datastorage.LocationProperty} from the combobox.
+	 */
 	protected LocationProperty selectedProperty = null;
+	/**
+	 * The chosen date from the slider.
+	 */
 	protected LocalDate selectedDate = null;
 	
-	// run after importing FX elements, before import dataset
+	/**
+	 * This method initializes this controller after loading all FMXL elements.
+	 * In particular, it dose four things.
+	 * 1. It sets up the combobox to store pairs of LocationProperty and its corresponding string, and changes the value of {@link TabC3pageController#selectedProperty} upon change of choice.
+	 * 2. It sets the y-axis of the chart to display percentage.
+	 * 3. It sets the string converter of the slider and Listener fro the slider.
+	 * 4. It sets the {@link javafx.scene.control.cell.PropertyValueFactory} for the table's columns.
+	 */
 	public void initialize() {
 		// Initialize the comboBox to contain pairs of name of LocationProperty and LocationProperty Enums
 		ObservableList<Pair<String, LocationProperty>> pairs = this.generateLocPropPairs();
@@ -116,7 +132,10 @@ public class TabC3pageController {
 		this.regPropCol.setCellValueFactory(new PropertyValueFactory<TableView<RegressionTableData>, String>("regName"));
 		this.regValCol.setCellValueFactory(new PropertyValueFactory<TableView<RegressionTableData>, Double>("regValue"));
 	}
-	
+	/**
+	 * This method stores set the minimum and maximum value of the slider to reflect the database's earliest and latest date that a data belongs to.
+	 * Invoked after importing the dataset.
+	 */
 	public void initAfterImport() {
 		LocalDate maxDate = this.database.getLatest();
 		LocalDate minDate = this.database.getEarliest();
@@ -125,7 +144,11 @@ public class TabC3pageController {
 		this.dateSlider.minProperty().set(dateConverter.dateToLong(minDate));
 	}
 	
-	//Helper for initializing the combo box
+	/**
+	 * This method constructs a list of pairs of {@link comp3111.covid.datastorage.LocationProperty} values and their corresponding names.
+	 * A helper method for {@link TabC3pageController#initialize()}.
+	 * @return {@link javafx.collections.ObservableList} of {@link javafx.util.Pair} of all {@link comp3111.covid.datastorage.LocationProperty} values and their corresponding names.
+	 */
 	protected ObservableList<Pair<String, LocationProperty>> generateLocPropPairs(){
 		ObservableList<Pair<String, LocationProperty>> result = FXCollections.observableArrayList();
 		int i = 0;
@@ -137,7 +160,9 @@ public class TabC3pageController {
 		return result;
 	}
 	
-	// Main function for generating the chart and the table
+	/**
+	 *  Main method for generating the chart and the table.
+	 */
 	private void generateView() {
 		ArrayList<Pair<Number, Number>> rawData = database.searchDataPair(this.selectedDate, this.selectedProperty);
 		RegressionResult regressionResult = this.generateRegression(rawData);
@@ -146,7 +171,11 @@ public class TabC3pageController {
 		
 	}
 	
-	//Main function for generating the chart
+	/**
+	 * Main method for generating the regression chart.
+	 * @param data				A {@link java.util.ArrayList} of raw data found from the database.
+	 * @param regressionResult	A {@link RegressionResult} object storing regression values stored generated from raw data.
+	 */
 	@SuppressWarnings("unchecked")
 	private void generateChart(ArrayList<Pair<Number, Number>> data, RegressionResult regressionResult) {
 		this.regressionChart.getData().clear();
@@ -175,7 +204,12 @@ public class TabC3pageController {
 		this.regressionChart.getScene().getStylesheets().add(getClass().getResource("/stylesheet/root.css").toExternalForm());
 	}
 	
-	//Helper for generateChart()
+	/**
+	 * A method to get the largest X value in a list of raw data.
+	 * A helper method to {@link TabC3pageController#generateRegressionSeries(ArrayList, RegressionResult)}.
+	 * @param sourceData	A list of raw data from the Database.
+	 * @return				the largest X value in the list of raw data.
+	 */
 	private double getLastX(ArrayList<Pair<Number, Number>> sourceData) {
 		double maxX = 0;
 		for(Pair<Number, Number> pair : sourceData) {
@@ -184,8 +218,11 @@ public class TabC3pageController {
 		}
 		return maxX;
 	}
-	
-	
+	/**
+	 * A method to generate a {@link RegressionResult} object from data obtained from database.
+	 * @param rawData	list of data obtained from database.
+	 * @return			{@link RegressionResult} object containing the values of regression performed on the set of data.
+	 */
 	protected RegressionResult generateRegression(ArrayList<Pair<Number, Number>> rawData) {
 		SimpleRegression regression = new SimpleRegression(true);
 		for(Pair<Number, Number> datum : rawData) {
@@ -193,7 +230,12 @@ public class TabC3pageController {
 		}
 		return new RegressionResult(regression.getIntercept(), regression.getSlope(), regression.getSignificance(), regression.getR(), regression.getRSquare());
 	}
-	
+	/**
+	 * A method creating the regression line in the chart.
+	 * @param rawData			list of data obtained from the database.
+	 * @param regressionResult	A {@link RegressionResult} object containing the values of regression performed on Raw Data.
+	 * @return					A {@link javafx.scene.chart.XYChart.Series} object for creating the regression line in the chart.
+	 */
 	protected XYChart.Series<Number, Number> generateRegressionSeries(ArrayList<Pair<Number, Number>> rawData, RegressionResult regressionResult) {
 		double slope = regressionResult.getSlope();
 		double intercept = regressionResult.getIntercept();
@@ -204,11 +246,13 @@ public class TabC3pageController {
 		double lastY = slope * lastX + intercept;
 		regressionSeries.getData().add(new Data<Number, Number>(0, intercept));
 		regressionSeries.getData().add(new Data<Number, Number>(lastX, lastY));
-		//System.out.println("First: " + 0 + "," + intercept);
-		//System.out.println("Last: " + lastX + "," + lastY);
 		return regressionSeries;
 	}
-	
+	/**
+	 * A method creating the scatter plot series for raw data in the chart.
+	 * @param rawData	Raw data to be plotted on the graph.
+	 * @return			A {@link javafx.scene.chart.XYChart.Series} object for creating the scatter plot in the chart.
+	 */
 	protected XYChart.Series<Number, Number> generateScatterSeries(ArrayList<Pair<Number, Number>> rawData){
 		XYChart.Series<Number, Number> scatter = new XYChart.Series<>();
 		scatter.setName("actual data points");
@@ -219,6 +263,10 @@ public class TabC3pageController {
 	}
 	
 	// ---------------- for table ----------------------
+	
+	/**
+	 * A helper class for holding data to be put in the table.
+	 */
 	public class RegressionTableData {
 		private final SimpleStringProperty regName;
 		private final SimpleDoubleProperty regValue;
@@ -236,7 +284,15 @@ public class TabC3pageController {
 			return this.regValue.get();
 		}
 	}
-	
+	/**
+	 * A helper class to hold values generated from performing simple linear regression on a set of data.
+	 * It holds these properties:
+	 * 1. Intercept
+	 * 2. Slope
+	 * 3. Statistical significance of the slope value
+	 * 4. Pearson's Correlation Coefficient (commonly called R value)
+	 * 5. Coefficient of Determination (commonly known as R-squared)
+	 */
 	public class RegressionResult {
 		private double intercept;
 		private double slope;
@@ -272,14 +328,18 @@ public class TabC3pageController {
 			return this.rSquared;
 		}
 	}
-	
+	/**
+	 * The main method for generating the table.
+	 * Its main functionality is to set the title on the left column and extract data from the given {@link RegressionResult} object to fill in the right row.
+	 * @param regressionResult	{@link RegressionResult} object generated from data from the database.
+	 */
 	private void generateTable(RegressionResult regressionResult) {
 		ObservableList<RegressionTableData> oList = FXCollections.observableArrayList();
 		oList.add(new RegressionTableData("Intercept", regressionResult.getIntercept()));
 		oList.add(new RegressionTableData("Slope", regressionResult.getSlope()));
 		oList.add(new RegressionTableData("Level of Significance of Slope", regressionResult.getSignificance()));
 		oList.add(new RegressionTableData("Pearson's Correlation Coefficient (R)", regressionResult.getR()));
-		oList.add(new RegressionTableData("Coefficient of Determination (R-squred)", regressionResult.getRsquared()));
+		oList.add(new RegressionTableData("Coefficient of Determination (R-squared)", regressionResult.getRsquared()));
 		// to make the columns get the right data from RegressionTableData
 		this.regTable.setItems(oList);
 	}
