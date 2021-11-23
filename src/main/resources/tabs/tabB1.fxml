@@ -10,13 +10,13 @@
 <?import javafx.scene.text.Font?>
 <?import org.controlsfx.control.CheckListView?>
 
-<VBox prefHeight="600.0" prefWidth="725.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="comp3111.covid.tabs.TabB1pageController">
+<VBox prefHeight="600.0" prefWidth="1000" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="comp3111.covid.tabs.TabB1pageController">
    <AnchorPane prefHeight="600.0" prefWidth="725.0">
       <children>
          <CheckListView fx:id="locationsCheckboxList" layoutX="14.0" layoutY="43.0" prefHeight="550.0" prefWidth="225" />
          <Label layoutX="21.0" layoutY="14.0" text="Select target Countries" />
-         <Button fx:id="confirmButton" layoutX="398.0" layoutY="9.0" mnemonicParsing="false" onAction="#handleConfirmSelection" text="Confirm Selection" />
-         <DatePicker fx:id="datePicker" layoutX="197.0" layoutY="11.0" onAction="#selectTargetDate" promptText="Select Date" />
+         <Button fx:id="confirmButton" layoutX="500.0" layoutY="10.0" mnemonicParsing="false" onAction="#handleConfirmSelection" text="Confirm Selection" />
+         <DatePicker fx:id="datePicker" editable="false" layoutX="270.0" layoutY="10.0" onAction="#selectTargetDate" promptText="Select Date" />
          <TableView fx:id="dataTable" layoutX="280.0" layoutY="75.0" prefHeight="500" prefWidth="650.0">
            <columns>
              <TableColumn fx:id="countryCol" prefWidth="175" text="Countries" />
