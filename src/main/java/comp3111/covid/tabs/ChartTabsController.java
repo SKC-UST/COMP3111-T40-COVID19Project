@@ -52,7 +52,7 @@ public class ChartTabsController extends TabController{
     	});
     }
     
-    protected int handleChartErorr() {
+    protected int handleChartError() {
     	if(this.getSelectedIso().isEmpty()) {
 			this.handleError("Please Choose at Least One Country!", "Country Input Error");
 			return -1;
@@ -88,7 +88,7 @@ public class ChartTabsController extends TabController{
     @FXML
     //Generate the acutal chart
     void handleConfirmSelection(ActionEvent event) {
-    	int errorCode = this.handleChartErorr();
+    	int errorCode = this.handleChartError();
     	if(errorCode != 0)
     		return;	//error occurs
     	

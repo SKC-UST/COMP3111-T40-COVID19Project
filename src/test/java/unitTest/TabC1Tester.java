@@ -2,6 +2,7 @@ package unitTest;
 
 import comp3111.covid.tabs.TabC1pageController;
 import comp3111.covid.tabs.TableTabsController.TableData;
+import javafx.util.Pair;
 
 import java.io.File;
 import java.time.LocalDate;
@@ -23,6 +24,7 @@ public class TabC1Tester extends TabC1pageController{
 	@Before
 	public void setUp() {
 		this.getDatabase().importCSV(new File("./src/main/resources/dataset/COVID_Dataset_v1.0.csv"));
+		this.checkedPair.addAll(new Pair<String, String>("HKG", "Hong Kong"));
 	}
 	
 	@Test
@@ -67,6 +69,26 @@ public class TabC1Tester extends TabC1pageController{
 		Assert.assertEquals("No Data", testData.getRateData());
 		testData = new TableData("", -1, -1, true);
 		Assert.assertEquals("No Data", testData.getRateData());
+	}
+	
+	@Test
+	public void testHandleTableError() {
+		//check data out of range
+		this.selectedDate = LocalDate.of(2021, 7, 21);
+		Assert.assertEquals(-3, this.handleTableError());
+		
+		//check data out of range 2
+		this.selectedDate = LocalDate.of(2019, 12, 31);
+		Assert.assertEquals(-3, this.handleTableError());
+		
+		//check no startDate
+		this.selectedDate = null;
+		Assert.assertEquals(-2, this.handleTableError());
+		
+		//check no country
+		this.selectedDate = LocalDate.of(2021, 7, 1); //valid date
+		this.checkedPair.clear();
+		Assert.assertEquals(-1, this.handleTableError());
 	}
 	
 	@After
