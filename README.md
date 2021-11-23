@@ -10,3 +10,25 @@ email: nkchow | github: calmChowder3 | dev-branch: yanton-feature-C<br/>Task C1,
 
 ## 3. WONG, Wai Yin
 email: wywongbp | github: wwyjason | dev-branch: jason-feature-B<br/>Task B1, B2
+
+## Sample execution of task A1
+![alt text](./images/tableA.png)
+
+## Sample execution of task B1
+![alt text](./images/tableB.png)
+
+## Sample execution of task C1
+![alt text](./images/tableC.png)
+
+## Sample execution of task A2
+![alt text](./images/chartA.png)
+
+## Sample execution of task B2
+![alt text](./images/chartB.png)
+
+## Sample execution of task C2
+![alt text](./images/chartC.png)
+
+## Sample execution of task C3
+![alt text](./images/reportCChart.png)
+![alt text](./images/reportCSlider.png)
