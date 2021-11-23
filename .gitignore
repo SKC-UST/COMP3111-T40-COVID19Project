@@ -2,4 +2,10 @@
 .gradle
 
 # Ignore Gradle build output directory
-build
+build/*
+!build/reports/tests/test/
+!build/jacocHTML/
+!build/docs/
+
+# Ignore Markdown file used to build docs/index.html
+index.md
