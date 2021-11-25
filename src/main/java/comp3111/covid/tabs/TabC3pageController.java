@@ -128,6 +128,7 @@ public class TabC3pageController {
 		
 		this.regPropCol.setCellValueFactory(new PropertyValueFactory<TableView<RegressionTableData>, String>("regName"));
 		this.regValCol.setCellValueFactory(new PropertyValueFactory<TableView<RegressionTableData>, Double>("regValue"));
+		
 	}
 	/**
 	 * This method stores set the minimum and maximum value of the slider to reflect the database's earliest and latest date that a data belongs to.
@@ -139,6 +140,9 @@ public class TabC3pageController {
 		this.selectedDate = minDate;
 		this.dateSlider.maxProperty().set(dateConverter.dateToLong(maxDate));
 		this.dateSlider.minProperty().set(dateConverter.dateToLong(minDate));
+		
+		this.noDataLabel1.setText("Select an X-axis to begin!");
+		this.noDataLabel2.setText("Using the combobox above chart");
 	}
 	
 	/**

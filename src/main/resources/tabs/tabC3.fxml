@@ -16,9 +16,9 @@
    <children>
       <ScrollPane prefWidth="1000.0">
          <content>
-            <AnchorPane prefHeight="849.0" prefWidth="1004.0">
+            <AnchorPane prefHeight="900.0" prefWidth="1004.0">
                <children>
-                  <LineChart fx:id="regressionChart" animated="false" layoutX="18.0" layoutY="50.0" prefHeight="600.0" prefWidth="950.0">
+                  <LineChart fx:id="regressionChart" animated="false" layoutX="14.0" layoutY="101.0" prefHeight="600.0" prefWidth="950.0">
                     <xAxis>
                       <NumberAxis side="BOTTOM" fx:id="xAxis" />
                     </xAxis>
@@ -26,15 +26,15 @@
                       <NumberAxis fx:id="yAxis" autoRanging="false" label="Vaccination Rate" side="LEFT" />
                     </yAxis>
                   </LineChart>
-                  <ComboBox layoutX="251.0" layoutY="13.0" prefHeight="25.0" prefWidth="213.0" promptText="x-axis" fx:id="xAxisCbx" />
-                  <Slider fx:id="dateSlider" blockIncrement="1.0" layoutX="27.0" layoutY="641.0" minorTickCount="0" prefHeight="18.0" prefWidth="950.0" showTickLabels="true" showTickMarks="true" />
-                  <Label fx:id="noDataLabel1" layoutX="251.0" layoutY="256.0" text="To Begin, Select an X-axis">
+                  <ComboBox layoutX="247.0" layoutY="64.0" prefHeight="25.0" prefWidth="213.0" promptText="x-axis" fx:id="xAxisCbx" />
+                  <Slider fx:id="dateSlider" blockIncrement="1.0" layoutX="23.0" layoutY="692.0" minorTickCount="0" prefHeight="18.0" prefWidth="950.0" showTickLabels="true" showTickMarks="true" />
+                  <Label fx:id="noDataLabel1" layoutX="247.0" layoutY="307.0" text="To Begin, Select an X-axis">
                      <font>
                         <Font name="Hack Bold" size="21.0" />
                      </font>
                   </Label>
-                  <Label fx:id="noDataLabel2" layoutX="251.0" layoutY="294.0" text="Change the slider value to se the changes of value as time goes on" />
-                  <TableView fx:id="regTable" layoutX="27.0" layoutY="685.0" prefHeight="150.0" prefWidth="950.0">
+                  <Label fx:id="noDataLabel2" layoutX="247.0" layoutY="345.0" text="Change the slider value to se the changes of value as time goes on" />
+                  <TableView fx:id="regTable" layoutX="23.0" layoutY="736.0" prefHeight="150.0" prefWidth="950.0">
                     <columns>
                       <TableColumn fx:id="regPropCol" prefWidth="178.52965831756592" text="Regression Properties" />
                       <TableColumn fx:id="regValCol" prefWidth="71.810791015625" text="Values" />
@@ -43,9 +43,19 @@
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                      </columnResizePolicy>
                   </TableView>
-                  <Label layoutX="86.0" layoutY="17.0" text="Choose your x-axis:">
+                  <Label layoutX="82.0" layoutY="68.0" text="Choose your x-axis:">
                      <font>
                         <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="14.0" text="How do countries' attributes correlate with vaccination rate?">
+                     <font>
+                        <Font name="System Bold" size="24.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="14.0" layoutY="31.0" text="Refer to docs/task-c3-details.md for detailis of the problem and solution statements">
+                     <font>
+                        <Font size="18.0" />
                      </font>
                   </Label>
                </children>
