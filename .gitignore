@@ -3,12 +3,6 @@
 
 # Ignore Gradle build output directory
 build/*
-<<<<<<< HEAD
-!build/reports/
-!build/jacocoHTML/
-!build/docs/javadoc
-=======
->>>>>>> refs/remotes/origin/master
 
 # Ignore Markdown file used to build docs/index.html
 index.md
