@@ -108,6 +108,7 @@ public class Database {
 	 * @param dataset a .csv dataset file.
 	 */
 	public void importCSV(File dataset) {
+		this.clearDatabase();
 		FileResource fr = new FileResource(dataset);
 		CSVParser parser = fr.getCSVParser(true);
 		
@@ -253,12 +254,7 @@ public class Database {
 	/**
 	 * This method clears the all the content of the database.
 	 */
-	public void clearDatabase () {
-		Iterator<Entry<String, LocationData>> it = hashStorage.entrySet().iterator();
-		while (it.hasNext()) {
-			Map.Entry<String, LocationData> pair = (Map.Entry<String, LocationData>)it.next();
-			pair.getValue().clearLocationData();
-		}
+	private void clearDatabase () {
 		hashStorage.clear();
 	}
 }
