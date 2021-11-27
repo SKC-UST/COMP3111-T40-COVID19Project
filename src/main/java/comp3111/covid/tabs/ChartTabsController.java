@@ -63,6 +63,12 @@ public abstract class ChartTabsController extends TabController{
     		}
     	});
     }
+    @Override
+    public void updateCheckboxList() {
+    	super.updateCheckboxList();
+    	this.dataChart.getData().clear();
+    }
+    
     /**
      * This method handles input errors.
      * It is used to ensure the user's input are correct.
@@ -99,7 +105,7 @@ public abstract class ChartTabsController extends TabController{
 		}
 		LocalDate earliestDate = getDatabase().getEarliest();
 		LocalDate latestDate = getDatabase().getLatest();
-		if(!(this.startDate.isBefore(latestDate) && this.startDate.isAfter(earliestDate) && this.endDate.isBefore(latestDate) && this.endDate.isAfter(earliestDate))) {
+		if(this.startDate.isBefore(earliestDate) || this.startDate.isAfter(latestDate) || this.endDate.isBefore(earliestDate) || this.endDate.isAfter(latestDate)) {
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd LLL yyy"); 
 			String startStr = getDatabase().getEarliest().format(formatter);
 			String endStr = getDatabase().getLatest().format(formatter);
@@ -110,9 +116,9 @@ public abstract class ChartTabsController extends TabController{
     }
     
     /**
-     * This method is handles the event that the confirmatino button is pressed
-     * It is reponsible for invoking {@link ChartTabsController#handleChartError() and {@link ChartTabsController#generateChartData()}.
-     * Then it puts the generatend onto the chart for display.
+     * This method is handles the event that the confirmation button is pressed
+     * It is responsible for invoking {@link ChartTabsController#handleChartError() and {@link ChartTabsController#generateChartData()}.
+     * Then it puts the generated onto the chart for display.
      */
     @FXML
     void handleConfirmSelection(ActionEvent event) {
@@ -121,7 +127,9 @@ public abstract class ChartTabsController extends TabController{
     		return;	//error occurs
     	
     	this.dataChart.getData().clear();
-    	ArrayList<XYChart.Series<Number, Number>> data = generateChartData();    	
+    	ArrayList<XYChart.Series<Number, Number>> data = generateChartData();  
+    	if(data == null) //error = one country contains no data at all
+    		return;		
     	for(XYChart.Series<Number, Number> series : data) {
     		this.dataChart.getData().add(series);
     	}

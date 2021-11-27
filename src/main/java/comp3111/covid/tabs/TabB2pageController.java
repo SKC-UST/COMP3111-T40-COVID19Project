@@ -6,9 +6,8 @@ import java.util.ArrayList;
 import comp3111.covid.datastorage.DataTitle;
 import javafx.util.Pair;
 /**
- * place holder
- * @author ytc314
- *
+ * Controller for the tab of COVID-19 Deaths Chart.
+ * Inherits the abstract class {@link ChartTabsController}.
  */
 public class TabB2pageController extends ChartTabsController {
 	

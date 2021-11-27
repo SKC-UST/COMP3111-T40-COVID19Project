@@ -10,41 +10,40 @@ import javafx.util.Pair;
 import javafx.util.StringConverter;
 
 /**
- * place holder
- * @author ytc314
- *
+ * Controller for the tab of COVID-19 Vaccination Rate Chart.
+ * Inherits the abstract class {@link ChartTabsController}.
  */
-<span class="fc" id="L17">public class TabC2pageController extends ChartTabsController {</span>
+<span class="fc" id="L16">public class TabC2pageController extends ChartTabsController {</span>
 	
 	@Override
 	public void initialize() {
 		
-<span class="nc" id="L22">		super.initialize();</span>
+<span class="nc" id="L21">		super.initialize();</span>
 		
-<span class="nc" id="L24">		yAxis.setTickLabelFormatter(new StringConverter&lt;Number&gt;() {</span>
+<span class="nc" id="L23">		yAxis.setTickLabelFormatter(new StringConverter&lt;Number&gt;() {</span>
 			@Override
 			public String toString(Number rate) {
-<span class="nc" id="L27">				return (rate + &quot;%&quot;);</span>
+<span class="nc" id="L26">				return (rate + &quot;%&quot;);</span>
 			}
 			
 			@Override
 			public Number fromString(String string) {
-<span class="nc" id="L32">				NumberFormat percentage = NumberFormat.getPercentInstance();</span>
+<span class="nc" id="L31">				NumberFormat percentage = NumberFormat.getPercentInstance();</span>
 				try {
-<span class="nc" id="L34">					return percentage.parse(string);</span>
-<span class="nc" id="L35">				} catch (ParseException e) {</span>
+<span class="nc" id="L33">					return percentage.parse(string);</span>
+<span class="nc" id="L34">				} catch (ParseException e) {</span>
 					// TODO Auto-generated catch block
-<span class="nc" id="L37">					e.printStackTrace();</span>
-<span class="nc" id="L38">					return 0;</span>
+<span class="nc" id="L36">					e.printStackTrace();</span>
+<span class="nc" id="L37">					return 0;</span>
 				}
 			}
 		});
 		
-<span class="nc" id="L43">	}</span>
+<span class="nc" id="L42">	}</span>
 	
 	@Override
 	protected ArrayList&lt;Pair&lt;LocalDate, Number&gt;&gt; getDateDataPair(String iso, LocalDate startDate, LocalDate endDate) { 
-<span class="fc" id="L47">    	return this.getDatabase().searchChartData(iso, startDate, endDate, DataTitle.VAC);</span>
+<span class="fc" id="L46">    	return this.getDatabase().searchChartData(iso, startDate, endDate, DataTitle.VAC);</span>
     }
 	
 }

@@ -10,6 +10,7 @@ import java.util.Map.Entry;
 
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
+import org.apache.commons.lang3.tuple.Triple;
 
 import edu.duke.FileResource;
 import javafx.util.Pair;
@@ -108,6 +109,7 @@ public class Database {
 	 * @param dataset a .csv dataset file.
 	 */
 	public void importCSV(File dataset) {
+		this.clearDatabase();
 		FileResource fr = new FileResource(dataset);
 		CSVParser parser = fr.getCSVParser(true);
 		
@@ -163,7 +165,12 @@ public class Database {
 		s = record.get("total_deaths_per_million");
 		if(!s.equals("")) {loc.addDayData(DataTitle.DEATH, new RateDayData(date, Double.parseDouble(s)));};
 		s = record.get("people_fully_vaccinated");
-		if(!s.equals("")) { loc.addDayData(DataTitle.VAC, new TotalDayData(date, Long.parseLong(s)));}
+		if(!s.equals("")) { 
+			long vaccinatedNum = Long.parseLong(s);
+			loc.addDayData(DataTitle.VAC, new TotalDayData(date, vaccinatedNum));
+			double vacRate = (vaccinatedNum * 100) / loc.getLocationProperty(LocationProperty.POPULATION).doubleValue(); 
+			loc.addDayData(DataTitle.VAC, new RateDayData(date, vacRate));
+		}
 		s = record.get("people_fully_vaccinated_per_hundred");
 		if(!s.equals("")) { loc.addDayData(DataTitle.VAC, new RateDayData(date, Double.parseDouble(s)));}
 	}
@@ -230,8 +237,8 @@ public class Database {
 	 * @param lp			the desired location property.
 	 * @return				a list of data points of all locations of the desired date and location property.
 	 */
-	public ArrayList<Pair<Number, Number>> searchDataPair(LocalDate targetDate, LocationProperty lp){
-		ArrayList<Pair<Number, Number>> result = new ArrayList<Pair<Number, Number>>();
+	public ArrayList<Triple<String, Number, Number>> searchDataPair(LocalDate targetDate, LocationProperty lp){
+		ArrayList<Triple<String, Number, Number>> result = new ArrayList<Triple<String, Number, Number>>();
 		
 		Iterator<Entry<String, LocationData>> it = hashStorage.entrySet().iterator();
 		while (it.hasNext()) {
@@ -240,12 +247,15 @@ public class Database {
 			//y-value
 			Number rateValue = pair.getValue().getRateDayData(targetDate, DataTitle.VAC);
 			if(rateValue.intValue() < 0 || pair.getKey().contains("OWID"))
-					continue;
+				continue;
 			//x-value
 			Number xValue = pair.getValue().getLocationProperty(lp);
 			if(xValue.intValue() < 0) //corresponding data field is blank in csv
 				continue;
-			result.add(new Pair<Number, Number>(xValue, rateValue));
+			
+			//country name
+			String countryName = pair.getValue().getLocationName();
+			result.add(Triple.of(countryName, xValue, rateValue));
 		}
 		return result;
 	}
@@ -254,11 +264,6 @@ public class Database {
 	 * This method clears the all the content of the database.
 	 */
 	public void clearDatabase () {
-		Iterator<Entry<String, LocationData>> it = hashStorage.entrySet().iterator();
-		while (it.hasNext()) {
-			Map.Entry<String, LocationData> pair = (Map.Entry<String, LocationData>)it.next();
-			pair.getValue().clearLocationData();
-		}
 		hashStorage.clear();
 	}
 }

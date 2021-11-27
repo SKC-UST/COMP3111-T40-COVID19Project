@@ -10,30 +10,29 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 /**
- * place holder
- * @author ytc314
- *
+ *	Controller for the tab of COVID-19 Cases table.
+ *	Inherits TableTabsController.
  */
-<span class="fc" id="L17">public class TabA1pageController extends TableTabsController{</span>
+<span class="fc" id="L16">public class TabA1pageController extends TableTabsController{</span>
 	
 	@Override
 	protected long getTotalDataFromDB(String isoCode, LocalDate targetDate) {
-<span class="fc" id="L21">		return this.getDatabase().searchTotalData(isoCode, targetDate, DataTitle.CASE);</span>
+<span class="fc" id="L20">		return this.getDatabase().searchTotalData(isoCode, targetDate, DataTitle.CASE);</span>
 	}
 		
 	@Override
 	protected double getRateDataFromDB(String isoCode, LocalDate targetDate) {
-<span class="fc" id="L26">		return this.getDatabase().searchRateData(isoCode, targetDate, DataTitle.CASE);</span>
+<span class="fc" id="L25">		return this.getDatabase().searchRateData(isoCode, targetDate, DataTitle.CASE);</span>
 	}
 		
 	@Override
 	protected void setTableTitle() {
-<span class="nc" id="L31">		this.tableTitlelbl.setText(&quot;Number of Confirmed COVID-19 Cases as of &quot; + this.selectedDate);</span>
-<span class="nc" id="L32">	}</span>
+<span class="nc" id="L30">		this.tableTitlelbl.setText(&quot;Number of Confirmed COVID-19 Cases as of &quot; + this.selectedDate);</span>
+<span class="nc" id="L31">	}</span>
 	
 	@Override
 	protected TableData getTableData(String iso, long totalData, double rateData) {
-<span class="nc" id="L36">		return new TableData(iso, totalData, rateData, false);</span>
+<span class="nc" id="L35">		return new TableData(iso, totalData, rateData, false);</span>
 	}
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

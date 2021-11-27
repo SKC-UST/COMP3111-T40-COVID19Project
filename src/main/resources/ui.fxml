@@ -1,16 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Tab?>
-<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.TextArea?>
-<?import javafx.scene.text.*?>
-<?import javafx.scene.image.*?>
+<?import javafx.scene.text.Font?>
 
 <VBox prefHeight="600" prefWidth="1000" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="comp3111.covid.Controller">
   <children>
@@ -18,34 +14,41 @@
       <children>
             <TabPane fx:id="tabPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="650.0" prefWidth="1000" tabClosingPolicy="UNAVAILABLE">
               <tabs>
-                <Tab fx:id="tabTaskZero" text="Import database" style="-fx-background-color: SILVER">
+                <Tab fx:id="tabTaskZero" style="-fx-background-color: SILVER" text="Import database">
                   <content>
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="221.0" prefWidth="719.0">
                            <children>
-                              <Button fx:id="fileChoosingButton" layoutX="400" layoutY="275" mnemonicParsing="false" onAction="#importCSVtoDatabase" text="Choose a dataset" />
+                              <Button fx:id="fileChoosingButton" layoutX="430.0" layoutY="244.0" mnemonicParsing="false" onAction="#importCSVtoDatabase" text="Choose a dataset">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font></Button>
+                              <Label fx:id="introLabel" layoutX="25.0" layoutY="187.0" text="Hello, young Data Explorer. Choose a dataset to start your journey">
+                                 <font>
+                                    <Font name="Hack Bold" size="23.0" />
+                                 </font></Label>
                            </children>
                         </AnchorPane>
                   </content>
                 </Tab>
-				<Tab fx:id="tabReport1" disable="true" text="Table A" style="-fx-background-color: AZURE">
+				<Tab fx:id="tabReport1" disable="true" style="-fx-background-color: AZURE" text="Table A">
 					<fx:include fx:id="tabA1page" source="tabs/tabA1.fxml" />
 				</Tab>
-				<Tab fx:id="tabReport2" disable="true" text="Table B" style="-fx-background-color: AZURE">
+				<Tab fx:id="tabReport2" disable="true" style="-fx-background-color: AZURE" text="Table B">
 					<fx:include fx:id="tabB1page" source="tabs/tabB1.fxml" />
 				</Tab>
-				<Tab fx:id="tabReport3" disable="true" text="Table C" style="-fx-background-color: AZURE">
+				<Tab fx:id="tabReport3" disable="true" style="-fx-background-color: AZURE" text="Table C">
 					<fx:include fx:id="tabC1page" source="tabs/tabC1.fxml" />
 				</Tab>	
-                 <Tab fx:id="tabApp1" disable="true" text="Chart A" style="-fx-background-color: HONEYDEW">
+                 <Tab fx:id="tabApp1" disable="true" style="-fx-background-color: HONEYDEW" text="Chart A">
                   <fx:include fx:id="tabA2page" source="tabs/tabA2.fxml" />
                  </Tab>
-                 <Tab fx:id="tabApp2" disable="true" text="Chart B" style="-fx-background-color: HONEYDEW">
+                 <Tab fx:id="tabApp2" disable="true" style="-fx-background-color: HONEYDEW" text="Chart B">
                   <fx:include fx:id="tabB2page" source="tabs/tabB2.fxml" />
                  </Tab>
-                 <Tab fx:id="tabApp3" disable="true" text="Chart C" style="-fx-background-color: HONEYDEW">
+                 <Tab fx:id="tabApp3" disable="true" style="-fx-background-color: HONEYDEW" text="Chart C">
                   <fx:include fx:id="tabC2page" source="tabs/tabC2.fxml" />
                  </Tab>
-                 <Tab fx:id="tabC3" disable="true" text="Report C" style="-fx-background-color: LAVENDERBLUSH">
+                 <Tab fx:id="tabC3" disable="true" style="-fx-background-color: LAVENDERBLUSH" text="Report C">
                   <fx:include fx:id="tabC3page" source="tabs/tabC3.fxml" />
                  </Tab>
               </tabs>

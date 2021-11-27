@@ -6,15 +6,14 @@ import java.util.ArrayList;
 import comp3111.covid.datastorage.DataTitle;
 import javafx.util.Pair;
 /**
- * place holder
- * @author ytc314
- *
+ * Controller for the tab of COVID-19 Deaths Chart.
+ * Inherits the abstract class {@link ChartTabsController}.
  */
-<span class="nc" id="L13">public class TabB2pageController extends ChartTabsController {</span>
+<span class="nc" id="L12">public class TabB2pageController extends ChartTabsController {</span>
 	
 	@Override
 	protected ArrayList&lt;Pair&lt;LocalDate, Number&gt;&gt; getDateDataPair(String iso, LocalDate startDate, LocalDate endDate) { 
-<span class="nc" id="L17">    	return this.getDatabase().searchChartData(iso, startDate, endDate, DataTitle.DEATH);</span>
+<span class="nc" id="L16">    	return this.getDatabase().searchChartData(iso, startDate, endDate, DataTitle.DEATH);</span>
     }
 	
 }

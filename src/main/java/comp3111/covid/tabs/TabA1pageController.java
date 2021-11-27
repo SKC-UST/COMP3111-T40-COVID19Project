@@ -10,9 +10,8 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 /**
- * place holder
- * @author ytc314
- *
+ *	Controller for the tab of COVID-19 Cases table.
+ *	Inherits TableTabsController.
  */
 public class TabA1pageController extends TableTabsController{
 	

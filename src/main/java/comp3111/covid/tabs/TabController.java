@@ -76,9 +76,7 @@ public abstract class TabController {
     	
     	this.locationsCheckboxList.getCheckModel().getCheckedItems().addListener(new ListChangeListener<Pair<String, String>>(){
     		public void onChanged(ListChangeListener.Change<? extends Pair<String, String>> c) {
-    			System.out.println(locationsCheckboxList.getCheckModel().getCheckedItems());
     			checkedPair = locationsCheckboxList.getCheckModel().getCheckedItems();
-    			System.out.println(checkedPair);
     		}
     	});
     }

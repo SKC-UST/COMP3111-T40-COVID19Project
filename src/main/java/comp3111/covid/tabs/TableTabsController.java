@@ -12,6 +12,8 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.Label;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -49,6 +51,13 @@ public abstract class TableTabsController extends TabController {
 		this.totalCol.setCellValueFactory(new PropertyValueFactory<TableView<TableData>, String>("totalData"));
 		this.rateCol.setCellValueFactory(new PropertyValueFactory<TableView<TableData>, String>("rateData"));
 	}
+	
+	@Override
+	public void updateCheckboxList() {
+		super.updateCheckboxList();
+		this.dataTable.getItems().clear();
+	}
+	
 	/**
      * This method handles user input errors.
      * It handles 3 types of errors:
@@ -77,17 +86,28 @@ public abstract class TableTabsController extends TabController {
 		return 0;
 	}
 	/**
-	 * A class holding data to be put into the table.
+	 * A nested class holding data to be put into the table.
+	 * Data contains country name, a total data, and a rate data.
 	 */
 	public class TableData {
 		private final SimpleStringProperty countryName;
 		private final SimpleStringProperty totalData;
 		private final SimpleStringProperty rateData;
-
+		/**
+		 * Constructor for TableData.
+		 * All data are stored as string internally.
+		 * This constructor performs string formating, such as rounding.
+		 * @param location - Name of location
+		 * @param total	- Total data
+		 * @param rate	- rate data
+		 * @param needPercentage - boolean value indicating whether a "%" symbol is added after rate data when on display.
+		 */
 		public TableData (String location, long total, double rate, boolean needPercentage) {
 			this.countryName = new SimpleStringProperty(location);
 			this.totalData = new SimpleStringProperty(total >= 0 ? String.format("%,d", total) : "No Data");
-			this.rateData = new SimpleStringProperty(rate >= 0 ? rate + (needPercentage ? "%" : "") : "No Data");
+			DecimalFormat df = new DecimalFormat("#.####");
+			df.setRoundingMode(RoundingMode.CEILING);
+			this.rateData = new SimpleStringProperty(rate >= 0 ? df.format(rate) + (needPercentage ? "%" : "") : "No Data");
 		}
 		/**
 		 * Getter for the value of the first column.

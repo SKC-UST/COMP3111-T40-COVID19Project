@@ -63,6 +63,12 @@ import comp3111.covid.dataAnalysis.DateConverter;
     		}
     	});
 <span class="nc" id="L65">    }</span>
+    @Override
+    public void updateCheckboxList() {
+<span class="nc" id="L68">    	super.updateCheckboxList();</span>
+<span class="nc" id="L69">    	this.dataChart.getData().clear();</span>
+<span class="nc" id="L70">    }</span>
+    
     /**
      * This method handles input errors.
      * It is used to ensure the user's input are correct.
@@ -77,55 +83,57 @@ import comp3111.covid.dataAnalysis.DateConverter;
      * @return a negative integer error code if an error occurs, 0 if no error.
      */
     protected int handleChartError() {
-<span class="fc bfc" id="L80" title="All 2 branches covered.">    	if(this.getSelectedIso().isEmpty()) {</span>
-<span class="fc" id="L81">			this.handleError(&quot;Please Choose at Least One Country!&quot;, &quot;Country Input Error&quot;);</span>
-<span class="fc" id="L82">			return -1;</span>
+<span class="fc bfc" id="L86" title="All 2 branches covered.">    	if(this.getSelectedIso().isEmpty()) {</span>
+<span class="fc" id="L87">			this.handleError(&quot;Please Choose at Least One Country!&quot;, &quot;Country Input Error&quot;);</span>
+<span class="fc" id="L88">			return -1;</span>
 		}
-<span class="fc bfc" id="L84" title="All 2 branches covered.">		if(this.startDate == null) {</span>
-<span class="fc" id="L85">			this.handleError(&quot;Please Choose a Start Date!&quot;, &quot;Date Input Error&quot;);</span>
-<span class="fc" id="L86">			return -2;</span>
+<span class="fc bfc" id="L90" title="All 2 branches covered.">		if(this.startDate == null) {</span>
+<span class="fc" id="L91">			this.handleError(&quot;Please Choose a Start Date!&quot;, &quot;Date Input Error&quot;);</span>
+<span class="fc" id="L92">			return -2;</span>
 		}
-<span class="fc bfc" id="L88" title="All 2 branches covered.">		if(this.endDate == null) {</span>
-<span class="fc" id="L89">			this.handleError(&quot;Please Choose an End Date&quot;, &quot;Date Input Error&quot;);</span>
-<span class="fc" id="L90">			return -3;</span>
+<span class="fc bfc" id="L94" title="All 2 branches covered.">		if(this.endDate == null) {</span>
+<span class="fc" id="L95">			this.handleError(&quot;Please Choose an End Date&quot;, &quot;Date Input Error&quot;);</span>
+<span class="fc" id="L96">			return -3;</span>
 		}
-<span class="fc bfc" id="L92" title="All 2 branches covered.">		if(this.startDate.isAfter(endDate)) {</span>
-<span class="fc" id="L93">			this.handleError(&quot;The start date cannot be after the end date!&quot;, &quot;Date Input Error&quot;);</span>
-<span class="fc" id="L94">			return -4;</span>
+<span class="fc bfc" id="L98" title="All 2 branches covered.">		if(this.startDate.isAfter(endDate)) {</span>
+<span class="fc" id="L99">			this.handleError(&quot;The start date cannot be after the end date!&quot;, &quot;Date Input Error&quot;);</span>
+<span class="fc" id="L100">			return -4;</span>
 		}
-<span class="fc bfc" id="L96" title="All 2 branches covered.">		if(this.startDate.equals(endDate)) {</span>
-<span class="fc" id="L97">			this.handleError(&quot;The date range must span across at least two days!&quot;, &quot;Date Input Error&quot;);</span>
-<span class="fc" id="L98">			return -5;</span>
+<span class="fc bfc" id="L102" title="All 2 branches covered.">		if(this.startDate.equals(endDate)) {</span>
+<span class="fc" id="L103">			this.handleError(&quot;The date range must span across at least two days!&quot;, &quot;Date Input Error&quot;);</span>
+<span class="fc" id="L104">			return -5;</span>
 		}
-<span class="fc" id="L100">		LocalDate earliestDate = getDatabase().getEarliest();</span>
-<span class="fc" id="L101">		LocalDate latestDate = getDatabase().getLatest();</span>
-<span class="pc bpc" id="L102" title="2 of 8 branches missed.">		if(!(this.startDate.isBefore(latestDate) &amp;&amp; this.startDate.isAfter(earliestDate) &amp;&amp; this.endDate.isBefore(latestDate) &amp;&amp; this.endDate.isAfter(earliestDate))) {</span>
-<span class="fc" id="L103">			DateTimeFormatter formatter = DateTimeFormatter.ofPattern(&quot;dd LLL yyy&quot;); </span>
-<span class="fc" id="L104">			String startStr = getDatabase().getEarliest().format(formatter);</span>
-<span class="fc" id="L105">			String endStr = getDatabase().getLatest().format(formatter);</span>
-<span class="fc" id="L106">			this.handleError(&quot;The data in this data set starts from &quot; + startStr + &quot; and ends on &quot; + endStr, &quot;Date Out of Range&quot;);</span>
-<span class="fc" id="L107">			return -6;</span>
+<span class="fc" id="L106">		LocalDate earliestDate = getDatabase().getEarliest();</span>
+<span class="fc" id="L107">		LocalDate latestDate = getDatabase().getLatest();</span>
+<span class="pc bpc" id="L108" title="2 of 8 branches missed.">		if(this.startDate.isBefore(earliestDate) || this.startDate.isAfter(latestDate) || this.endDate.isBefore(earliestDate) || this.endDate.isAfter(latestDate)) {</span>
+<span class="fc" id="L109">			DateTimeFormatter formatter = DateTimeFormatter.ofPattern(&quot;dd LLL yyy&quot;); </span>
+<span class="fc" id="L110">			String startStr = getDatabase().getEarliest().format(formatter);</span>
+<span class="fc" id="L111">			String endStr = getDatabase().getLatest().format(formatter);</span>
+<span class="fc" id="L112">			this.handleError(&quot;The data in this data set starts from &quot; + startStr + &quot; and ends on &quot; + endStr, &quot;Date Out of Range&quot;);</span>
+<span class="fc" id="L113">			return -6;</span>
 		}
-<span class="fc" id="L109">		return 0;</span>
+<span class="fc" id="L115">		return 0;</span>
     }
     
     /**
-     * This method is handles the event that the confirmatino button is pressed
-     * It is reponsible for invoking {@link ChartTabsController#handleChartError() and {@link ChartTabsController#generateChartData()}.
-     * Then it puts the generatend onto the chart for display.
+     * This method is handles the event that the confirmation button is pressed
+     * It is responsible for invoking {@link ChartTabsController#handleChartError() and {@link ChartTabsController#generateChartData()}.
+     * Then it puts the generated onto the chart for display.
      */
     @FXML
     void handleConfirmSelection(ActionEvent event) {
-<span class="nc" id="L119">    	int errorCode = this.handleChartError();</span>
-<span class="nc bnc" id="L120" title="All 2 branches missed.">    	if(errorCode != 0)</span>
-<span class="nc" id="L121">    		return;	//error occurs</span>
+<span class="nc" id="L125">    	int errorCode = this.handleChartError();</span>
+<span class="nc bnc" id="L126" title="All 2 branches missed.">    	if(errorCode != 0)</span>
+<span class="nc" id="L127">    		return;	//error occurs</span>
     	
-<span class="nc" id="L123">    	this.dataChart.getData().clear();</span>
-<span class="nc" id="L124">    	ArrayList&lt;XYChart.Series&lt;Number, Number&gt;&gt; data = generateChartData();    	</span>
-<span class="nc bnc" id="L125" title="All 2 branches missed.">    	for(XYChart.Series&lt;Number, Number&gt; series : data) {</span>
-<span class="nc" id="L126">    		this.dataChart.getData().add(series);</span>
-<span class="nc" id="L127">    	}</span>
-<span class="nc" id="L128">    }</span>
+<span class="nc" id="L129">    	this.dataChart.getData().clear();</span>
+<span class="nc" id="L130">    	ArrayList&lt;XYChart.Series&lt;Number, Number&gt;&gt; data = generateChartData();  </span>
+<span class="nc bnc" id="L131" title="All 2 branches missed.">    	if(data == null) //error = one country contains no data at all</span>
+<span class="nc" id="L132">    		return;		</span>
+<span class="nc bnc" id="L133" title="All 2 branches missed.">    	for(XYChart.Series&lt;Number, Number&gt; series : data) {</span>
+<span class="nc" id="L134">    		this.dataChart.getData().add(series);</span>
+<span class="nc" id="L135">    	}</span>
+<span class="nc" id="L136">    }</span>
 
     @FXML
     /**
@@ -133,8 +141,8 @@ import comp3111.covid.dataAnalysis.DateConverter;
      * @param event	JavaFX action event
      */
     void selectStartDate(ActionEvent event) {
-<span class="nc" id="L136">    	this.startDate = this.startDatePicker.getValue();</span>
-<span class="nc" id="L137">    }</span>
+<span class="nc" id="L144">    	this.startDate = this.startDatePicker.getValue();</span>
+<span class="nc" id="L145">    }</span>
 
     @FXML
     /**
@@ -142,39 +150,39 @@ import comp3111.covid.dataAnalysis.DateConverter;
      * @param event	JavaFX action event
      */
     void selectEndDate(ActionEvent event) {
-<span class="nc" id="L145">    	this.endDate = this.endDatePicker.getValue();</span>
-<span class="nc" id="L146">    }</span>
+<span class="nc" id="L153">    	this.endDate = this.endDatePicker.getValue();</span>
+<span class="nc" id="L154">    }</span>
     /**
      * This method generates series for the chart using the given user input and data from the dataset.
      * @return	an ArrayList of {@link javafx.scene.chart.XYChart.Series}.
      */
 	protected ArrayList&lt;XYChart.Series&lt;Number, Number&gt;&gt; generateChartData(){
-<span class="fc" id="L152">		DateConverter dateConverter = new DateConverter();</span>
-<span class="fc" id="L153">    	ArrayList&lt;XYChart.Series&lt;Number, Number&gt;&gt; result = new ArrayList&lt;XYChart.Series&lt;Number, Number&gt;&gt;();</span>
+<span class="fc" id="L160">		DateConverter dateConverter = new DateConverter();</span>
+<span class="fc" id="L161">    	ArrayList&lt;XYChart.Series&lt;Number, Number&gt;&gt; result = new ArrayList&lt;XYChart.Series&lt;Number, Number&gt;&gt;();</span>
     	
-<span class="fc bfc" id="L155" title="All 2 branches covered.">    	for(String iso : this.getSelectedIso()) {</span>
-<span class="fc" id="L156">    		ArrayList&lt;Pair&lt;LocalDate, Number&gt;&gt; source = this.getDateDataPair(iso, this.startDate, this.endDate);</span>
+<span class="fc bfc" id="L163" title="All 2 branches covered.">    	for(String iso : this.getSelectedIso()) {</span>
+<span class="fc" id="L164">    		ArrayList&lt;Pair&lt;LocalDate, Number&gt;&gt; source = this.getDateDataPair(iso, this.startDate, this.endDate);</span>
     		
-<span class="fc bfc" id="L158" title="All 2 branches covered.">    		if(source.isEmpty()) {</span>
-<span class="fc" id="L159">        		JOptionPane.showMessageDialog(null, &quot;No data found for &quot; + getDatabase().getLocationName(iso) + &quot; between &quot; + startDate + &quot; and &quot; + endDate + </span>
-<span class="fc" id="L160">        				&quot;\nTry another date or country&quot;, &quot;No data found for &quot; + getDatabase().getLocationName(iso), JOptionPane.WARNING_MESSAGE);</span>
-<span class="fc" id="L161">        		return null;</span>
+<span class="fc bfc" id="L166" title="All 2 branches covered.">    		if(source.isEmpty()) {</span>
+<span class="fc" id="L167">        		JOptionPane.showMessageDialog(null, &quot;No data found for &quot; + getDatabase().getLocationName(iso) + &quot; between &quot; + startDate + &quot; and &quot; + endDate + </span>
+<span class="fc" id="L168">        				&quot;\nTry another date or country&quot;, &quot;No data found for &quot; + getDatabase().getLocationName(iso), JOptionPane.WARNING_MESSAGE);</span>
+<span class="fc" id="L169">        		return null;</span>
         	}
     		
-<span class="fc" id="L164">    		XYChart.Series&lt;Number, Number&gt; series = new XYChart.Series&lt;&gt;();</span>
+<span class="fc" id="L172">    		XYChart.Series&lt;Number, Number&gt; series = new XYChart.Series&lt;&gt;();</span>
     		//
-<span class="fc bfc" id="L166" title="All 2 branches covered.">    		for(Pair&lt;LocalDate, Number&gt; data : source) {</span>
-<span class="fc" id="L167">    			series.getData().add(new XYChart.Data&lt;Number, Number&gt;(dateConverter.dateToLong(data.getKey()), data.getValue()));</span>
-<span class="fc" id="L168">    		}</span>
+<span class="fc bfc" id="L174" title="All 2 branches covered.">    		for(Pair&lt;LocalDate, Number&gt; data : source) {</span>
+<span class="fc" id="L175">    			series.getData().add(new XYChart.Data&lt;Number, Number&gt;(dateConverter.dateToLong(data.getKey()), data.getValue()));</span>
+<span class="fc" id="L176">    		}</span>
     		
-<span class="fc" id="L170">    		series.setName(this.getDatabase().getLocationName(iso));</span>
-<span class="fc" id="L171">    		result.add(series);</span>
-<span class="fc" id="L172">    	}</span>
-<span class="fc" id="L173">    	LocalDateTime currentTime = LocalDateTime.now();</span>
-<span class="fc" id="L174">		String formattedTime = DateTimeFormatter.ofPattern(&quot;HH:mm:ss&quot;).format(currentTime);</span>
-<span class="fc" id="L175">		String importMessage = &quot;[ &quot; + formattedTime + &quot; ] &quot; + &quot;Successfully generated chart\n&quot;;</span>
-<span class="fc" id="L176">		System.out.println(importMessage);</span>
-<span class="fc" id="L177">    	return result;</span>
+<span class="fc" id="L178">    		series.setName(this.getDatabase().getLocationName(iso));</span>
+<span class="fc" id="L179">    		result.add(series);</span>
+<span class="fc" id="L180">    	}</span>
+<span class="fc" id="L181">    	LocalDateTime currentTime = LocalDateTime.now();</span>
+<span class="fc" id="L182">		String formattedTime = DateTimeFormatter.ofPattern(&quot;HH:mm:ss&quot;).format(currentTime);</span>
+<span class="fc" id="L183">		String importMessage = &quot;[ &quot; + formattedTime + &quot; ] &quot; + &quot;Successfully generated chart\n&quot;;</span>
+<span class="fc" id="L184">		System.out.println(importMessage);</span>
+<span class="fc" id="L185">    	return result;</span>
     }
     
 	/**

@@ -4,9 +4,8 @@ import java.time.LocalDate;
 
 import comp3111.covid.datastorage.*;
 /**
- * place holder
- * @author ytc314
- *
+ * Controller for the tab of COVID-19 Deaths Table.
+ * Inherits the abstract class {@link TableTabsController}.
  */
 public class TabB1pageController extends TableTabsController{
 	
