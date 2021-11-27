@@ -22,6 +22,7 @@ email: wywongbp | github: wwyjason | dev-branch: jason-feature-B<br/>Task B1, B2
 Input: 
   - Locations chosen in combobox: Hong Kong, India, Israel, Japan, Singapore, United Kingdom, United States, World
   - Date chosen in datepicker: 20 June, 2021
+
 Output:
 ![alt text](./images/tableA.png)
 
@@ -29,7 +30,8 @@ Output:
 
 Input: 
   - Locations chosen in combobox: Hong Kong, India, Israel, Japan, Singapore, United Kingdom, United States, World
-  - Date chosen in datepicker: 20 June, 2021
+  - Date chosen in datepicker: 20 June, 2021\
+ 
 Output:
 ![alt text](./images/tableB.png)
 
@@ -37,6 +39,7 @@ Output:
 Input: 
   - Locations chosen in combobox: Hong Kong, India, Israel, Japan, Singapore, United Kingdom, United States, World
   - Date chosen in datepicker: 20 June, 2021
+ 
 Output:
 ![alt text](./images/tableC.png)
 
@@ -44,6 +47,7 @@ Output:
 Input: 
   - Locations chosen in combobox: Hong Kong, India, Israel, Japan, Singapore, United Kingdom, United States, World
   - Date Range chosen in datepickers: 1 March, 2020 to 20 June 2021
+ 
 Output:
 ![alt text](./images/chartA.png)
 
@@ -51,6 +55,7 @@ Output:
 Input: 
   - Locations chosen in combobox: Hong Kong, India, Israel, Japan, Singapore, United Kingdom, United States, World
   - Date Range chosen in datepickers: 1 March, 2020 to 20 June 2021
+ 
 Output:
 ![alt text](./images/chartB.png)
 
@@ -58,6 +63,7 @@ Output:
 Input: 
   - Locations chosen in combobox: Hong Kong, India, Israel, Japan, Singapore, United Kingdom, United States, World
   - Date Range chosen in datepickers: 1 March, 2020 to 20 June 2021
+ 
 Output:
 ![alt text](./images/chartC.png)
 
@@ -65,6 +71,7 @@ Output:
 Input: 
   - x-axis chosen in combobox: GDP per Capita
   - Date chosen using slider: 20 July, 2021
+ 
 Output:
 ![alt text](./images/reportCChart.png)
 ![alt text](./images/reportCSlider.png)
