@@ -4,30 +4,29 @@ import java.time.LocalDate;
 
 import comp3111.covid.datastorage.DataTitle;
 /**
- * place holder
- * @author ytc314
- *
+ * Controller for the tab of COVID-19 Vaccination Table.
+ * Inherits the abstract class {@link TableTabsController}.
  */
-<span class="fc" id="L11">public class TabC1pageController extends TableTabsController{</span>
+<span class="fc" id="L10">public class TabC1pageController extends TableTabsController{</span>
 	
 	@Override
 	protected long getTotalDataFromDB(String isoCode, LocalDate targetDate) {
-<span class="fc" id="L15">		return this.getDatabase().searchTotalData(isoCode, targetDate, DataTitle.VAC);</span>
+<span class="fc" id="L14">		return this.getDatabase().searchTotalData(isoCode, targetDate, DataTitle.VAC);</span>
 	}
 		
 	@Override
 	protected double getRateDataFromDB(String isoCode, LocalDate targetDate) {
-<span class="fc" id="L20">		return this.getDatabase().searchRateData(isoCode, targetDate, DataTitle.VAC);</span>
+<span class="fc" id="L19">		return this.getDatabase().searchRateData(isoCode, targetDate, DataTitle.VAC);</span>
 	}
 		
 	@Override
 	protected void setTableTitle() {
-<span class="nc" id="L25">		this.tableTitlelbl.setText(&quot;Rate of Vaccination against COVID-19 as of &quot; + this.selectedDate);</span>
-<span class="nc" id="L26">	}</span>
+<span class="nc" id="L24">		this.tableTitlelbl.setText(&quot;Rate of Vaccination against COVID-19 as of &quot; + this.selectedDate);</span>
+<span class="nc" id="L25">	}</span>
 	
 	@Override
 	protected TableData getTableData(String iso, long totalData, double rateData) {
-<span class="fc" id="L30">		return new TableData(iso, totalData, rateData, true);</span>
+<span class="fc" id="L29">		return new TableData(iso, totalData, rateData, true);</span>
 	}
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

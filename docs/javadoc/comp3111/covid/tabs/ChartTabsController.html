@@ -15,7 +15,7 @@
 <script type="text/javascript" src="../../../script-dir/jquery-ui.min.js"></script>
 </head>
 <body class="class-declaration-page">
-<script type="text/javascript">var data = {"i0":10,"i1":6,"i2":10,"i3":10};
+<script type="text/javascript">var data = {"i0":10,"i1":6,"i2":10,"i3":10,"i4":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],8:["t4","Concrete Methods"]};
 var altColor = "alt-color";
 var rowColor = "row-color";
@@ -204,13 +204,20 @@ java.time.LocalDate&nbsp;endDate)</code></th>
 <div class="block">This method initializes the controller.</div>
 </td>
 </tr>
+<tr class="alt-color" id="i4">
+<td class="col-first"><code>void</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#updateCheckboxList()">updateCheckboxList</a></span>()</code></th>
+<td class="col-last">
+<div class="block">This initializes the checkboxList after the dataset is imported into the database.</div>
+</td>
+</tr>
 </tbody>
 </table>
 </div>
 </div>
 <div class="inherited-list">
 <h3 id="methods.inherited.from.class.comp3111.covid.tabs.TabController">Methods inherited from class&nbsp;comp3111.covid.tabs.<a href="TabController.html" title="class in comp3111.covid.tabs">TabController</a></h3>
-<code><a href="TabController.html#getDatabase()">getDatabase</a>, <a href="TabController.html#getSelectedIso()">getSelectedIso</a>, <a href="TabController.html#handleError(java.lang.String,java.lang.String)">handleError</a>, <a href="TabController.html#updateCheckboxList()">updateCheckboxList</a></code></div>
+<code><a href="TabController.html#getDatabase()">getDatabase</a>, <a href="TabController.html#getSelectedIso()">getSelectedIso</a>, <a href="TabController.html#handleError(java.lang.String,java.lang.String)">handleError</a></code></div>
 <div class="inherited-list">
 <h3 id="methods.inherited.from.class.java.lang.Object">Methods inherited from class&nbsp;java.lang.Object</h3>
 <code>clone, equals, finalize, getClass, hashCode, notify, notifyAll, toString, wait, wait, wait</code></div>
@@ -279,6 +286,20 @@ java.time.LocalDate&nbsp;endDate)</code></th>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="TabController.html#initialize()">initialize</a></code>&nbsp;in class&nbsp;<code><a href="TabController.html" title="class in comp3111.covid.tabs">TabController</a></code></dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="updateCheckboxList()">
+<h3>updateCheckboxList</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name">updateCheckboxList</span>()</div>
+<div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="TabController.html#updateCheckboxList()">TabController</a></code></span></div>
+<div class="block">This initializes the checkboxList after the dataset is imported into the database.
+ It loads the country name - iso code pair into the checkbox list for display,
+ and it adds a (@link javafx.collections.ListChangeListener} to update checked items onece the user clicks on a checkbox.</div>
+<dl class="notes">
+<dt>Overrides:</dt>
+<dd><code><a href="TabController.html#updateCheckboxList()">updateCheckboxList</a></code>&nbsp;in class&nbsp;<code><a href="TabController.html" title="class in comp3111.covid.tabs">TabController</a></code></dd>
 </dl>
 </section>
 </li>

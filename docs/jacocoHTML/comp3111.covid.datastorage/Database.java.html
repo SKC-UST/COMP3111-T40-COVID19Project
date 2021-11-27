@@ -10,6 +10,7 @@ import java.util.Map.Entry;
 
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
+import org.apache.commons.lang3.tuple.Triple;
 
 import edu.duke.FileResource;
 import javafx.util.Pair;
@@ -23,39 +24,39 @@ import java.time.format.DateTimeFormatter;
  * Each location read is stored in a HashMap, and each location is represented by a LocationData object.
  * {@link LocationData}
  */
-<span class="fc" id="L26">public class Database {</span>
+<span class="fc" id="L27">public class Database {</span>
 	
 	/**
 	 * A list of pairs containing the iso_code and name of each location read from the dataset. 
 	 * each pair is represented by &lt;isocode, locationName&gt;
 	 */
-<span class="fc" id="L32">	private ArrayList&lt;Pair&lt;String, String&gt;&gt; locationNames = new ArrayList&lt;Pair&lt;String, String&gt;&gt;(); </span>
+<span class="fc" id="L33">	private ArrayList&lt;Pair&lt;String, String&gt;&gt; locationNames = new ArrayList&lt;Pair&lt;String, String&gt;&gt;(); </span>
 	/**
 	 * A HashMap storing all LocationData objects created from the dataset.
 	 * the Key is the iso_code, and value is the LocationData object.
 	 */
-<span class="fc" id="L37">	private HashMap&lt;String, LocationData&gt; hashStorage = new HashMap&lt;String, LocationData&gt;();</span>
+<span class="fc" id="L38">	private HashMap&lt;String, LocationData&gt; hashStorage = new HashMap&lt;String, LocationData&gt;();</span>
 	/**
 	 * The earliest date in the dataset that a data exist.
 	 * i.e. the dataset does not contain any data before this date.
 	 */
-<span class="fc" id="L42">	private LocalDate earliest = LocalDate.now();</span>
+<span class="fc" id="L43">	private LocalDate earliest = LocalDate.now();</span>
 	/**
 	 * The latest date in the dataset that a data exist.
 	 * i.e. the dataset does not contain any data after this date.
 	 */
-<span class="fc" id="L47">	private LocalDate latest = LocalDate.of(2000, 1, 1); </span>
+<span class="fc" id="L48">	private LocalDate latest = LocalDate.of(2000, 1, 1); </span>
 	/**
 	 * A date formatter for transforming the date read from the dataset into a LocalDate value.
 	 */
-<span class="fc" id="L51">	final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern(&quot;M/d/yyyy&quot;);</span>
+<span class="fc" id="L52">	final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern(&quot;M/d/yyyy&quot;);</span>
 	
 	/**
 	 * Getter for earliest
 	 * @return {@link Database#earliest}
 	 */
 	public LocalDate getEarliest() {
-<span class="fc" id="L58">		return this.earliest;</span>
+<span class="fc" id="L59">		return this.earliest;</span>
 	}
 	
 	/**
@@ -63,7 +64,7 @@ import java.time.format.DateTimeFormatter;
 	 * @return {@link Database#latest}
 	 */
 	public LocalDate getLatest() {
-<span class="fc" id="L66">		return this.latest;</span>
+<span class="fc" id="L67">		return this.latest;</span>
 	}
 	
 	/**
@@ -72,10 +73,10 @@ import java.time.format.DateTimeFormatter;
 	 * @return			the name of the location.
 	 */
 	public String getLocationName(String isoCode) {
-<span class="fc" id="L75">		LocationData loc = this.hashStorage.get(isoCode);</span>
-<span class="pc bpc" id="L76" title="1 of 2 branches missed.">		if(loc == null)</span>
-<span class="nc" id="L77">			return null;</span>
-<span class="fc" id="L78">		return loc.getLocationName();</span>
+<span class="fc" id="L76">		LocationData loc = this.hashStorage.get(isoCode);</span>
+<span class="pc bpc" id="L77" title="1 of 2 branches missed.">		if(loc == null)</span>
+<span class="nc" id="L78">			return null;</span>
+<span class="fc" id="L79">		return loc.getLocationName();</span>
 	}
 	
 	/**
@@ -84,23 +85,23 @@ import java.time.format.DateTimeFormatter;
 	 * @see LocationData
 	 */
 	private void sortLocations() {
-<span class="fc" id="L87">		Iterator&lt;Entry&lt;String, LocationData&gt;&gt; it = hashStorage.entrySet().iterator();</span>
-<span class="fc bfc" id="L88" title="All 2 branches covered.">		while (it.hasNext()) {</span>
-<span class="fc" id="L89">			Map.Entry&lt;String, LocationData&gt; pair = (Map.Entry&lt;String, LocationData&gt;)it.next();</span>
-<span class="fc" id="L90">			LocationData loc = pair.getValue();</span>
-<span class="fc bfc" id="L91" title="All 2 branches covered.">			for(DataTitle title : DataTitle.values()) {</span>
-<span class="fc" id="L92">				Collections.sort(loc.getTotalDayList(title));</span>
-<span class="fc" id="L93">				Collections.sort(loc.getRateDayList(title));</span>
+<span class="fc" id="L88">		Iterator&lt;Entry&lt;String, LocationData&gt;&gt; it = hashStorage.entrySet().iterator();</span>
+<span class="fc bfc" id="L89" title="All 2 branches covered.">		while (it.hasNext()) {</span>
+<span class="fc" id="L90">			Map.Entry&lt;String, LocationData&gt; pair = (Map.Entry&lt;String, LocationData&gt;)it.next();</span>
+<span class="fc" id="L91">			LocationData loc = pair.getValue();</span>
+<span class="fc bfc" id="L92" title="All 2 branches covered.">			for(DataTitle title : DataTitle.values()) {</span>
+<span class="fc" id="L93">				Collections.sort(loc.getTotalDayList(title));</span>
+<span class="fc" id="L94">				Collections.sort(loc.getRateDayList(title));</span>
 			}
-<span class="fc" id="L95">		}</span>
-<span class="fc" id="L96">	}</span>
+<span class="fc" id="L96">		}</span>
+<span class="fc" id="L97">	}</span>
 	
 	/**
 	 * This method returns a list of iso-code - location name pairs of every location in this database.
 	 * @return {@link Database#locationNames}
 	 */
 	public ArrayList&lt;Pair&lt;String, String&gt;&gt; getLocationNames(){
-<span class="nc" id="L103">		return this.locationNames;</span>
+<span class="nc" id="L104">		return this.locationNames;</span>
 	}
 	
 	/**
@@ -108,15 +109,16 @@ import java.time.format.DateTimeFormatter;
 	 * @param dataset a .csv dataset file.
 	 */
 	public void importCSV(File dataset) {
-<span class="fc" id="L111">		FileResource fr = new FileResource(dataset);</span>
-<span class="fc" id="L112">		CSVParser parser = fr.getCSVParser(true);</span>
+<span class="fc" id="L112">		this.clearDatabase();</span>
+<span class="fc" id="L113">		FileResource fr = new FileResource(dataset);</span>
+<span class="fc" id="L114">		CSVParser parser = fr.getCSVParser(true);</span>
 		
-<span class="fc bfc" id="L114" title="All 2 branches covered.">		for(CSVRecord rec : parser) {</span>
-<span class="fc" id="L115">			rowToData(rec);</span>
-<span class="fc" id="L116">		}</span>
+<span class="fc bfc" id="L116" title="All 2 branches covered.">		for(CSVRecord rec : parser) {</span>
+<span class="fc" id="L117">			rowToData(rec);</span>
+<span class="fc" id="L118">		}</span>
 		
-<span class="fc" id="L118">		this.sortLocations();</span>
-<span class="fc" id="L119">	}</span>
+<span class="fc" id="L120">		this.sortLocations();</span>
+<span class="fc" id="L121">	}</span>
 	
 	/**
 	 * A helper method for {@link Database#importCSV(File)}.
@@ -127,46 +129,51 @@ import java.time.format.DateTimeFormatter;
 	 * @see LocationData, DayData
 	 */
 	private void rowToData(CSVRecord record) {
-<span class="fc" id="L130">		String isoCode = record.get(&quot;iso_code&quot;);</span>
-<span class="fc" id="L131">		LocalDate date = LocalDate.parse(record.get(&quot;date&quot;), this.DATE_FORMAT);</span>
-<span class="fc bfc" id="L132" title="All 2 branches covered.">		if(date.isAfter(latest)) { latest = date;}</span>
-<span class="fc bfc" id="L133" title="All 2 branches covered.">		if(date.isBefore(earliest)) { earliest = date;}</span>
+<span class="fc" id="L132">		String isoCode = record.get(&quot;iso_code&quot;);</span>
+<span class="fc" id="L133">		LocalDate date = LocalDate.parse(record.get(&quot;date&quot;), this.DATE_FORMAT);</span>
+<span class="fc bfc" id="L134" title="All 2 branches covered.">		if(date.isAfter(latest)) { latest = date;}</span>
+<span class="fc bfc" id="L135" title="All 2 branches covered.">		if(date.isBefore(earliest)) { earliest = date;}</span>
 		
 		//Initializing a LocationData from record
-<span class="fc bfc" id="L136" title="All 2 branches covered.">		if(!this.hashStorage.containsKey(isoCode)) {</span>
-<span class="fc" id="L137">			String locationName = record.get(&quot;location&quot;);</span>
-<span class="fc" id="L138">			String populationStr = record.get(&quot;population&quot;);</span>
+<span class="fc bfc" id="L138" title="All 2 branches covered.">		if(!this.hashStorage.containsKey(isoCode)) {</span>
+<span class="fc" id="L139">			String locationName = record.get(&quot;location&quot;);</span>
+<span class="fc" id="L140">			String populationStr = record.get(&quot;population&quot;);</span>
 			long populationNum;
 			double populationDensity, medianAge, age65, age70, gdp, diabetes;
 			
-<span class="fc" id="L142">			try {populationNum = Long.parseLong(populationStr);} catch(Exception e){return;} //&quot;countries&quot; without population numbers do not contain meaning data in any way</span>
-<span class="fc" id="L143">			try {populationDensity = Double.parseDouble(record.get(&quot;population_density&quot;));} catch(Exception e) {populationDensity = -1;}</span>
-<span class="fc" id="L144">			try {medianAge = Double.parseDouble(record.get(&quot;median_age&quot;));} catch(Exception e) {medianAge = -1;}</span>
-<span class="fc" id="L145">			try {age65 = Double.parseDouble(record.get(&quot;aged_65_older&quot;));} catch(Exception e) {age65 = -1;}</span>
-<span class="fc" id="L146">			try {age70 = Double.parseDouble(record.get(&quot;aged_70_older&quot;));} catch(Exception e) {age70 = -1;}</span>
-<span class="fc" id="L147">			try {gdp = Double.parseDouble(record.get(&quot;gdp_per_capita&quot;));} catch(Exception e) {gdp = -1;}</span>
-<span class="fc" id="L148">			try {diabetes = Double.parseDouble(record.get(&quot;diabetes_prevalence&quot;));} catch(Exception e) {diabetes = -1;}</span>
-<span class="pc bpc" id="L149" title="1 of 2 branches missed.">			if(populationStr.equals(&quot;&quot;)) return;</span>
-<span class="fc" id="L150">			this.hashStorage.put(isoCode, new LocationData(</span>
-<span class="fc" id="L151">					isoCode, record.get(&quot;continent&quot;), record.get(&quot;location&quot;), populationNum, populationDensity, medianAge, age65, age70, gdp, diabetes));</span>
-<span class="fc" id="L152">			this.locationNames.add(new Pair&lt;String, String&gt;(isoCode, locationName));</span>
+<span class="fc" id="L144">			try {populationNum = Long.parseLong(populationStr);} catch(Exception e){return;} //&quot;countries&quot; without population numbers do not contain meaning data in any way</span>
+<span class="fc" id="L145">			try {populationDensity = Double.parseDouble(record.get(&quot;population_density&quot;));} catch(Exception e) {populationDensity = -1;}</span>
+<span class="fc" id="L146">			try {medianAge = Double.parseDouble(record.get(&quot;median_age&quot;));} catch(Exception e) {medianAge = -1;}</span>
+<span class="fc" id="L147">			try {age65 = Double.parseDouble(record.get(&quot;aged_65_older&quot;));} catch(Exception e) {age65 = -1;}</span>
+<span class="fc" id="L148">			try {age70 = Double.parseDouble(record.get(&quot;aged_70_older&quot;));} catch(Exception e) {age70 = -1;}</span>
+<span class="fc" id="L149">			try {gdp = Double.parseDouble(record.get(&quot;gdp_per_capita&quot;));} catch(Exception e) {gdp = -1;}</span>
+<span class="fc" id="L150">			try {diabetes = Double.parseDouble(record.get(&quot;diabetes_prevalence&quot;));} catch(Exception e) {diabetes = -1;}</span>
+<span class="pc bpc" id="L151" title="1 of 2 branches missed.">			if(populationStr.equals(&quot;&quot;)) return;</span>
+<span class="fc" id="L152">			this.hashStorage.put(isoCode, new LocationData(</span>
+<span class="fc" id="L153">					isoCode, record.get(&quot;continent&quot;), record.get(&quot;location&quot;), populationNum, populationDensity, medianAge, age65, age70, gdp, diabetes));</span>
+<span class="fc" id="L154">			this.locationNames.add(new Pair&lt;String, String&gt;(isoCode, locationName));</span>
 		}
 		
 		//put DayData into LocationData
-<span class="fc" id="L156">		LocationData loc = this.hashStorage.get(isoCode);</span>
-<span class="fc" id="L157">		String s = record.get(&quot;total_cases&quot;);</span>
-<span class="fc bfc" id="L158" title="All 2 branches covered.">		if(!s.equals(&quot;&quot;)) { loc.addDayData(DataTitle.CASE, new TotalDayData(date, Long.parseLong(s)));}</span>
-<span class="fc" id="L159">		s = record.get(&quot;total_cases_per_million&quot;);</span>
-<span class="fc bfc" id="L160" title="All 2 branches covered.">		if(!s.equals(&quot;&quot;)) {loc.addDayData(DataTitle.CASE, new RateDayData(date, Double.parseDouble(s)));};</span>
-<span class="fc" id="L161">		s = record.get(&quot;total_deaths&quot;);</span>
-<span class="fc bfc" id="L162" title="All 2 branches covered.">		if(!s.equals(&quot;&quot;)) { loc.addDayData(DataTitle.DEATH, new TotalDayData(date, Long.parseLong(s)));}</span>
-<span class="fc" id="L163">		s = record.get(&quot;total_deaths_per_million&quot;);</span>
-<span class="fc bfc" id="L164" title="All 2 branches covered.">		if(!s.equals(&quot;&quot;)) {loc.addDayData(DataTitle.DEATH, new RateDayData(date, Double.parseDouble(s)));};</span>
-<span class="fc" id="L165">		s = record.get(&quot;people_fully_vaccinated&quot;);</span>
-<span class="fc bfc" id="L166" title="All 2 branches covered.">		if(!s.equals(&quot;&quot;)) { loc.addDayData(DataTitle.VAC, new TotalDayData(date, Long.parseLong(s)));}</span>
-<span class="fc" id="L167">		s = record.get(&quot;people_fully_vaccinated_per_hundred&quot;);</span>
-<span class="fc bfc" id="L168" title="All 2 branches covered.">		if(!s.equals(&quot;&quot;)) { loc.addDayData(DataTitle.VAC, new RateDayData(date, Double.parseDouble(s)));}</span>
-<span class="fc" id="L169">	}</span>
+<span class="fc" id="L158">		LocationData loc = this.hashStorage.get(isoCode);</span>
+<span class="fc" id="L159">		String s = record.get(&quot;total_cases&quot;);</span>
+<span class="fc bfc" id="L160" title="All 2 branches covered.">		if(!s.equals(&quot;&quot;)) { loc.addDayData(DataTitle.CASE, new TotalDayData(date, Long.parseLong(s)));}</span>
+<span class="fc" id="L161">		s = record.get(&quot;total_cases_per_million&quot;);</span>
+<span class="fc bfc" id="L162" title="All 2 branches covered.">		if(!s.equals(&quot;&quot;)) {loc.addDayData(DataTitle.CASE, new RateDayData(date, Double.parseDouble(s)));};</span>
+<span class="fc" id="L163">		s = record.get(&quot;total_deaths&quot;);</span>
+<span class="fc bfc" id="L164" title="All 2 branches covered.">		if(!s.equals(&quot;&quot;)) { loc.addDayData(DataTitle.DEATH, new TotalDayData(date, Long.parseLong(s)));}</span>
+<span class="fc" id="L165">		s = record.get(&quot;total_deaths_per_million&quot;);</span>
+<span class="fc bfc" id="L166" title="All 2 branches covered.">		if(!s.equals(&quot;&quot;)) {loc.addDayData(DataTitle.DEATH, new RateDayData(date, Double.parseDouble(s)));};</span>
+<span class="fc" id="L167">		s = record.get(&quot;people_fully_vaccinated&quot;);</span>
+<span class="fc bfc" id="L168" title="All 2 branches covered.">		if(!s.equals(&quot;&quot;)) { </span>
+<span class="fc" id="L169">			long vaccinatedNum = Long.parseLong(s);</span>
+<span class="fc" id="L170">			loc.addDayData(DataTitle.VAC, new TotalDayData(date, vaccinatedNum));</span>
+<span class="fc" id="L171">			double vacRate = (vaccinatedNum * 100) / loc.getLocationProperty(LocationProperty.POPULATION).doubleValue(); </span>
+<span class="fc" id="L172">			loc.addDayData(DataTitle.VAC, new RateDayData(date, vacRate));</span>
+		}
+<span class="fc" id="L174">		s = record.get(&quot;people_fully_vaccinated_per_hundred&quot;);</span>
+<span class="fc bfc" id="L175" title="All 2 branches covered.">		if(!s.equals(&quot;&quot;)) { loc.addDayData(DataTitle.VAC, new RateDayData(date, Double.parseDouble(s)));}</span>
+<span class="fc" id="L176">	}</span>
 	
 	/**
 	 * A method that searches a data value given the location, date and title of data.
@@ -179,8 +186,8 @@ import java.time.format.DateTimeFormatter;
 	 * @return	the value of data of given location, date and title. Returns -1 if no data found.
 	 */
 	public long searchTotalData(String isoCode, LocalDate targetDate, DataTitle title) {
-<span class="fc" id="L182">		long result = this.hashStorage.get(isoCode).getTotalDayData(targetDate, title);</span>
-<span class="fc" id="L183">		return result;</span>
+<span class="fc" id="L189">		long result = this.hashStorage.get(isoCode).getTotalDayData(targetDate, title);</span>
+<span class="fc" id="L190">		return result;</span>
 	}
 	
 	/**
@@ -194,8 +201,8 @@ import java.time.format.DateTimeFormatter;
 	 * @return	the value of data of given location, date and title. Returns -1 if no data found.
 	 */
 	public double searchRateData(String isoCode, LocalDate targetDate, DataTitle title) {
-<span class="fc" id="L197">		double result = this.hashStorage.get(isoCode).getRateDayData(targetDate, title);</span>
-<span class="fc" id="L198">		return result;</span>
+<span class="fc" id="L204">		double result = this.hashStorage.get(isoCode).getRateDayData(targetDate, title);</span>
+<span class="fc" id="L205">		return result;</span>
 	}
 	
 	/**
@@ -210,15 +217,15 @@ import java.time.format.DateTimeFormatter;
 	 * @return			a list of pairs with the date as x-value and the data value as y-value.
 	 */
 	public ArrayList&lt;Pair&lt;LocalDate, Number&gt;&gt; searchChartData(String isoCode, LocalDate startDate, LocalDate endDate, DataTitle title){
-<span class="fc" id="L213">		ArrayList&lt;Pair&lt;LocalDate, Number&gt;&gt; result = new ArrayList&lt;Pair&lt;LocalDate, Number&gt;&gt;();</span>
-<span class="fc" id="L214">		LocationData loc = this.hashStorage.get(isoCode);</span>
-<span class="fc" id="L215">		ArrayList&lt;RateDayData&gt; rateList = loc.getRateDayList(title); </span>
-<span class="fc bfc" id="L216" title="All 2 branches covered.">		for(RateDayData day : rateList) {</span>
-<span class="fc bfc" id="L217" title="All 4 branches covered.">			if(!day.getDate().isBefore(startDate) &amp;&amp; !day.getDate().isAfter(endDate)) {</span>
-<span class="fc" id="L218">				result.add(new Pair&lt;LocalDate, Number&gt;(day.getDate(), day.getData()));</span>
+<span class="fc" id="L220">		ArrayList&lt;Pair&lt;LocalDate, Number&gt;&gt; result = new ArrayList&lt;Pair&lt;LocalDate, Number&gt;&gt;();</span>
+<span class="fc" id="L221">		LocationData loc = this.hashStorage.get(isoCode);</span>
+<span class="fc" id="L222">		ArrayList&lt;RateDayData&gt; rateList = loc.getRateDayList(title); </span>
+<span class="fc bfc" id="L223" title="All 2 branches covered.">		for(RateDayData day : rateList) {</span>
+<span class="fc bfc" id="L224" title="All 4 branches covered.">			if(!day.getDate().isBefore(startDate) &amp;&amp; !day.getDate().isAfter(endDate)) {</span>
+<span class="fc" id="L225">				result.add(new Pair&lt;LocalDate, Number&gt;(day.getDate(), day.getData()));</span>
 			}
-<span class="fc" id="L220">		}</span>
-<span class="fc" id="L221">		return result;</span>
+<span class="fc" id="L227">		}</span>
+<span class="fc" id="L228">		return result;</span>
 	}
 	
 	/**
@@ -230,36 +237,34 @@ import java.time.format.DateTimeFormatter;
 	 * @param lp			the desired location property.
 	 * @return				a list of data points of all locations of the desired date and location property.
 	 */
-	public ArrayList&lt;Pair&lt;Number, Number&gt;&gt; searchDataPair(LocalDate targetDate, LocationProperty lp){
-<span class="fc" id="L234">		ArrayList&lt;Pair&lt;Number, Number&gt;&gt; result = new ArrayList&lt;Pair&lt;Number, Number&gt;&gt;();</span>
+	public ArrayList&lt;Triple&lt;String, Number, Number&gt;&gt; searchDataPair(LocalDate targetDate, LocationProperty lp){
+<span class="fc" id="L241">		ArrayList&lt;Triple&lt;String, Number, Number&gt;&gt; result = new ArrayList&lt;Triple&lt;String, Number, Number&gt;&gt;();</span>
 		
-<span class="fc" id="L236">		Iterator&lt;Entry&lt;String, LocationData&gt;&gt; it = hashStorage.entrySet().iterator();</span>
-<span class="fc bfc" id="L237" title="All 2 branches covered.">		while (it.hasNext()) {</span>
-<span class="fc" id="L238">			Map.Entry&lt;String, LocationData&gt; pair = (Map.Entry&lt;String, LocationData&gt;)it.next();</span>
+<span class="fc" id="L243">		Iterator&lt;Entry&lt;String, LocationData&gt;&gt; it = hashStorage.entrySet().iterator();</span>
+<span class="fc bfc" id="L244" title="All 2 branches covered.">		while (it.hasNext()) {</span>
+<span class="fc" id="L245">			Map.Entry&lt;String, LocationData&gt; pair = (Map.Entry&lt;String, LocationData&gt;)it.next();</span>
 			
 			//y-value
-<span class="fc" id="L241">			Number rateValue = pair.getValue().getRateDayData(targetDate, DataTitle.VAC);</span>
-<span class="fc bfc" id="L242" title="All 4 branches covered.">			if(rateValue.intValue() &lt; 0 || pair.getKey().contains(&quot;OWID&quot;))</span>
-<span class="fc" id="L243">					continue;</span>
+<span class="fc" id="L248">			Number rateValue = pair.getValue().getRateDayData(targetDate, DataTitle.VAC);</span>
+<span class="fc bfc" id="L249" title="All 4 branches covered.">			if(rateValue.intValue() &lt; 0 || pair.getKey().contains(&quot;OWID&quot;))</span>
+<span class="fc" id="L250">				continue;</span>
 			//x-value
-<span class="fc" id="L245">			Number xValue = pair.getValue().getLocationProperty(lp);</span>
-<span class="pc bpc" id="L246" title="1 of 2 branches missed.">			if(xValue.intValue() &lt; 0) //corresponding data field is blank in csv</span>
-<span class="nc" id="L247">				continue;</span>
-<span class="fc" id="L248">			result.add(new Pair&lt;Number, Number&gt;(xValue, rateValue));</span>
-<span class="fc" id="L249">		}</span>
-<span class="fc" id="L250">		return result;</span>
+<span class="fc" id="L252">			Number xValue = pair.getValue().getLocationProperty(lp);</span>
+<span class="pc bpc" id="L253" title="1 of 2 branches missed.">			if(xValue.intValue() &lt; 0) //corresponding data field is blank in csv</span>
+<span class="nc" id="L254">				continue;</span>
+			
+			//country name
+<span class="fc" id="L257">			String countryName = pair.getValue().getLocationName();</span>
+<span class="fc" id="L258">			result.add(Triple.of(countryName, xValue, rateValue));</span>
+<span class="fc" id="L259">		}</span>
+<span class="fc" id="L260">		return result;</span>
 	}
 	
 	/**
 	 * This method clears the all the content of the database.
 	 */
 	public void clearDatabase () {
-<span class="fc" id="L257">		Iterator&lt;Entry&lt;String, LocationData&gt;&gt; it = hashStorage.entrySet().iterator();</span>
-<span class="fc bfc" id="L258" title="All 2 branches covered.">		while (it.hasNext()) {</span>
-<span class="fc" id="L259">			Map.Entry&lt;String, LocationData&gt; pair = (Map.Entry&lt;String, LocationData&gt;)it.next();</span>
-<span class="fc" id="L260">			pair.getValue().clearLocationData();</span>
-<span class="fc" id="L261">		}</span>
-<span class="fc" id="L262">		hashStorage.clear();</span>
-<span class="fc" id="L263">	}</span>
+<span class="fc" id="L267">		hashStorage.clear();</span>
+<span class="fc" id="L268">	}</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
