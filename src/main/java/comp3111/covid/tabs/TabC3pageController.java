@@ -22,6 +22,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.Tooltip;
 import javafx.util.Pair;
 import javafx.util.StringConverter;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -203,6 +204,7 @@ public class TabC3pageController {
 		//display the chart
 		this.regressionChart.getData().addAll(scatter, regression);
 		this.regressionChart.getScene().getStylesheets().add(getClass().getResource("/stylesheet/root.css").toExternalForm());
+		this.addTooltip(scatter);
 	}
 	
 	/**
@@ -261,6 +263,16 @@ public class TabC3pageController {
 			scatter.getData().add(new Data<Number, Number>(pair.getKey(), pair.getValue()));
 		}
 		return scatter;
+	}
+	
+	private void addTooltip(XYChart.Series<Number, Number> s) {
+		for(Data<Number,Number> d : s.getData()) {
+			Tooltip t = new Tooltip(d.getXValue().toString() + "\n" + d.getYValue().toString());
+			Tooltip.install(d.getNode(), t);
+			d.getNode().setOnMouseEntered(event->d.getNode().getStyleClass().clear());
+			d.getNode().setOnMouseEntered(event->d.getNode().getStyleClass().add("onHover"));
+			d.getNode().setOnMouseEntered(event->d.getNode().getStyleClass().remove("onHover"));
+		}
 	}
 	
 	// ---------------- for table ----------------------

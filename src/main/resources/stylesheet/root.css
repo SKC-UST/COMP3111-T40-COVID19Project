@@ -14,3 +14,6 @@
 .default-color1.chart-legend-item-symbol{
     -fx-background-color: #003153;
  }
+ .onHover{
+ 	-fx-background-color: Orange;
+ }
