@@ -1,5 +1,7 @@
 package comp3111.covid.tabs;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -260,14 +262,21 @@ public class TabC3pageController {
 		XYChart.Series<Number, Number> scatter = new XYChart.Series<>();
 		scatter.setName("actual data points");
 		for(Pair<Number, Number> pair : rawData) {
-			scatter.getData().add(new Data<Number, Number>(pair.getKey(), pair.getValue()));
+			Data<Number,Number> data = new Data<Number,Number>(pair.getKey(),pair.getValue());
+			data.setExtraValue("Hello");
+			scatter.getData().add(data);
 		}
 		return scatter;
 	}
 	
 	private void addTooltip(XYChart.Series<Number, Number> s) {
+		DecimalFormat df = new DecimalFormat("#.####");
+		df.setRoundingMode(RoundingMode.CEILING);
 		for(Data<Number,Number> d : s.getData()) {
-			Tooltip t = new Tooltip(d.getXValue().toString() + "\n" + d.getYValue().toString());
+			Tooltip t = new Tooltip(
+					d.getExtraValue().toString() + "\n" +
+					this.LOC_PROP_TEXT[this.selectedProperty.value()] + ": " + d.getXValue().toString() + "\n" + 
+					"Vaccination Rate: " + df.format(d.getYValue().doubleValue()) + "%");
 			Tooltip.install(d.getNode(), t);
 			d.getNode().setOnMouseEntered(event->d.getNode().getStyleClass().clear());
 			d.getNode().setOnMouseEntered(event->d.getNode().getStyleClass().add("onHover"));
