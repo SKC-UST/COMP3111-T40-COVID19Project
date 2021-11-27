@@ -74,4 +74,4 @@ Input:
  
 Output:
 ![alt text](./images/reportCChart.png)
-![alt text](./images/reportCSlider.png)
+![alt text](./images/report-C-table.png)
