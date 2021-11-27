@@ -10,9 +10,8 @@ import javafx.util.Pair;
 import javafx.util.StringConverter;
 
 /**
- * place holder
- * @author ytc314
- *
+ * Controller for the tab of COVID-19 Vaccination Rate Chart.
+ * Inherits the abstract class {@link ChartTabsController}.
  */
 public class TabC2pageController extends ChartTabsController {
 	

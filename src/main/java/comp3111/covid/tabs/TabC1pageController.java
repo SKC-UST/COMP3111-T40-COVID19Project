@@ -4,9 +4,8 @@ import java.time.LocalDate;
 
 import comp3111.covid.datastorage.DataTitle;
 /**
- * place holder
- * @author ytc314
- *
+ * Controller for the tab of COVID-19 Vaccination Table.
+ * Inherits the abstract class {@link TableTabsController}.
  */
 public class TabC1pageController extends TableTabsController{
 	
