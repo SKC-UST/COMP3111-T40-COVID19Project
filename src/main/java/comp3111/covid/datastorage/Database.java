@@ -263,7 +263,7 @@ public class Database {
 	/**
 	 * This method clears the all the content of the database.
 	 */
-	private void clearDatabase () {
+	public void clearDatabase () {
 		hashStorage.clear();
 	}
 }

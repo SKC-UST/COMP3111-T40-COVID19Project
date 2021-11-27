@@ -54,7 +54,7 @@ public class TabC1Tester extends TabC1pageController{
 	@Test
 	public void testGenerateDataList() {
 		ArrayList<TableData> resultArr = this.generateDataList(testIsoArr, testDate);
-		TableData[] expectedArr = {new TableData("Hong Kong", 2065375, 27.55, true), new TableData("United States", 161631676, 48.33, true)};
+		TableData[] expectedArr = {new TableData("Hong Kong", 2065375, 27.5494, true), new TableData("United States", 161631676, 48.831, true)};
 		for(int i = 0; i < resultArr.size(); ++i) {
 			Assert.assertEquals(expectedArr[i].getCountryName(), resultArr.get(i).getCountryName());
 			Assert.assertEquals(expectedArr[i].getTotalData(), resultArr.get(i).getTotalData());
