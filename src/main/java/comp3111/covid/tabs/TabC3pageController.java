@@ -29,6 +29,7 @@ import javafx.util.Pair;
 import javafx.util.StringConverter;
 import javafx.scene.control.cell.PropertyValueFactory;
 
+import org.apache.commons.lang3.tuple.Triple;
 import org.apache.commons.math3.stat.regression.SimpleRegression;
 
 /**
@@ -170,7 +171,7 @@ public class TabC3pageController {
 	 *  Main method for generating the chart and the table.
 	 */
 	private void generateView() {
-		ArrayList<Pair<Number, Number>> rawData = database.searchDataPair(this.selectedDate, this.selectedProperty);
+		ArrayList<Triple<String, Number, Number>> rawData = database.searchDataPair(this.selectedDate, this.selectedProperty);
 		RegressionResult regressionResult = this.generateRegression(rawData);
 		this.generateChart(rawData, regressionResult);
 		this.generateTable(regressionResult);
@@ -183,7 +184,7 @@ public class TabC3pageController {
 	 * @param regressionResult	A {@link RegressionResult} object storing regression values stored generated from raw data.
 	 */
 	@SuppressWarnings("unchecked")
-	private void generateChart(ArrayList<Pair<Number, Number>> data, RegressionResult regressionResult) {
+	private void generateChart(ArrayList<Triple<String, Number, Number>> data, RegressionResult regressionResult) {
 		this.regressionChart.getData().clear();
 	
 		//Handle no data found
@@ -217,10 +218,10 @@ public class TabC3pageController {
 	 * @param sourceData	A list of raw data from the Database.
 	 * @return				the largest X value in the list of raw data.
 	 */
-	private double getLastX(ArrayList<Pair<Number, Number>> sourceData) {
+	private double getLastX(ArrayList<Triple<String,Number, Number>> sourceData) {
 		double maxX = 0;
-		for(Pair<Number, Number> pair : sourceData) {
-			double x = pair.getKey().doubleValue();
+		for(Triple<String,Number, Number> triple : sourceData) {
+			double x = triple.getMiddle().doubleValue();
 			maxX = (maxX > x) ? maxX : x; 
 		}
 		return maxX;
@@ -230,10 +231,10 @@ public class TabC3pageController {
 	 * @param rawData	list of data obtained from database.
 	 * @return			{@link RegressionResult} object containing the values of regression performed on the set of data.
 	 */
-	protected RegressionResult generateRegression(ArrayList<Pair<Number, Number>> rawData) {
+	protected RegressionResult generateRegression(ArrayList<Triple<String, Number, Number>> rawData) {
 		SimpleRegression regression = new SimpleRegression(true);
-		for(Pair<Number, Number> datum : rawData) {
-			regression.addData(datum.getKey().doubleValue(), datum.getValue().doubleValue());
+		for(Triple<String, Number, Number> datum : rawData) {
+			regression.addData(datum.getMiddle().doubleValue(), datum.getRight().doubleValue());
 		}
 		return new RegressionResult(regression.getIntercept(), regression.getSlope(), regression.getSignificance(), regression.getR(), regression.getRSquare());
 	}
@@ -243,7 +244,7 @@ public class TabC3pageController {
 	 * @param regressionResult	A {@link RegressionResult} object containing the values of regression performed on Raw Data.
 	 * @return					A {@link javafx.scene.chart.XYChart.Series} object for creating the regression line in the chart.
 	 */
-	protected XYChart.Series<Number, Number> generateRegressionSeries(ArrayList<Pair<Number, Number>> rawData, RegressionResult regressionResult) {
+	protected XYChart.Series<Number, Number> generateRegressionSeries(ArrayList<Triple<String,Number, Number>> rawData, RegressionResult regressionResult) {
 		double slope = regressionResult.getSlope();
 		double intercept = regressionResult.getIntercept();
 		
@@ -260,12 +261,11 @@ public class TabC3pageController {
 	 * @param rawData	Raw data to be plotted on the graph.
 	 * @return			A {@link javafx.scene.chart.XYChart.Series} object for creating the scatter plot in the chart.
 	 */
-	protected XYChart.Series<Number, Number> generateScatterSeries(ArrayList<Pair<Number, Number>> rawData){
+	protected XYChart.Series<Number, Number> generateScatterSeries(ArrayList<Triple<String, Number, Number>> rawData){
 		XYChart.Series<Number, Number> scatter = new XYChart.Series<>();
 		scatter.setName("actual data points");
-		for(Pair<Number, Number> pair : rawData) {
-			Data<Number,Number> data = new Data<Number,Number>(pair.getKey(),pair.getValue());
-			data.setExtraValue("Hello");
+		for(Triple<String, Number, Number> triple : rawData) {
+			Data<Number,Number> data = new Data<Number,Number>(triple.getMiddle(),triple.getRight(), triple.getLeft());
 			scatter.getData().add(data);
 		}
 		return scatter;

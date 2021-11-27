@@ -10,6 +10,7 @@ import java.util.Map.Entry;
 
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
+import org.apache.commons.lang3.tuple.Triple;
 
 import edu.duke.FileResource;
 import javafx.util.Pair;
@@ -236,8 +237,8 @@ public class Database {
 	 * @param lp			the desired location property.
 	 * @return				a list of data points of all locations of the desired date and location property.
 	 */
-	public ArrayList<Pair<Number, Number>> searchDataPair(LocalDate targetDate, LocationProperty lp){
-		ArrayList<Pair<Number, Number>> result = new ArrayList<Pair<Number, Number>>();
+	public ArrayList<Triple<String, Number, Number>> searchDataPair(LocalDate targetDate, LocationProperty lp){
+		ArrayList<Triple<String, Number, Number>> result = new ArrayList<Triple<String, Number, Number>>();
 		
 		Iterator<Entry<String, LocationData>> it = hashStorage.entrySet().iterator();
 		while (it.hasNext()) {
@@ -246,12 +247,15 @@ public class Database {
 			//y-value
 			Number rateValue = pair.getValue().getRateDayData(targetDate, DataTitle.VAC);
 			if(rateValue.intValue() < 0 || pair.getKey().contains("OWID"))
-					continue;
+				continue;
 			//x-value
 			Number xValue = pair.getValue().getLocationProperty(lp);
 			if(xValue.intValue() < 0) //corresponding data field is blank in csv
 				continue;
-			result.add(new Pair<Number, Number>(xValue, rateValue));
+			
+			//country name
+			String countryName = pair.getValue().getLocationName();
+			result.add(Triple.of(countryName, xValue, rateValue));
 		}
 		return result;
 	}
