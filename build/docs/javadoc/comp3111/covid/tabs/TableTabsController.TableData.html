@@ -86,7 +86,8 @@ loadScripts(document, 'script');</script>
 <hr>
 <pre>public class <span class="type-name-label">TableTabsController.TableData</span>
 extends java.lang.Object</pre>
-<div class="block">A class holding data to be put into the table.</div>
+<div class="block">A nested class holding data to be put into the table.
+ Data contains country name, a total data, and a rate data.</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -109,7 +110,9 @@ extends java.lang.Object</pre>
 long&nbsp;total,
 double&nbsp;rate,
 boolean&nbsp;needPercentage)</code></th>
-<td class="col-last">&nbsp;</td>
+<td class="col-last">
+<div class="block">Constructor for TableData.</div>
+</td>
 </tr>
 </tbody>
 </table>
@@ -178,6 +181,16 @@ boolean&nbsp;needPercentage)</code></th>
 long&nbsp;total,
 double&nbsp;rate,
 boolean&nbsp;needPercentage)</span></div>
+<div class="block">Constructor for TableData.
+ All data are stored as string internally.
+ This constructor performs string formating, such as rounding.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>location</code> - - Name of location</dd>
+<dd><code>total</code> - - Total data</dd>
+<dd><code>rate</code> - - rate data</dd>
+<dd><code>needPercentage</code> - - boolean value indicating whether a "%" symbol is added after rate data when on display.</dd>
+</dl>
 </section>
 </li>
 </ul>

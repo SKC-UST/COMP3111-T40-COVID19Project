@@ -86,13 +86,22 @@ public abstract class TableTabsController extends TabController {
 		return 0;
 	}
 	/**
-	 * A class holding data to be put into the table.
+	 * A nested class holding data to be put into the table.
+	 * Data contains country name, a total data, and a rate data.
 	 */
 	public class TableData {
 		private final SimpleStringProperty countryName;
 		private final SimpleStringProperty totalData;
 		private final SimpleStringProperty rateData;
-
+		/**
+		 * Constructor for TableData.
+		 * All data are stored as string internally.
+		 * This constructor performs string formating, such as rounding.
+		 * @param location - Name of location
+		 * @param total	- Total data
+		 * @param rate	- rate data
+		 * @param needPercentage - boolean value indicating whether a "%" symbol is added after rate data when on display.
+		 */
 		public TableData (String location, long total, double rate, boolean needPercentage) {
 			this.countryName = new SimpleStringProperty(location);
 			this.totalData = new SimpleStringProperty(total >= 0 ? String.format("%,d", total) : "No Data");

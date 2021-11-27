@@ -15,7 +15,7 @@
 <script type="text/javascript" src="../../../script-dir/jquery-ui.min.js"></script>
 </head>
 <body class="class-declaration-page">
-<script type="text/javascript">var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10};
+<script type="text/javascript">var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "alt-color";
 var rowColor = "row-color";
@@ -129,48 +129,41 @@ extends java.lang.Object</pre>
 </thead>
 <tbody>
 <tr class="alt-color" id="i0">
-<td class="col-first"><code>void</code></td>
-<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#clearDatabase()">clearDatabase</a></span>()</code></th>
-<td class="col-last">
-<div class="block">This method clears the all the content of the database.</div>
-</td>
-</tr>
-<tr class="row-color" id="i1">
 <td class="col-first"><code>java.time.LocalDate</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getEarliest()">getEarliest</a></span>()</code></th>
 <td class="col-last">
 <div class="block">Getter for earliest</div>
 </td>
 </tr>
-<tr class="alt-color" id="i2">
+<tr class="row-color" id="i1">
 <td class="col-first"><code>java.time.LocalDate</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getLatest()">getLatest</a></span>()</code></th>
 <td class="col-last">
 <div class="block">Getter for latest</div>
 </td>
 </tr>
-<tr class="row-color" id="i3">
+<tr class="alt-color" id="i2">
 <td class="col-first"><code>java.lang.String</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getLocationName(java.lang.String)">getLocationName</a></span>&#8203;(java.lang.String&nbsp;isoCode)</code></th>
 <td class="col-last">
 <div class="block">This method gets the name of the location with the given iso-code.</div>
 </td>
 </tr>
-<tr class="alt-color" id="i4">
+<tr class="row-color" id="i3">
 <td class="col-first"><code>java.util.ArrayList&lt;javafx.util.Pair&lt;java.lang.String,&#8203;java.lang.String&gt;&gt;</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getLocationNames()">getLocationNames</a></span>()</code></th>
 <td class="col-last">
 <div class="block">This method returns a list of iso-code - location name pairs of every location in this database.</div>
 </td>
 </tr>
-<tr class="row-color" id="i5">
+<tr class="alt-color" id="i4">
 <td class="col-first"><code>void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#importCSV(java.io.File)">importCSV</a></span>&#8203;(java.io.File&nbsp;dataset)</code></th>
 <td class="col-last">
 <div class="block">A method that takes the given dataset file chosen by the user, and read all its data into the database.</div>
 </td>
 </tr>
-<tr class="alt-color" id="i6">
+<tr class="row-color" id="i5">
 <td class="col-first"><code>java.util.ArrayList&lt;javafx.util.Pair&lt;java.time.LocalDate,&#8203;java.lang.Number&gt;&gt;</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#searchChartData(java.lang.String,java.time.LocalDate,java.time.LocalDate,comp3111.covid.datastorage.DataTitle)">searchChartData</a></span>&#8203;(java.lang.String&nbsp;isoCode,
 java.time.LocalDate&nbsp;startDate,
@@ -180,15 +173,15 @@ java.time.LocalDate&nbsp;endDate,
 <div class="block">This method returns a list of data point represented by a pair of date and number.</div>
 </td>
 </tr>
-<tr class="row-color" id="i7">
-<td class="col-first"><code>java.util.ArrayList&lt;javafx.util.Pair&lt;java.lang.Number,&#8203;java.lang.Number&gt;&gt;</code></td>
+<tr class="alt-color" id="i6">
+<td class="col-first"><code>java.util.ArrayList&lt;org.apache.commons.lang3.tuple.Triple&lt;java.lang.String,&#8203;java.lang.Number,&#8203;java.lang.Number&gt;&gt;</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#searchDataPair(java.time.LocalDate,comp3111.covid.datastorage.LocationProperty)">searchDataPair</a></span>&#8203;(java.time.LocalDate&nbsp;targetDate,
 <a href="LocationProperty.html" title="enum in comp3111.covid.datastorage">LocationProperty</a>&nbsp;lp)</code></th>
 <td class="col-last">
 <div class="block">This method returns a list of data points represented by a pair.</div>
 </td>
 </tr>
-<tr class="alt-color" id="i8">
+<tr class="row-color" id="i7">
 <td class="col-first"><code>double</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#searchRateData(java.lang.String,java.time.LocalDate,comp3111.covid.datastorage.DataTitle)">searchRateData</a></span>&#8203;(java.lang.String&nbsp;isoCode,
 java.time.LocalDate&nbsp;targetDate,
@@ -197,7 +190,7 @@ java.time.LocalDate&nbsp;targetDate,
 <div class="block">A method that searches a data value given the location, date and title of data.</div>
 </td>
 </tr>
-<tr class="row-color" id="i9">
+<tr class="alt-color" id="i8">
 <td class="col-first"><code>long</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#searchTotalData(java.lang.String,java.time.LocalDate,comp3111.covid.datastorage.DataTitle)">searchTotalData</a></span>&#8203;(java.lang.String&nbsp;isoCode,
 java.time.LocalDate&nbsp;targetDate,
@@ -363,7 +356,7 @@ java.time.LocalDate&nbsp;endDate,
 <li>
 <section class="detail" id="searchDataPair(java.time.LocalDate,comp3111.covid.datastorage.LocationProperty)">
 <h3>searchDataPair</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">java.util.ArrayList&lt;javafx.util.Pair&lt;java.lang.Number,&#8203;java.lang.Number&gt;&gt;</span>&nbsp;<span class="member-name">searchDataPair</span>&#8203;(<span class="parameters">java.time.LocalDate&nbsp;targetDate,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">java.util.ArrayList&lt;org.apache.commons.lang3.tuple.Triple&lt;java.lang.String,&#8203;java.lang.Number,&#8203;java.lang.Number&gt;&gt;</span>&nbsp;<span class="member-name">searchDataPair</span>&#8203;(<span class="parameters">java.time.LocalDate&nbsp;targetDate,
 <a href="LocationProperty.html" title="enum in comp3111.covid.datastorage">LocationProperty</a>&nbsp;lp)</span></div>
 <div class="block">This method returns a list of data points represented by a pair.
  The x-value of this pair is dictated by the parameter <code>lp</code> a <a href="LocationProperty.html" title="enum in comp3111.covid.datastorage"><code>LocationProperty</code></a> value.
@@ -376,13 +369,6 @@ java.time.LocalDate&nbsp;endDate,
 <dt>Returns:</dt>
 <dd>a list of data points of all locations of the desired date and location property.</dd>
 </dl>
-</section>
-</li>
-<li>
-<section class="detail" id="clearDatabase()">
-<h3>clearDatabase</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name">clearDatabase</span>()</div>
-<div class="block">This method clears the all the content of the database.</div>
 </section>
 </li>
 </ul>
