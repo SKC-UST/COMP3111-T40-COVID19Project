@@ -164,25 +164,26 @@ import comp3111.covid.dataAnalysis.DateConverter;
 <span class="fc" id="L164">    		ArrayList&lt;Pair&lt;LocalDate, Number&gt;&gt; source = this.getDateDataPair(iso, this.startDate, this.endDate);</span>
     		
 <span class="fc bfc" id="L166" title="All 2 branches covered.">    		if(source.isEmpty()) {</span>
-<span class="fc" id="L167">        		JOptionPane.showMessageDialog(null, &quot;No data found for &quot; + getDatabase().getLocationName(iso) + &quot; between &quot; + startDate + &quot; and &quot; + endDate + </span>
-<span class="fc" id="L168">        				&quot;\nTry another date or country&quot;, &quot;No data found for &quot; + getDatabase().getLocationName(iso), JOptionPane.WARNING_MESSAGE);</span>
-<span class="fc" id="L169">        		return null;</span>
+<span class="fc" id="L167">    			String locationName = getDatabase().getLocationName(iso);</span>
+<span class="fc" id="L168">        		JOptionPane.showMessageDialog(null, &quot;No data found for &quot; + locationName + &quot; between &quot; + startDate + &quot; and &quot; + endDate + </span>
+<span class="fc" id="L169">        				&quot;\nTry another date or uncheck &quot; + locationName + &quot; from combobox.&quot;, &quot;No data found for &quot; + getDatabase().getLocationName(iso), JOptionPane.WARNING_MESSAGE);</span>
+<span class="fc" id="L170">        		return null;</span>
         	}
     		
-<span class="fc" id="L172">    		XYChart.Series&lt;Number, Number&gt; series = new XYChart.Series&lt;&gt;();</span>
+<span class="fc" id="L173">    		XYChart.Series&lt;Number, Number&gt; series = new XYChart.Series&lt;&gt;();</span>
     		//
-<span class="fc bfc" id="L174" title="All 2 branches covered.">    		for(Pair&lt;LocalDate, Number&gt; data : source) {</span>
-<span class="fc" id="L175">    			series.getData().add(new XYChart.Data&lt;Number, Number&gt;(dateConverter.dateToLong(data.getKey()), data.getValue()));</span>
-<span class="fc" id="L176">    		}</span>
+<span class="fc bfc" id="L175" title="All 2 branches covered.">    		for(Pair&lt;LocalDate, Number&gt; data : source) {</span>
+<span class="fc" id="L176">    			series.getData().add(new XYChart.Data&lt;Number, Number&gt;(dateConverter.dateToLong(data.getKey()), data.getValue()));</span>
+<span class="fc" id="L177">    		}</span>
     		
-<span class="fc" id="L178">    		series.setName(this.getDatabase().getLocationName(iso));</span>
-<span class="fc" id="L179">    		result.add(series);</span>
-<span class="fc" id="L180">    	}</span>
-<span class="fc" id="L181">    	LocalDateTime currentTime = LocalDateTime.now();</span>
-<span class="fc" id="L182">		String formattedTime = DateTimeFormatter.ofPattern(&quot;HH:mm:ss&quot;).format(currentTime);</span>
-<span class="fc" id="L183">		String importMessage = &quot;[ &quot; + formattedTime + &quot; ] &quot; + &quot;Successfully generated chart\n&quot;;</span>
-<span class="fc" id="L184">		System.out.println(importMessage);</span>
-<span class="fc" id="L185">    	return result;</span>
+<span class="fc" id="L179">    		series.setName(this.getDatabase().getLocationName(iso));</span>
+<span class="fc" id="L180">    		result.add(series);</span>
+<span class="fc" id="L181">    	}</span>
+<span class="fc" id="L182">    	LocalDateTime currentTime = LocalDateTime.now();</span>
+<span class="fc" id="L183">		String formattedTime = DateTimeFormatter.ofPattern(&quot;HH:mm:ss&quot;).format(currentTime);</span>
+<span class="fc" id="L184">		String importMessage = &quot;[ &quot; + formattedTime + &quot; ] &quot; + &quot;Successfully generated chart\n&quot;;</span>
+<span class="fc" id="L185">		System.out.println(importMessage);</span>
+<span class="fc" id="L186">    	return result;</span>
     }
     
 	/**

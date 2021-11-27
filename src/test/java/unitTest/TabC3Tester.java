@@ -5,7 +5,6 @@ import comp3111.covid.tabs.TabC3pageController;
 
 import javafx.collections.ObservableList;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.ComboBox;
 import javafx.util.Pair;
 
 import org.junit.Before;
@@ -14,6 +13,7 @@ import org.junit.Test;
 import java.io.File;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.lang3.tuple.Triple;
 import org.junit.After;
@@ -48,12 +48,11 @@ public class TabC3Tester extends TabC3pageController{
 	
 	@Test
 	public void testGenerateScatterSeries() {
-		ArrayList<Triple<String, Number, Number>> rawData = this.database.searchDataPair(selectedDate, LocationProperty.POPULATION);
+		//ArrayList<Triple<String, Number, Number>> rawData = this.database.searchDataPair(selectedDate, LocationProperty.POPULATION);
+		ArrayList<Triple<String, Number, Number>> rawData = new ArrayList<Triple<String,Number,Number>>(List.of(Triple.of("Hong Kong", 1, 0.1)));
 		XYChart.Series<Number, Number> testSeries = this.generateScatterSeries(rawData);
-		Assert.assertEquals(4822233, testSeries.getData().get(0).getXValue().doubleValue(), 0.01);
-		Assert.assertEquals(13.03, testSeries.getData().get(0).getYValue().doubleValue(), 0.01);
-		Assert.assertEquals(5.930869E7, testSeries.getData().get(testSeries.getData().size() - 1).getXValue().doubleValue(), 0.01);
-		Assert.assertEquals(3.01, testSeries.getData().get(testSeries.getData().size() - 1).getYValue().doubleValue(), 0.01);
+		Assert.assertEquals(1, testSeries.getData().get(0).getXValue().doubleValue(), 0.01);
+		Assert.assertEquals(0.1, testSeries.getData().get(0).getYValue().doubleValue(), 0.01);
 	}
 	
 	@After
