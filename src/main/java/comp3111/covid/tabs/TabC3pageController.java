@@ -277,7 +277,7 @@ public class TabC3pageController {
 		for(Data<Number,Number> d : s.getData()) {
 			Tooltip t = new Tooltip(
 					d.getExtraValue().toString() + "\n" +
-					this.LOC_PROP_TEXT[this.selectedProperty.value()] + ": " + d.getXValue().toString() + "\n" + 
+					this.LOC_PROP_TEXT[this.selectedProperty.value()] + ": " + String.format("%,.2f", d.getXValue().doubleValue()) + "\n" + 
 					"Vaccination Rate: " + df.format(d.getYValue().doubleValue()) + "%");
 			Tooltip.install(d.getNode(), t);
 			d.getNode().setOnMouseEntered(event->d.getNode().getStyleClass().clear());
