@@ -10,15 +10,30 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
 <VBox prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="comp3111.covid.tabs.TabC3pageController">
    <children>
       <ScrollPane prefWidth="1000.0">
          <content>
-            <AnchorPane prefHeight="900.0" prefWidth="1004.0">
+            <AnchorPane prefHeight="980.0" prefWidth="1000.0">
                <children>
-                  <LineChart fx:id="regressionChart" animated="false" layoutX="14.0" layoutY="101.0" prefHeight="600.0" prefWidth="950.0">
+                  <AnchorPane layoutY="73.0" prefWidth="990.0">
+                     <children>
+                        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ff481f00" height="104.0" layoutX="22.0" layoutY="14.0" stroke="#0dacfc" strokeType="INSIDE" strokeWidth="3.0" width="947.0" />
+                        <ComboBox layoutX="226.0" layoutY="35.0" prefHeight="25.0" prefWidth="213.0" promptText="x-axis" fx:id="xAxisCbx" />
+                        <Slider fx:id="dateSlider" blockIncrement="1.0" layoutX="60.0" layoutY="75.0" minorTickCount="0" prefHeight="30.0" prefWidth="890.0" showTickLabels="true" showTickMarks="true" />
+                        <Label layoutX="71.0" layoutY="38.0" text="Choose your x-axis:">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="31.0" layoutX="271.0" stroke="#069ade" strokeType="INSIDE" strokeWidth="3.0" width="447.0" />
+                        <Label layoutX="278.0" layoutY="7.0" text="1. Select X-axis and use the slider to see changes as time went on" />
+                     </children>
+                  </AnchorPane>
+                  <LineChart fx:id="regressionChart" animated="false" layoutX="10.0" layoutY="244.0" prefHeight="540.0" prefWidth="970.0">
                     <xAxis>
                       <NumberAxis side="BOTTOM" fx:id="xAxis" />
                     </xAxis>
@@ -26,15 +41,13 @@
                       <NumberAxis fx:id="yAxis" autoRanging="false" label="Vaccination Rate" side="LEFT" />
                     </yAxis>
                   </LineChart>
-                  <ComboBox layoutX="247.0" layoutY="64.0" prefHeight="25.0" prefWidth="213.0" promptText="x-axis" fx:id="xAxisCbx" />
-                  <Slider fx:id="dateSlider" blockIncrement="1.0" layoutX="23.0" layoutY="692.0" minorTickCount="0" prefHeight="18.0" prefWidth="950.0" showTickLabels="true" showTickMarks="true" />
-                  <Label fx:id="noDataLabel1" layoutX="247.0" layoutY="307.0" text="To Begin, Select an X-axis">
+                  <Label fx:id="noDataLabel1" layoutX="244.0" layoutY="410.0" text="To Begin, Select an X-axis">
                      <font>
                         <Font name="Hack Bold" size="21.0" />
                      </font>
                   </Label>
-                  <Label fx:id="noDataLabel2" layoutX="247.0" layoutY="345.0" text="Change the slider value to se the changes of value as time goes on" />
-                  <TableView fx:id="regTable" layoutX="23.0" layoutY="736.0" prefHeight="150.0" prefWidth="950.0">
+                  <Label fx:id="noDataLabel2" layoutX="244.0" layoutY="448.0" text="Change the slider value to se the changes of value as time goes on" />
+                  <TableView fx:id="regTable" layoutX="27.0" layoutY="800" prefHeight="150.0" prefWidth="950.0">
                     <columns>
                       <TableColumn fx:id="regPropCol" prefWidth="178.52965831756592" text="Regression Properties" />
                       <TableColumn fx:id="regValCol" prefWidth="71.810791015625" text="Values" />
@@ -43,21 +56,24 @@
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                      </columnResizePolicy>
                   </TableView>
-                  <Label layoutX="82.0" layoutY="68.0" text="Choose your x-axis:">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                  </Label>
                   <Label layoutX="14.0" text="How do countries' attributes correlate with vaccination rate?">
                      <font>
                         <Font name="System Bold" size="24.0" />
                      </font>
                   </Label>
-                  <Label layoutX="14.0" layoutY="31.0" text="Refer to docs/task-c3-details.md for detailis of the problem and solution statements">
+                  <Label layoutX="14.0" layoutY="31.0" text="Please refer to docs/task-c3-details.md for detailis of the problem and solution statements">
                      <font>
                         <Font size="18.0" />
                      </font>
                   </Label>
+                  <AnchorPane layoutX="234.0" layoutY="206.0">
+                     <children>
+                        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ff972100" height="35.0" layoutY="1.0" stroke="#ff981f" strokeType="INSIDE" strokeWidth="3.0" width="200.0" />
+                        <Label layoutX="9.0" layoutY="9.0" text="2. See your results in chart!" />
+                        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#1f93ff00" height="35.0" layoutX="286.0" stroke="#72e302" strokeType="INSIDE" strokeWidth="3.0" width="309.0" />
+                        <Label layoutX="293.0" layoutY="10.0" text="3. Scroll down to see your results in numbers" />
+                     </children>
+                  </AnchorPane>
                </children>
             </AnchorPane>
          </content>
