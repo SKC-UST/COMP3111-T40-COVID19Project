@@ -12,6 +12,8 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.Label;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -87,7 +89,9 @@ public abstract class TableTabsController extends TabController {
 		public TableData (String location, long total, double rate, boolean needPercentage) {
 			this.countryName = new SimpleStringProperty(location);
 			this.totalData = new SimpleStringProperty(total >= 0 ? String.format("%,d", total) : "No Data");
-			this.rateData = new SimpleStringProperty(rate >= 0 ? rate + (needPercentage ? "%" : "") : "No Data");
+			DecimalFormat df = new DecimalFormat("#.####");
+			df.setRoundingMode(RoundingMode.CEILING);
+			this.rateData = new SimpleStringProperty(rate >= 0 ? df.format(rate) + (needPercentage ? "%" : "") : "No Data");
 		}
 		/**
 		 * Getter for the value of the first column.

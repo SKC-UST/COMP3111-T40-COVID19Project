@@ -164,7 +164,12 @@ public class Database {
 		s = record.get("total_deaths_per_million");
 		if(!s.equals("")) {loc.addDayData(DataTitle.DEATH, new RateDayData(date, Double.parseDouble(s)));};
 		s = record.get("people_fully_vaccinated");
-		if(!s.equals("")) { loc.addDayData(DataTitle.VAC, new TotalDayData(date, Long.parseLong(s)));}
+		if(!s.equals("")) { 
+			long vaccinatedNum = Long.parseLong(s);
+			loc.addDayData(DataTitle.VAC, new TotalDayData(date, vaccinatedNum));
+			double vacRate = (vaccinatedNum * 100) / loc.getLocationProperty(LocationProperty.POPULATION).doubleValue(); 
+			loc.addDayData(DataTitle.VAC, new RateDayData(date, vacRate));
+		}
 		s = record.get("people_fully_vaccinated_per_hundred");
 		if(!s.equals("")) { loc.addDayData(DataTitle.VAC, new RateDayData(date, Double.parseDouble(s)));}
 	}
