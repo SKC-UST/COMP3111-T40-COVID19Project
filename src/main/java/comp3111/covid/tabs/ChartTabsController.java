@@ -164,8 +164,9 @@ public abstract class ChartTabsController extends TabController{
     		ArrayList<Pair<LocalDate, Number>> source = this.getDateDataPair(iso, this.startDate, this.endDate);
     		
     		if(source.isEmpty()) {
-        		JOptionPane.showMessageDialog(null, "No data found for " + getDatabase().getLocationName(iso) + " between " + startDate + " and " + endDate + 
-        				"\nTry another date or country", "No data found for " + getDatabase().getLocationName(iso), JOptionPane.WARNING_MESSAGE);
+    			String locationName = getDatabase().getLocationName(iso);
+        		JOptionPane.showMessageDialog(null, "No data found for " + locationName + " between " + startDate + " and " + endDate + 
+        				"\nTry another date or uncheck " + locationName + " from combobox.", "No data found for " + getDatabase().getLocationName(iso), JOptionPane.WARNING_MESSAGE);
         		return null;
         	}
     		
