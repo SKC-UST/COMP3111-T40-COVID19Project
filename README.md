@@ -12,7 +12,7 @@ email: nkchow | github: calmChowder3 | dev-branch: yanton-feature-C<br/>Task C1,
 email: wywongbp | github: wwyjason | dev-branch: jason-feature-B<br/>Task B1, B2
 
 ## Task C3 Problem and Solutions Statement
-[link to task c3 document] (./docs/task-C3-details.md)
+[link to task c3 document](./docs/task-C3-details.md)
 
 ## Javadoc, JUnit Test Report, Jacoco Coverage Report and Supplementary Document
 [link](https://skc-ust.github.io/COMP3111-T40-COVID19Project/)
