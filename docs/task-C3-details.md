@@ -16,7 +16,7 @@ Therefore, the program incorporated the following features to facilitate the use
 
 Because the vaccination rate is different as time goes by, it is important to see the regression across all available dates to have a bigger picture. Dragging the slider across different dates will yield the regression results of that day. An interactive slider is chosen because this graph is **dynamic**. Meaning, it is important for the user to drag the slider and see, in motion, how data is changing ass time went by.
 
-![image of date slider](./img/task-c3-slider-and cbx.png)
+![image of date slider](./img/task-c3-slider-and-cbx.png)
 
 As stated in the problem and solution statement, the goal was not only to show linear regression of vaccination rate against one attribute, but to compare the different factors affecting rate of vaccination. There is a combobox for choosing one of many countries' attributes for performing linear regression.
 
