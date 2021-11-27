@@ -8,7 +8,7 @@ Governments nowadays are trying their best to encourage their citizens to be vac
 
 To answer the question, we can go some representative attributes of a country, and see how correlated are these attributes are with vaccination rate. To do so, I have opted to use **linear regression** to study the relationship between a country's attributes and their vaccination rates. An attribute is first chosen, say, GDP per capita. Then, vaccination rate is plotted against the chosen countries' attribute. Linear regression is useful in showing the relationship between the attribute and vaccination rate. For example, if GDP per capita is very positively correlated with vaccination rate, then a country with higher GDP per capita should have higher vaccination rate. We can then study the regression's Pearson Correlation Coefficient to have a quantitative measure of how correlated the attribute is with vaccination rate.
 
-Therefore, the program incorporated the following features to facilitate the user's understanding of the statistical inference.
+Therefore, the program incorporated the following features to facilitate the user's understanding of the statistical inference and later decision making.
 
 ### Features to facilitate knowledge discovery
 
