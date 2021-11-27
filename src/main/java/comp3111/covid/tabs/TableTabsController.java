@@ -51,6 +51,13 @@ public abstract class TableTabsController extends TabController {
 		this.totalCol.setCellValueFactory(new PropertyValueFactory<TableView<TableData>, String>("totalData"));
 		this.rateCol.setCellValueFactory(new PropertyValueFactory<TableView<TableData>, String>("rateData"));
 	}
+	
+	@Override
+	public void updateCheckboxList() {
+		super.updateCheckboxList();
+		this.dataTable.getItems().clear();
+	}
+	
 	/**
      * This method handles user input errors.
      * It handles 3 types of errors:

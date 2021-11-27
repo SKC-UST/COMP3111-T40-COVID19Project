@@ -63,6 +63,12 @@ public abstract class ChartTabsController extends TabController{
     		}
     	});
     }
+    @Override
+    public void updateCheckboxList() {
+    	super.updateCheckboxList();
+    	this.dataChart.getData().clear();
+    }
+    
     /**
      * This method handles input errors.
      * It is used to ensure the user's input are correct.

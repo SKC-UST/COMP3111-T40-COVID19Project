@@ -138,6 +138,8 @@ public class TabC3pageController {
 	 * Invoked after importing the dataset.
 	 */
 	public void initAfterImport() {
+		this.regressionChart.getData().clear();
+		this.regTable.getItems().clear();
 		LocalDate maxDate = this.database.getLatest();
 		LocalDate minDate = this.database.getEarliest();
 		this.selectedDate = minDate;
