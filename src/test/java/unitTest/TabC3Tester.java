@@ -48,7 +48,6 @@ public class TabC3Tester extends TabC3pageController{
 	
 	@Test
 	public void testGenerateScatterSeries() {
-		//ArrayList<Triple<String, Number, Number>> rawData = this.database.searchDataPair(selectedDate, LocationProperty.POPULATION);
 		ArrayList<Triple<String, Number, Number>> rawData = new ArrayList<Triple<String,Number,Number>>(List.of(Triple.of("Hong Kong", 1, 0.1)));
 		XYChart.Series<Number, Number> testSeries = this.generateScatterSeries(rawData);
 		Assert.assertEquals(1, testSeries.getData().get(0).getXValue().doubleValue(), 0.01);
